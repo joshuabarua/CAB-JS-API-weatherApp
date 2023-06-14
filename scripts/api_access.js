@@ -1,7 +1,9 @@
-const units = "metric";
-const timesteps = "1h";
-const baseUrl = "https://api.tomorrow.io/v4";
-const apikey = "";
+const config = require("../config");
+
+const {
+	var: { units, timesteps, baseUrl, apikey },
+} = config;
+
 const request = new XMLHttpRequest();
 
 // Create a request variable and assign a new XMLHttpRequest object to it.
