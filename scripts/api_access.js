@@ -1,4 +1,4 @@
-const config = require("../config");
+import config from "../config";
 
 const {
 	var: { units, timesteps, baseUrl, apikey },
