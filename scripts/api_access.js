@@ -1,14 +1,14 @@
-import config from "../config";
+import config from "../config.js";
 
 const {
-	var: { units, timesteps, baseUrl, apikey },
+	var: { units, timesteps, baseURL, apikey, fields, startTime, endTime },
 } = config;
 
 const request = new XMLHttpRequest();
 
 // Create a request variable and assign a new XMLHttpRequest object to it.
 const getCurrentPosition = () => {
-	return new Promise((resolve, reject) => {
+	return new Promise((resolve, reject) => {0
 		navigator.geolocation.getCurrentPosition(resolve, reject);
 	});
 };
@@ -18,6 +18,7 @@ const getPositionData = async () => {
 		const position = await getCurrentPosition();
 		const latitude = position.coords.latitude;
 		const longitude = position.coords.longitude;
+		console.log(position);
 		const userLocation = `${latitude},${longitude}`;
 
 		makeApiRequest(userLocation);
@@ -27,7 +28,7 @@ const getPositionData = async () => {
 };
 
 const makeApiRequest = async (userLocation) => {
-	const apiUrl = `${baseUrl}/weather/forecast?location=${userLocation}&units=${units}&timesteps=${timesteps}&apikey=${apikey}`;
+	const apiUrl = `${baseURL}/weather/forecast?location=${userLocation}&units=${units}&timesteps=${timesteps}&endTime=${endTime}&apikey=${apikey}`;
 	try {
 		const response = await fetch(apiUrl);
 		if (!response.ok) {
