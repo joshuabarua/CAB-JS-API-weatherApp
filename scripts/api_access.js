@@ -1,14 +1,21 @@
 import config from "../config.js";
 
 const {
-	var: { units, timesteps, baseURL, apikey, fields, startTime, endTime },
+	var: {
+		units,
+		timesteps,
+		baseTomorrowIOURL,
+		baseFlexWeatherURL,
+		apikey,
+		fields,
+		startTime,
+		endTime,
+	},
 } = config;
 
-const request = new XMLHttpRequest();
-
-// Create a request variable and assign a new XMLHttpRequest object to it.
 const getCurrentPosition = () => {
-	return new Promise((resolve, reject) => {0
+	return new Promise((resolve, reject) => {
+		0;
 		navigator.geolocation.getCurrentPosition(resolve, reject);
 	});
 };
@@ -18,38 +25,43 @@ const getPositionData = async () => {
 		const position = await getCurrentPosition();
 		const latitude = position.coords.latitude;
 		const longitude = position.coords.longitude;
-		console.log(position);
-		const userLocation = `${latitude},${longitude}`;
 
-		makeApiRequest(userLocation);
+		makeApiRequest(latitude, longitude);
 	} catch (error) {
 		console.error(error);
 	}
 };
 
-const makeApiRequest = async (userLocation) => {
-	const apiUrl = `${baseURL}/weather/forecast?location=${userLocation}&units=${units}&timesteps=${timesteps}&endTime=${endTime}&apikey=${apikey}`;
+const makeApiRequest = async (lat, long) => {
+	const userLocation = `${lat},${long}`;
+	const options = { method: "GET", headers: { accept: "application/json" } };
+	const flexWeatherAPI = `${baseFlexWeatherURL}/today?lat=${lat}&lon=${long}&units=${units}`;
+
+	// const tomorrowIOUrl = `${baseTomorrowIOURL}/weather/realtime?location=${userLocation}&units=${units}&timesteps=${timesteps}&startTime=${startTime}&endTime=${endTime}&apikey=${apikey}`;
+
+	fetch(flexWeatherAPI, options)
+		.then((response) => response.json())
+		.catch((err) => console.error(err));
 	try {
-		const response = await fetch(apiUrl);
+		const response = await fetch(flexWeatherAPI);
 		if (!response.ok) {
 			throw new Error(`API request failed with status: ${response.status}`);
 		}
-
 		const data = await response.json();
-		return data;
+		sessionStorage.setItem("data", JSON.stringify(data));
 	} catch (error) {
 		console.error("API request failed:", error);
 	}
 };
 
-const processApiData = (data) => {
-	// Process the received data as needed
-	console.log(data);
-
-	// Further processing or logic using the API response data
-	// Example: Accessing specific data properties
-	const temperature = data.data.timelines[0].intervals[0].values.temperature;
-	console.log("Temperature:", temperature);
+const btnOnClickEvent = () => {
+	getPositionData();
+	console.log("CLICKED", JSON.parse(sessionStorage.getItem("data")));
+	setTimeout(() => {
+		document.location.href = "../pages/result.html";
+	}, 4000);
 };
 
-getPositionData();
+document
+	.getElementById("get-weather-btn")
+	.addEventListener("click", btnOnClickEvent);
