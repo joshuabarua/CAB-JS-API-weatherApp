@@ -1,0 +1,22 @@
+body {
+	margin: auto;
+	background-color: #e9f1f7;
+	font-family: Arial, Helvetica, sans-serif;
+}
+
+.header {
+	padding: 20px;
+	height: 60px;
+	width: 100%;
+	background-color: #e9f1f7;
+	opacity: 1;
+	display: flex;
+	z-index: 2;
+}
+
+section {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+}
