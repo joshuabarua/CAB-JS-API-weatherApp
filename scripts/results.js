@@ -1,4 +1,8 @@
-const manipulateResultData = () => {
+//1: create layout
+const createBaseLayout = () => {};
+
+//2: manipulate data
+const getResultData = () => {
 	let weatherData = JSON.parse(sessionStorage.getItem("data"));
 	const {
 		temperature_max,
@@ -28,4 +32,10 @@ const manipulateResultData = () => {
 	);
 };
 
-manipulateResultData();
+//3: make controller
+const controller = () => {
+	manipulateResultData();
+	createBaseLayout();
+};
+
+controller();

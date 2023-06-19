@@ -4,19 +4,22 @@
 		<meta charset="UTF-8" />
 		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link rel="stylesheet" href="../styles/result.css" type="text/css" />
 		<title>Result</title>
 	</head>
 	<body>
-		<h1>RESULTS</h1>
-		<div id="sessionDataDiv">
-			<!-- TODO: THINK about how i want to display the data. 
-            1. display buttons for now
-            2. Loop over index of timestamps and generate buttons for  each  number of timestamps, also convert timestamps to normal time.
-            3. each button has an onclick event listener. when clicked the entire div containing weather info gets swapped for the data for that time
-            4. Figure out a solution for working out what constitutes evening,morning and AFTERNOON so user can select a button that tells when they will be outside. 
-            5. A function is needed that takes adds a new field to the json if a value of temperature, wind and condition is a certain setting. It will tell the user what to pack based on these in the data. This might take a long time to conceptualise.
-            -->
-		</div>
+		<section>
+			<h1>RESULTS</h1>
+			<div id="weatherDataDisplay">
+				<!-- TODO: THINK about how i want to display the data. 
+                1. display buttons for now
+                2. Loop over index of timestamps and generate buttons for  each  number of timestamps, also convert timestamps to normal time.
+                3. each button has an onclick event listener. when clicked the entire div containing weather info gets swapped for the data for that time
+                4. Figure out a solution for working out what constitutes evening,morning and AFTERNOON so user can select a button that tells when they will be outside. 
+                5. A function is needed that takes adds a new field to the json if a value of temperature, wind and condition is a certain setting. It will tell the user what to pack based on these in the data. This might take a long time to conceptualise.
+                -->
+			</div>
+		</section>
 	</body>
 	<script src="../scripts/results.js" type="module"></script>
 </html>

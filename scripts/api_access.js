@@ -1,5 +1,5 @@
 import config from "../config.js";
-
+// Variable to be used/destructured for use in code
 const {
 	var: {
 		units,
@@ -14,6 +14,8 @@ const {
 		endTime,
 	},
 } = config;
+
+// 1: Get user position data
 
 const getCurrentPosition = () => {
 	return new Promise((resolve, reject) => {
@@ -34,6 +36,8 @@ const getPositionData = async () => {
 	}
 };
 
+// 2: Make api request using user location
+
 const makeApiRequest = async (lat, long) => {
 	const userLocation = `${lat},${long}`;
 	const options = { method: "GET", headers: { accept: "application/json" } };
@@ -52,13 +56,12 @@ const makeApiRequest = async (lat, long) => {
 		.catch((err) => console.error(err));
 };
 
-const btnOnClickEvent = () => {
+// 3: Create onClick  event that triggers the other functions
+const triggerEvent = () => {
 	getPositionData();
 	setTimeout(() => {
 		document.location.href = "../pages/result.html";
-	}, 10000);
+	}, 3000);
 };
 
-document
-	.getElementById("get-weather-btn")
-	.addEventListener("click", btnOnClickEvent);
+document.getElementById("get-weather-btn").addEventListener("click", triggerEvent);

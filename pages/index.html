@@ -14,7 +14,6 @@
 			href="https://fonts.googleapis.com/css2?family=Josefin+Sans&display=swap"
 			rel="stylesheet"
 		/>
-		<link rel="stylesheet" href="../styles/styles.css" type="text/css" />
 		<title>Weather Wear Index</title>
 		<script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
 	</head>
@@ -29,19 +28,7 @@
 					loop
 					autoplay
 				></lottie-player>
-				<h1
-					style="
-						font-size: 28px;
-						margin: 0;
-						padding-left: 15px;
-						font-weight: 200;
-						color: #2274a5;
-						font-style: italic;
-						font-family: 'Josefin Sans', sans-serif;
-					"
-				>
-					Weather Wear
-				</h1>
+				<h1 style="font-family: 'Josefin Sans', sans-serif">Weather-Aware</h1>
 			</div>
 
 			<nav class="navbar"></nav>
@@ -50,21 +37,20 @@
 		<section class="content">
 			<div class="lottie-man">
 				<!-- <lottie-player
-					src="https://assets3.lottiefiles.com/packages/lf20_az35lod2.json"
-					background="transparent"
-					speed="1"
-					style="width: 300px; height: 300px"
-					loop
-					autoplay
+				src="https://assets3.lottiefiles.com/packages/lf20_az35lod2.json"
+				background="transparent"
+				speed="1"
+				style="width: 300px; height: 300px"
+				loop
+				autoplay
 				></lottie-player> -->
 			</div>
 			<button id="get-weather-btn">
-				<p style="font-size: 18px; color: #e9f1f7">
-					What should YOU wear whatever the weather?
-				</p>
+				<p>Get todays forecast</p>
 			</button>
 		</section>
 	</body>
 	<script src="../config.js" type="module"></script>
 	<script src="../scripts/api_access.js" type="module"></script>
+	<link rel="stylesheet" href="../styles/styles.css" type="text/css" />
 </html>

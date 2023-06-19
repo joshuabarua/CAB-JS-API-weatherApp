@@ -4,6 +4,22 @@ body {
 	font-family: Arial, Helvetica, sans-serif;
 }
 
+/** TODO: Make font size dynamic, make transition on hover of button **/
+
+h1 {
+	font-size: 32px;
+	margin: 0;
+	padding-left: 15px;
+	font-weight: 200;
+	color: #2274a5;
+	font-style: italic;
+}
+
+p {
+	font-size: 2em;
+	color: #2274a5;
+}
+
 .header {
 	padding: 20px;
 	height: 60px;
@@ -48,14 +64,26 @@ body {
 	}
 }
 
-.btn {
-	color: #e9f1f7;
-	width: 350px;
-	border-radius: 15px;
+#get-weather-btn {
+	background-color: #e9f1f7;
+	color: black;
+	width: 40vw;
+	height: 40vw;
+	border-radius: 500px;
 	box-shadow: none;
 	border-width: 0px;
-	opacity: 1;
 	z-index: 3;
 	text-decoration: none;
 	animation: changeAxis 3s linear infinite;
+}
+
+#get-weather-btn:hover {
+	background-color: antiquewhite;
+	color: black;
+	border-radius: 500px;
+	box-shadow: none;
+	border-width: 0px;
+	z-index: 3;
+	text-decoration: none;
+	transform: scale(-1.5);
 }
