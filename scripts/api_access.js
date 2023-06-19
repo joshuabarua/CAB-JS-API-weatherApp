@@ -6,7 +6,9 @@ const {
 		timesteps,
 		baseTomorrowIOURL,
 		baseFlexWeatherURL,
-		apikey,
+		baseOpenWeatherURL,
+		tomorrowApikey,
+		openWeatherMapApiKey,
 		fields,
 		startTime,
 		endTime,
@@ -39,27 +41,22 @@ const makeApiRequest = async (lat, long) => {
 
 	// const tomorrowIOUrl = `${baseTomorrowIOURL}/weather/realtime?location=${userLocation}&units=${units}&timesteps=${timesteps}&startTime=${startTime}&endTime=${endTime}&apikey=${apikey}`;
 
-	fetch(flexWeatherAPI, options)
-		.then((response) => response.json())
+	// const openWeatherMapApi = `${baseOpenWeatherURL}weather?lat=${lat}&lon=${long}&appid=${openWeatherMapApiKey}`;
+
+	await fetch(flexWeatherAPI, options)
+		.then(async (response) => {
+			const weatherData = await response.json();
+			sessionStorage.setItem("data", JSON.stringify(weatherData));
+			console.log(weatherData);
+		})
 		.catch((err) => console.error(err));
-	try {
-		const response = await fetch(flexWeatherAPI);
-		if (!response.ok) {
-			throw new Error(`API request failed with status: ${response.status}`);
-		}
-		const data = await response.json();
-		sessionStorage.setItem("data", JSON.stringify(data));
-	} catch (error) {
-		console.error("API request failed:", error);
-	}
 };
 
 const btnOnClickEvent = () => {
 	getPositionData();
-	console.log("CLICKED", JSON.parse(sessionStorage.getItem("data")));
 	setTimeout(() => {
 		document.location.href = "../pages/result.html";
-	}, 4000);
+	}, 10000);
 };
 
 document

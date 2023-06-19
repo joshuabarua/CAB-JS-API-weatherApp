@@ -1,4 +1,4 @@
-const displayResultData = () => {
+const manipulateResultData = () => {
 	let weatherData = JSON.parse(sessionStorage.getItem("data"));
 	const {
 		temperature_max,
@@ -9,22 +9,14 @@ const displayResultData = () => {
 		hours,
 	} = weatherData;
 
-	console.log(hours);
+	console.log(weatherData);
 
 	for (let i = 0; i < hours.length; i++) {
-		const {
-			timestamp,
-			temperature,
-			condition,
-			wind_speed,
-			wind_direction,
-			wind_speed_unit,
-		} = hours;
+		let localTimestamp = new Date(hours[i].timestamp).toLocaleString();
 		const weatherElements = document.createElement("p");
-		weatherElements.innerText = hours[i];
+		weatherElements.innerText = Object.values(hours[i]);
 		const resultsDiv = document.getElementById("sessionDataDiv");
 		resultsDiv.appendChild(weatherElements);
-		console.log(hours[i]);
 	}
 	console.log(
 		temperature_max,
@@ -36,4 +28,4 @@ const displayResultData = () => {
 	);
 };
 
-displayResultData();
+manipulateResultData();
