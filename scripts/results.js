@@ -1,6 +1,7 @@
 // get data
 const getSessionResultData = () => {
 	let weatherData = JSON.parse(sessionStorage.getItem("data"));
+	controller(weatherData);
 };
 
 /*
@@ -11,41 +12,51 @@ TODO: make layout of page ready to display:
 */
 
 // create layout
-const createBaseLayout = (weatherData) => {
-	const {
-		temperature_max,
-		temperature_min,
-		temperature_unit,
-		condition,
-		location,
-		hours,
-	} = weatherData;
+const createBaseToolbarLayout = (weatherData) => {
+	const { hours } = weatherData;
 
-	let containerDiv = getElementById("weatherDataDisplay");
-
-	console.log(weatherData);
+	let containerDiv = document.getElementById("weatherDataDisplay");
+	let avgTemp = document.getElementById("avgTemp");
+	let toolbar = document.getElementById("toolbar");
 
 	for (let i = 0; i < hours.length; i++) {
-		let localTimestamp = new Date(hours[i].timestamp).toLocaleString();
-		const weatherElements = document.createElement("p");
-		weatherElements.innerText = Object.values(hours[i]);
-		const resultsDiv = document.getElementById("weatherDataDisplay");
-		resultsDiv.appendChild(weatherElements);
+		let localTimestamp = new Date(hours[i].timestamp).toLocaleTimeString([], {
+			hour12: false,
+			hour: "2-digit",
+			minute: "2-digit",
+		});
+
+		let hourlyBtns = document.createElement("button");
+		hourlyBtns.innerText = localTimestamp;
+		toolbar.appendChild(hourlyBtns);
 	}
-	console.log(
-		temperature_max,
-		temperature_min,
-		temperature_unit,
-		condition,
-		location,
-		hours
-	);
+
+	// Split the condition string by commas
+	let conditionsArray = weatherData.condition.split(",");
+
+	// Capitalize the first letter of each word and add a space
+	let formattedCondition = conditionsArray
+		.map(function (condition) {
+			return condition.charAt(0).toUpperCase() + condition.slice(1);
+		})
+		.join(", ");
+
+	// Update the weatherData object with the formatted condition
+	weatherData.condition = formattedCondition;
+
+	avgTemp.innerHTML = `<h4>Daily Avg. </h4>
+  	<p>Max: ${weatherData.temperature_max}°C</p>
+  	<p>Min: ${weatherData.temperature_min}°C</p>
+  	<p>${weatherData.condition}</p>
+  	<p>${weatherData.location}</p>
+`;
+
+	console.log(hours);
 };
 
 // make controller
-const controller = () => {
-	getSessionResultData();
-	createBaseLayout();
+const controller = (weatherData) => {
+	createBaseToolbarLayout(weatherData);
 };
 
-controller();
+getSessionResultData();
