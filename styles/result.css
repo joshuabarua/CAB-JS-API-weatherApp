@@ -12,9 +12,13 @@ section {
 	justify-content: space-between;
 }
 
+#header {
+	padding-left: 30px;
+}
+
 #mainContainer {
 	display: flex;
-	justify-content: flex-start;
+	justify-content: center;
 	align-items: center;
 	flex-direction: column;
 }
@@ -32,17 +36,17 @@ section {
 	padding: 10px;
 	cursor: pointer;
 	max-width: 10vw;
-	height: 30vh;
+	height: 50vh;
 	display: flex;
 	flex-direction: column;
 	align-items: flex-end;
-	flex-shrink: 1;
 	overflow-y: scroll;
+	flex-shrink: 3;
 	border-radius: 50px 50px 0px 0px;
 }
 
 #toolbar button:hover {
-	background-color: #3e8e41;
+	background-color: #f8c9c9;
 }
 
 #toolbar button {
@@ -53,20 +57,29 @@ section {
 }
 
 #avgTemp {
-	background-color: #ffcd06;
+	background-color: #fbcd16;
 	color: white;
-	cursor: pointer;
-	padding-right: 10px;
 	width: 150px;
-	height: 180px;
-	border-radius: 0 0 0 50px;
+	height: 150px;
+	border-radius: 0 0 0 150px;
 	display: flex;
 	flex-direction: column;
-	align-items: flex-end;
-	flex-shrink: 1;
-	line-height: 0px;
+	align-items: center;
+	text-align: center;
+	flex-shrink: 0;
 }
 
-#avgTemp p {
-	line-height: 0px;
+#avgTemp ul {
+	word-wrap: break-word;
+	list-style: none;
+	line-height: 20px;
+	font-size: 14px;
+}
+
+#weatherDataDisplay {
+	height: 30vw;
+	width: 30vw;
+	flex: 0 1 auto;
+	border-radius: 50%;
+	border: black 5px solid;
 }
