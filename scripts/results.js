@@ -33,6 +33,8 @@ const createBaseToolbarLayout = (weatherData) => {
 	title.innerText = `${weatherData.location} Weather`;
 	date.innerText = `${currentDateTime}`;
 
+	console.log(hours);
+
 	for (let i = 0; i < hours.length; i++) {
 		let localTimestamp = new Date(hours[i].timestamp).toLocaleTimeString([], {
 			hour12: false,
@@ -71,12 +73,31 @@ const createBaseToolbarLayout = (weatherData) => {
 	</li>
 	</ul>
 `;
+};
+//TODO: Fix this function to get the relevant data for the now time frame.
+const mainTemperatureArea = (weatherData) => {
+	const { hours } = weatherData;
+	let weatherDataDisplay = document.getElementById("weatherDataDisplay");
+	let ulCurrentWeatherData = document.createElement("ul");
+	for (const key in hours[0]) {
+		// Create a list item element
+		const li = document.createElement("li");
+		console.log(hours[key]);
+		// Create a text node with the property name and value
+		const text = document.createTextNode(`${key}: ${hours[key]}`);
 
-	console.log(hours);
+		// Append the text node to the list item
+		li.appendChild(text);
+
+		// Append the list item to the unordered list
+		ulCurrentWeatherData.appendChild(li);
+	}
+	weatherDataDisplay.appendChild(ulCurrentWeatherData);
 };
 
 // make controller
 const controller = (weatherData) => {
+	mainTemperatureArea(weatherData);
 	createBaseToolbarLayout(weatherData);
 	setEventListener(weatherData);
 };
@@ -90,6 +111,13 @@ const setEventListener = (weatherData) => {
 			displayTemperatureData(weatherData);
 		});
 	});
+};
+
+//TODO: Get data replacing the value in the main area by resetting the data area and updating with relevant value that matches button text content value
+// Display data represented by button  value
+const displayTemperatureData = (weatherData) => {
+	const selectedBtn = document.querySelector(".hourlyBtns");
+	console.log(selectedBtn.textContent);
 };
 
 getSessionResultData();
