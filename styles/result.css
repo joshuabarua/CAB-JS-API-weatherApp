@@ -37,6 +37,7 @@ section {
 	cursor: pointer;
 	max-width: 10vw;
 	height: 50vh;
+	min-height: 20vh;
 	display: flex;
 	flex-direction: column;
 	align-items: flex-end;
@@ -82,4 +83,13 @@ section {
 	flex: 0 1 auto;
 	border-radius: 50%;
 	border: black 5px solid;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	text-align: justify;
+}
+
+#weatherDataDisplay ul {
+	margin-left: -20px;
+	list-style: none;
 }

@@ -1,8 +1,4 @@
 const options = {
-	weekday: "long",
-	year: "numeric",
-	month: "long",
-	day: "numeric",
 	hour12: false,
 	hour: "2-digit",
 	minute: "2-digit",
@@ -16,38 +12,42 @@ const getSessionResultData = () => {
 
 /*
 TODO: make layout of page ready to display:
-1: avg daily temp
 2: toolbar for filtering (buttons of hourly temps/filtering based on clothing preference and gender)
 3: hourly temp filling view, on button select, switch/slide to next temperature
 */
 
 // create layout
-const createBaseToolbarLayout = (weatherData) => {
-	const { hours } = weatherData;
-
+const createHeaderLayout = (weatherData) => {
 	let title = document.getElementById("title");
 	let date = document.getElementById("date");
-	let avgTemp = document.getElementById("avgTemp");
-	let toolbar = document.getElementById("toolbar");
-	let currentDateTime = new Date(hours[0].timestamp).toLocaleString([], options);
+	let currentDateTime = new Date(weatherData.hours[0].timestamp).toLocaleString([], {
+		...options,
+		weekday: "long",
+		year: "numeric",
+		month: "long",
+		day: "numeric",
+	});
 	title.innerText = `${weatherData.location} Weather`;
 	date.innerText = `${currentDateTime}`;
+};
 
-	console.log(hours);
-
-	for (let i = 0; i < hours.length; i++) {
-		let localTimestamp = new Date(hours[i].timestamp).toLocaleTimeString([], {
-			hour12: false,
-			hour: "2-digit",
-			minute: "2-digit",
-		});
-
+const createButtonLayout = (weatherData) => {
+	let toolbar = document.getElementById("toolbar");
+	// loop over timestamps conver and print as button
+	for (let i = 0; i < weatherData.hours.length; i++) {
+		let localTimestamp = new Date(weatherData.hours[i].timestamp).toLocaleTimeString(
+			[],
+			options
+		);
 		let hourlyBtn = document.createElement("button");
 		hourlyBtn.classList.add("hourlyBtns");
 		hourlyBtn.innerText = localTimestamp;
 		toolbar.appendChild(hourlyBtn);
 	}
+};
 
+const createAvgWeatherLayout = (weatherData) => {
+	let avgTemp = document.getElementById("avgTemp");
 	// Split the condition string by commas
 	let conditionsArray = weatherData.condition.split(",");
 
@@ -74,21 +74,29 @@ const createBaseToolbarLayout = (weatherData) => {
 	</ul>
 `;
 };
-//TODO: Fix this function to get the relevant data for the now time frame.
+
 const mainTemperatureArea = (weatherData) => {
 	const { hours } = weatherData;
+	const currentWeather = Object.values(hours)[0];
 	let weatherDataDisplay = document.getElementById("weatherDataDisplay");
 	let ulCurrentWeatherData = document.createElement("ul");
-	for (const key in hours[0]) {
+
+	let counter = 0;
+	for (const property in currentWeather) {
 		// Create a list item element
 		const li = document.createElement("li");
-		console.log(hours[key]);
 		// Create a text node with the property name and value
-		const text = document.createTextNode(`${key}: ${hours[key]}`);
-
+		const text = document.createTextNode(`${property}: ${currentWeather[property]}`);
+		if (counter === 0) {
+			let localTimestamp = new Date(currentWeather.timestamp).toLocaleTimeString(
+				[],
+				options
+			);
+			text.nodeValue = `${property}: ${localTimestamp}`;
+			counter++;
+		}
 		// Append the text node to the list item
 		li.appendChild(text);
-
 		// Append the list item to the unordered list
 		ulCurrentWeatherData.appendChild(li);
 	}
@@ -98,7 +106,9 @@ const mainTemperatureArea = (weatherData) => {
 // make controller
 const controller = (weatherData) => {
 	mainTemperatureArea(weatherData);
-	createBaseToolbarLayout(weatherData);
+	createButtonLayout(weatherData);
+	createAvgWeatherLayout(weatherData);
+	createHeaderLayout(weatherData);
 	setEventListener(weatherData);
 };
 
