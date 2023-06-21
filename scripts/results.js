@@ -20,13 +20,16 @@ TODO: make layout of page ready to display:
 const createHeaderLayout = (weatherData) => {
 	let title = document.getElementById("title");
 	let date = document.getElementById("date");
-	let currentDateTime = new Date(weatherData.hours[0].timestamp).toLocaleString([], {
-		...options,
-		weekday: "long",
-		year: "numeric",
-		month: "long",
-		day: "numeric",
-	});
+	let currentDateTime = new Date(weatherData.hours[0].timestamp).toLocaleString(
+		[],
+		{
+			...options,
+			weekday: "long",
+			year: "numeric",
+			month: "long",
+			day: "numeric",
+		}
+	);
 	title.innerText = `${weatherData.location} Weather`;
 	date.innerText = `${currentDateTime}`;
 };
@@ -35,10 +38,9 @@ const createButtonLayout = (weatherData) => {
 	let toolbar = document.getElementById("toolbar");
 	// loop over timestamps conver and print as button
 	for (let i = 0; i < weatherData.hours.length; i++) {
-		let localTimestamp = new Date(weatherData.hours[i].timestamp).toLocaleTimeString(
-			[],
-			options
-		);
+		let localTimestamp = new Date(
+			weatherData.hours[i].timestamp
+		).toLocaleTimeString([], options);
 		let hourlyBtn = document.createElement("button");
 		hourlyBtn.classList.add("hourlyBtns");
 		hourlyBtn.innerText = localTimestamp;
@@ -60,19 +62,20 @@ const createAvgWeatherLayout = (weatherData) => {
 
 	// Update the weatherData object with the formatted condition
 	weatherData.condition = formattedCondition;
-	avgTemp.innerHTML = `
-	<ul>
+	let ulAvgWeatherData = document.createElement("ul");
+
+	const textContents = [
+		`Max: ${weatherData.temperature_max}°C `,
+		`Min: ${weatherData.temperature_min}°C`,
+		weatherData.condition,
+	];
 	
-	<li>
-	Max: ${weatherData.temperature_max}°C 
-	</li>
-	<li>
-	Min: ${weatherData.temperature_min}°C	</li>
-	<li>
-		${weatherData.condition}
-	</li>
-	</ul>
-`;
+	for (let i = 0; i < textContents.length; i++) {
+		const li = document.createElement("li");
+		li.innerText = textContents[i];
+		ulAvgWeatherData.appendChild(li);
+	}
+	avgTemp.appendChild(ulAvgWeatherData);
 };
 
 const mainTemperatureArea = (weatherData) => {
@@ -86,7 +89,9 @@ const mainTemperatureArea = (weatherData) => {
 		// Create a list item element
 		const li = document.createElement("li");
 		// Create a text node with the property name and value
-		const text = document.createTextNode(`${property}: ${currentWeather[property]}`);
+		const text = document.createTextNode(
+			`${property}: ${currentWeather[property]}`
+		);
 		if (counter === 0) {
 			let localTimestamp = new Date(currentWeather.timestamp).toLocaleTimeString(
 				[],
