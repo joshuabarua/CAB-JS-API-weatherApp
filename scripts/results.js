@@ -38,22 +38,23 @@ const createHeaderLayout = (weatherData) => {
 	date.innerText = `${currentDateTime}`;
 };
 
-const modifyTimeFormat = (weatherData) => {
-	for (let i = 0; i < weatherData.hours.length; i++) {
-		let localTimestamp = new Date(
-			weatherData.hours[i].timestamp
-		).toLocaleTimeString([], timeOptions);
-		weatherData.hours[i].timestamp = localTimestamp;
+const modifyTimeFormat = (hourlyTemps) => {
+	for (let i = 0; i < hourlyTemps.length; i++) {
+		let localTimestamp = new Date(hourlyTemps[i].timestamp).toLocaleTimeString(
+			[],
+			timeOptions
+		);
+		hourlyTemps[i].timestamp = localTimestamp;
 	}
 };
 
-const createButtonLayout = (weatherData) => {
+const createButtonLayout = (tempTimes) => {
 	let toolbar = document.getElementById("toolbar");
 	// loop over timestamps conver and print as button
-	for (let i = 0; i < weatherData.hours.length; i++) {
+	for (let i = 0; i < tempTimes.length; i++) {
 		let hourlyBtn = document.createElement("button");
 		hourlyBtn.classList.add("hourlyBtn");
-		hourlyBtn.innerText = weatherData.hours[i].timestamp;
+		hourlyBtn.innerText = tempTimes[i].timestamp;
 		toolbar.appendChild(hourlyBtn);
 	}
 };
@@ -88,44 +89,44 @@ const createAvgWeatherLayout = (weatherData) => {
 	avgTemp.appendChild(ulAvgWeatherData);
 };
 
-const mainTemperatureArea = (weatherData) => {
-	// const currentWeather = Object.values(weatherData.hours)[0];
+// Main temp area
+const mainTemperatureArea = (hourlyTemp) => {
 	let weatherDataDisplay = document.getElementById("weatherDataDisplay");
+	weatherDataDisplay.innerHTML = "";
 	let ulCurrentWeatherData = document.createElement("ul");
+	const defaultHour = hourlyTemp[0];
 
-	//TODO: MAKE A LI ITEM FOR EACH HOUR DATA POINT
-	ulCurrentWeatherData.innerText = "";
-	weatherData.hours.forEach((hour) => {
+	const dataElements = [
+		{ value: defaultHour.timestamp },
+		{ value: `${defaultHour.temperature}°C` },
+		{
+			value: `${defaultHour.wind_speed} ${defaultHour.wind_speed_unit}`,
+		},
+		{ value: defaultHour.wind_direction },
+		{
+			value:
+				defaultHour.condition.charAt(0).toUpperCase() +
+				defaultHour.condition.slice(1),
+		},
+	];
+
+	dataElements.forEach((element) => {
 		const li = document.createElement("li");
-		// Create a text node with the property name and value
-		const text = document.createTextNode(`${hour}`);
-		// Append the text node to the list item
-		li.appendChild(text);
-		// Append the list item to the unordered list
+		li.innerText = `${element.value}`;
 		ulCurrentWeatherData.appendChild(li);
 	});
-
-	for (const property in weatherData.hours) {
-		// Create a list item element
-		const li = document.createElement("li");
-		// Create a text node with the property name and value
-		const text = document.createTextNode(`${property}: ${weatherData[property]}`);
-		// Append the text node to the list item
-		li.appendChild(text);
-		// Append the list item to the unordered list
-		ulCurrentWeatherData.appendChild(li);
-	}
 	weatherDataDisplay.appendChild(ulCurrentWeatherData);
 };
 
 // make controller
 const controller = (weatherData) => {
+	const { hours } = weatherData;
 	createHeaderLayout(weatherData);
-	modifyTimeFormat(weatherData);
-	mainTemperatureArea(weatherData);
-	createButtonLayout(weatherData);
+	modifyTimeFormat(hours);
+	mainTemperatureArea(hours);
+	createButtonLayout(hours);
 	createAvgWeatherLayout(weatherData);
-	setEventListener(weatherData);
+	setEventListener(hours);
 };
 
 //set Event Listener on button and change event
@@ -133,21 +134,17 @@ const setEventListener = (weatherData) => {
 	let buttons = document.querySelectorAll(".hourlyBtn");
 	buttons.forEach((button) => {
 		button.addEventListener("click", () => {
-			const selectedBtn = button.textContent.trim();
+			const selectedBtn = button.textContent;
 			filterData(weatherData, selectedBtn);
 		});
 	});
 };
 
-const filterData = (weatherData, selectedTimestamp) => {
-	const filteredData = weatherData.hours.filter(
+const filterData = (hourlyTemps, selectedTimestamp) => {
+	const filteredData = hourlyTemps.filter(
 		(hour) => hour.timestamp === selectedTimestamp
 	);
-	console.log(filteredData);
 	mainTemperatureArea(filteredData);
 };
-
-//TODO: Get data replacing the value in the main area by resetting the data area and updating with relevant value that matches button text content value
-// Display data represented by button  value
 
 getSessionResultData();
