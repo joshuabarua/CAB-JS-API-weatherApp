@@ -11,6 +11,44 @@ const dateOptions = {
 	day: "numeric",
 };
 
+const lottieConditions = {
+	day: {
+		cloudy: "../assets/lotties/windy.json",
+		partlyCloudy: "../assets/lotties/partly-cloudy.json",
+		partlyShowers: "../assets/lotties/partly-showers.json",
+		rain: "../assets/lotties/rain.json",
+		dry: "../assets/lotties/sunny1.json",
+		thunderstorm: "../assets/lotties/thunder.json",
+		snow: "../assets/lotties/snow.json",
+		windy: "../assets/lotties/mist.json",
+	},
+	night: {
+		cloudy: "../assets/lotties/cloudy-night.json",
+		dry: "../assets/lotties/night.json",
+		rain: "../assets/lotties/rainy-night.json",
+		snow: "../assets/lotties/snow-night.json",
+	},
+};
+
+const emojiConditions = {
+	day: {
+		cloudy: "☁️",
+		partlyCloudy: "⛅",
+		partlyShowers: "🌦️",
+		rain: "🌧️",
+		dry: "☀️",
+		thunderstorm: "⛈️",
+		snow: "❄️",
+		windy: "💨",
+	},
+	night: {
+		cloudy: "☁️🌙",
+		dry: "🌙",
+		rain: " 🌧️🌙",
+		snow: " ❄️🌙",
+	},
+};
+
 // get data
 const getSessionResultData = () => {
 	let weatherData = JSON.parse(sessionStorage.getItem("data"));
@@ -48,6 +86,27 @@ const modifyTimeFormat = (hourlyTemps) => {
 	}
 };
 
+const modifyConditionsToImg = (weatherConditionData) => {
+	for (let i = 0; i < weatherConditionData.length; i++) {
+		if (
+			weatherConditionData[i].timestamp <= "18:00" &&
+			weatherConditionData[i].timestamp >= "05:00"
+		) {
+			for (let [key, value] of Object.entries(emojiConditions.day)) {
+				if (key === weatherConditionData[i].condition) {
+					weatherConditionData[i].condition = value;
+				}
+			}
+		} else {
+			for (let [key, value] of Object.entries(emojiConditions.night)) {
+				if (key === weatherConditionData[i].condition) {
+					weatherConditionData[i].condition = value;
+				}
+			}
+		}
+	}
+};
+
 const createButtonLayout = (tempTimes) => {
 	let toolbar = document.getElementById("toolbar");
 	// loop over timestamps conver and print as button
@@ -61,24 +120,13 @@ const createButtonLayout = (tempTimes) => {
 
 const createAvgWeatherLayout = (weatherData) => {
 	let avgTemp = document.getElementById("avgTemp");
-	// Split the condition string by commas
-	let conditionsArray = weatherData.condition.split(",");
-
-	// Capitalize the first letter of each word and add a space
-	let formattedCondition = conditionsArray
-		.map((condition) => {
-			return condition.charAt(0).toUpperCase() + condition.slice(1);
-		})
-		.join(", ");
 
 	// Update the weatherData object with the formatted condition
-	weatherData.condition = formattedCondition;
 	let ulAvgWeatherData = document.createElement("ul");
 
 	const textContents = [
 		`Max: ${weatherData.temperature_max}°C `,
 		`Min: ${weatherData.temperature_min}°C`,
-		weatherData.condition,
 	];
 
 	for (let i = 0; i < textContents.length; i++) {
@@ -97,25 +145,34 @@ const mainTemperatureArea = (hourlyTemp) => {
 	const defaultHour = hourlyTemp[0];
 
 	const dataElements = [
-		{ value: defaultHour.timestamp },
-		{ value: `${defaultHour.temperature}°C` },
+		{ key: "🕰️", value: ` ${defaultHour.timestamp}` },
+		{ key: "🌡️", value: ` ${defaultHour.temperature}°C` },
 		{
-			value: `${defaultHour.wind_speed} ${defaultHour.wind_speed_unit}`,
-		},
-		{ value: defaultHour.wind_direction },
-		{
-			value:
-				defaultHour.condition.charAt(0).toUpperCase() +
-				defaultHour.condition.slice(1),
+			key: "🌬️",
+			value: ` ${defaultHour.wind_speed} ${defaultHour.wind_speed_unit}`,
 		},
 	];
 
-	dataElements.forEach((element) => {
-		const li = document.createElement("li");
-		li.innerText = `${element.value}`;
-		ulCurrentWeatherData.appendChild(li);
+	dataElements.forEach(({ key, value }) => {
+		const listItem = document.createElement("li");
+		const keySpan = document.createElement("span");
+		keySpan.classList.add("emojis");
+
+		keySpan.innerText = key;
+		const valueSpan = document.createElement("span");
+		valueSpan.classList.add("mainTempAreaVals");
+		valueSpan.innerText = value;
+		listItem.appendChild(keySpan);
+		listItem.appendChild(valueSpan);
+		ulCurrentWeatherData.appendChild(listItem);
 	});
+
+	const liItem = document.createElement("span");
+	liItem.innerText = defaultHour.condition;
+	liItem.classList.add("emojis");
+
 	weatherDataDisplay.appendChild(ulCurrentWeatherData);
+	weatherDataDisplay.appendChild(liItem);
 };
 
 // make controller
@@ -123,6 +180,7 @@ const controller = (weatherData) => {
 	const { hours } = weatherData;
 	createHeaderLayout(weatherData);
 	modifyTimeFormat(hours);
+	modifyConditionsToImg(hours);
 	mainTemperatureArea(hours);
 	createButtonLayout(hours);
 	createAvgWeatherLayout(weatherData);
