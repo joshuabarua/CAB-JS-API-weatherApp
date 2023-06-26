@@ -118,31 +118,13 @@ const createButtonLayout = (tempTimes) => {
 	}
 };
 
-const createAvgWeatherLayout = (weatherData) => {
-	let avgTemp = document.getElementById("avgTemp");
-
-	// Update the weatherData object with the formatted condition
-	let ulAvgWeatherData = document.createElement("ul");
-
-	const textContents = [
-		`Max: ${weatherData.temperature_max}°C `,
-		`Min: ${weatherData.temperature_min}°C`,
-	];
-
-	for (let i = 0; i < textContents.length; i++) {
-		const li = document.createElement("li");
-		li.innerText = textContents[i];
-		ulAvgWeatherData.appendChild(li);
-	}
-	avgTemp.appendChild(ulAvgWeatherData);
-};
-
 // Main temp area
-const mainTemperatureArea = (hourlyTemp) => {
+const mainTemperatureArea = (weatherData, hourlyTemps) => {
 	let weatherDataDisplay = document.getElementById("weatherDataDisplay");
 	weatherDataDisplay.innerHTML = "";
-	let ulCurrentWeatherData = document.createElement("ul");
-	const defaultHour = hourlyTemp[0];
+	let ulHourlyWeatherData = document.createElement("ul");
+
+	const defaultHour = hourlyTemps[0];
 
 	const dataElements = [
 		{ key: "🕰️", value: ` ${defaultHour.timestamp}` },
@@ -164,15 +146,25 @@ const mainTemperatureArea = (hourlyTemp) => {
 		valueSpan.innerText = value;
 		listItem.appendChild(keySpan);
 		listItem.appendChild(valueSpan);
-		ulCurrentWeatherData.appendChild(listItem);
+		ulHourlyWeatherData.appendChild(listItem);
 	});
 
-	const liItem = document.createElement("span");
+	// Update the weatherData object with the formatted condition
+	let avgDiv = document.createElement("div");
+	avgDiv.setAttribute("id", "avgTempDiv");
+	let ulAvgWeatherData = document.createElement("ul");
+	// avgTemperature.appendChild(ulAvgWeatherData);
+	const liItem = document.createElement("li");
 	liItem.innerText = defaultHour.condition;
 	liItem.classList.add("emojis");
+	const avgLi = document.createElement("li");
+	avgLi.innerText = ` ${weatherData.temperature_max}°C / ${weatherData.temperature_min}°C `;
+	ulAvgWeatherData.appendChild(liItem);
+	ulAvgWeatherData.appendChild(avgLi);
+	avgDiv.appendChild(ulAvgWeatherData);
 
-	weatherDataDisplay.appendChild(ulCurrentWeatherData);
-	weatherDataDisplay.appendChild(liItem);
+	weatherDataDisplay.appendChild(ulHourlyWeatherData);
+	weatherDataDisplay.appendChild(avgDiv);
 };
 
 // make controller
@@ -181,28 +173,25 @@ const controller = (weatherData) => {
 	createHeaderLayout(weatherData);
 	modifyTimeFormat(hours);
 	modifyConditionsToImg(hours);
-	mainTemperatureArea(hours);
+	mainTemperatureArea(weatherData, hours);
 	createButtonLayout(hours);
-	createAvgWeatherLayout(weatherData);
-	setEventListener(hours);
+	setEventListener(weatherData, hours);
 };
 
 //set Event Listener on button and change event
-const setEventListener = (weatherData) => {
+const setEventListener = (weatherData, hours) => {
 	let buttons = document.querySelectorAll(".hourlyBtn");
 	buttons.forEach((button) => {
 		button.addEventListener("click", () => {
 			const selectedBtn = button.textContent;
-			filterData(weatherData, selectedBtn);
+			filterData(weatherData, hours, selectedBtn);
 		});
 	});
 };
 
-const filterData = (hourlyTemps, selectedTimestamp) => {
-	const filteredData = hourlyTemps.filter(
-		(hour) => hour.timestamp === selectedTimestamp
-	);
-	mainTemperatureArea(filteredData);
+const filterData = (weatherData, hours, selectedTimestamp) => {
+	const filteredData = hours.filter((hour) => hour.timestamp === selectedTimestamp);
+	mainTemperatureArea(weatherData, filteredData);
 };
 
 getSessionResultData();

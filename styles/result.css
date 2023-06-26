@@ -37,14 +37,13 @@ section {
 	padding: 10px;
 	cursor: pointer;
 	max-width: 10vw;
-	height: 50vh;
+	height: 100vh;
 	min-height: 20vh;
 	display: flex;
 	flex-direction: column;
 	align-items: flex-end;
 	overflow-y: scroll;
 	flex-shrink: 3;
-	border-radius: 50px 50px 0px 0px;
 }
 
 #toolbar button:hover {
@@ -58,28 +57,8 @@ section {
 	margin-bottom: 5px;
 }
 
-#avgTemp {
-	background-color: #fbcd16;
-	padding-right: 15px;
-	color: white;
-	width: 120px;
-	height: 70px;
-	border-radius: 0 0 0 125px;
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	text-align: center;
-	flex-shrink: 0;
-}
-
-#avgTemp ul {
-	word-wrap: break-word;
-	list-style: none;
-	line-height: 20px;
-	font-size: 14px;
-}
-
 #weatherDataDisplay {
+	background: url("../assets/imgs/sky-bg2.jpg") center center;
 	min-height: 30vw;
 	min-width: 30vw;
 	flex: 0 1 auto;
@@ -90,15 +69,24 @@ section {
 	justify-content: space-evenly;
 	align-items: center;
 }
+
 #weatherDataDisplay ul {
-	margin-left: -40px;
 	list-style: none;
 	font-size: 20px;
-	line-height: 70px;
+	line-height: 60px;
+	margin-left: -40px;
 }
 .mainTempAreaVals {
 	padding-left: 40px;
 }
+
 .emojis {
 	font-size: 60px;
+}
+
+#avgTempDiv ul {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
 }
