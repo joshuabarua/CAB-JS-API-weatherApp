@@ -71,7 +71,7 @@ const triggerEvent = () => {
 	getPositionData();
 	setTimeout(() => {
 		document.location.href = "../pages/result.html";
-	}, 3000);
+	}, 3500);
 };
 
 const createCheckboxes = (temperature, items) => {
@@ -172,7 +172,7 @@ const showModalWindow = () => {
 const controller = () => {
 	buildModal();
 	addEventListeners();
-	setTimeout(showModalWindow, 1500);
+	setTimeout(showModalWindow, 1000);
 };
 
 controller();

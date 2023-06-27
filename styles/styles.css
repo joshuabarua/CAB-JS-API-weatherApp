@@ -93,7 +93,7 @@ label {
 	cursor: pointer;
 }
 
-#clothing-preferences img:hover {
+#clothing-preferences-icon img:hover {
 	background-color: aqua;
 	border-radius: 20px;
 	border: 10px solid aqua;
@@ -145,7 +145,7 @@ label {
 	border-width: 0px;
 	z-index: 3;
 	text-decoration: none;
-	animation: changeAxis 3s linear infinite;
+	animation: changeAxis 2.5s ease-in-out infinite;
 }
 
 #get-weather-btn:hover {
@@ -156,5 +156,6 @@ label {
 	border-width: 0px;
 	z-index: 3;
 	text-decoration: none;
-	transform: scale(-1.5);
+	transition: ease-in-out 0.5s;
+	cursor: pointer;
 }

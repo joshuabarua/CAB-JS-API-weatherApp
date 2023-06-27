@@ -45,6 +45,7 @@ const emojiConditions = {
 		cloudy: "☁️🌙",
 		dry: "🌙",
 		rain: " 🌧️🌙",
+		thunderstorm: "⛈️🌙",
 		snow: " ❄️🌙",
 	},
 };
@@ -120,7 +121,9 @@ const createButtonLayout = (tempTimes) => {
 
 // Main temp area
 const mainTemperatureArea = (weatherData, hourlyTemps) => {
+	let clothingPref = JSON.parse(sessionStorage.getItem("clothingPreferences"));
 	let weatherDataDisplay = document.getElementById("weatherDataDisplay");
+
 	weatherDataDisplay.innerHTML = "";
 	let ulHourlyWeatherData = document.createElement("ul");
 
@@ -134,20 +137,6 @@ const mainTemperatureArea = (weatherData, hourlyTemps) => {
 			value: ` ${defaultHour.wind_speed} ${defaultHour.wind_speed_unit}`,
 		},
 	];
-
-	dataElements.forEach(({ key, value }) => {
-		const listItem = document.createElement("li");
-		const keySpan = document.createElement("span");
-		keySpan.classList.add("emojis");
-
-		keySpan.innerText = key;
-		const valueSpan = document.createElement("span");
-		valueSpan.classList.add("mainTempAreaVals");
-		valueSpan.innerText = value;
-		listItem.appendChild(keySpan);
-		listItem.appendChild(valueSpan);
-		ulHourlyWeatherData.appendChild(listItem);
-	});
 
 	// Update the weatherData object with the formatted condition
 	let avgDiv = document.createElement("div");
@@ -165,10 +154,51 @@ const mainTemperatureArea = (weatherData, hourlyTemps) => {
 
 	weatherDataDisplay.appendChild(ulHourlyWeatherData);
 	weatherDataDisplay.appendChild(avgDiv);
+
+	const subHead = document.createElement("h4");
+	subHead.innerText = "Make sure to pack these items:";
+	avgDiv.appendChild(subHead);
+
+	dataElements.forEach(({ key, value }) => {
+		const listItem = document.createElement("li");
+		const keySpan = document.createElement("span");
+		keySpan.classList.add("emojis");
+
+		keySpan.innerText = key;
+		const valueSpan = document.createElement("span");
+		valueSpan.classList.add("mainTempAreaVals");
+		valueSpan.innerText = value;
+		listItem.appendChild(keySpan);
+		listItem.appendChild(valueSpan);
+		ulHourlyWeatherData.appendChild(listItem);
+
+		if (key === "🌡️" && parseInt(value) <= 8) {
+			const valueSpan = document.createElement("span");
+			valueSpan.innerText = clothingPref.cold.join(", ");
+
+			avgDiv.appendChild(valueSpan);
+			// valueSpan =
+			// Check if cold preferences exist and display them
+			console.log("cold", clothingPref.cold);
+			// Use the cold preferences to determine appropriate actions
+			// based on the temperature being below 8°C
+		} else if (key === "🌡️" && parseInt(value) <= 18) {
+			const valueSpan = document.createElement("span");
+			valueSpan.innerText = clothingPref.normal.join(", ");
+			avgDiv.appendChild(valueSpan);
+			console.log(clothingPref.normal);
+		} else if (key === "🌡️" && parseInt(value) <= 40 && parseInt(value) > 18) {
+			const valueSpan = document.createElement("span");
+			valueSpan.innerText = clothingPref.hot.join(", ");
+			avgDiv.appendChild(valueSpan);
+			console.log(clothingPref.hot);
+		}
+	});
 };
 
 // make controller
 const controller = (weatherData) => {
+	console.log(weatherData);
 	const { hours } = weatherData;
 	createHeaderLayout(weatherData);
 	modifyTimeFormat(hours);
