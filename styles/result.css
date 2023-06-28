@@ -6,6 +6,68 @@ body {
 	overflow: hidden;
 }
 
+.header {
+	height: 60px;
+	width: 100%;
+	background-color: transparent;
+	opacity: 1;
+	display: flex;
+	z-index: 2;
+	flex-direction: row;
+	justify-content: space-between;
+	align-items: center;
+	padding: 20px;
+}
+
+#clothing-preferences-icon img {
+	margin-right: 50px;
+	width: 40px;
+	height: 40px;
+	background-color: aquamarine;
+	border-radius: 20px;
+	border-width: 40px;
+	border-color: aquamarine;
+	border: 10px solid aquamarine;
+	cursor: pointer;
+}
+
+#clothing-preferences-icon img:hover {
+	background-color: aqua;
+	border-radius: 20px;
+	border: 10px solid aqua;
+	cursor: pointer;
+	transition: ease-in-out 0.3s;
+}
+
+#modal-overlay {
+	display: none;
+	justify-content: center;
+	align-items: center;
+	width: 100%;
+	height: 100vh;
+	position: absolute;
+	background: rgba(0, 0, 0, 0.4);
+	z-index: 10;
+}
+
+#modal-overlay.open {
+	display: flex;
+}
+
+#modal-overlay #modal {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	flex-direction: column;
+	text-align: center;
+	max-width: 750px;
+	width: 70vw;
+	background: white;
+	height: 70vh;
+	border-radius: 10px;
+	padding: 10px;
+}
+
 section {
 	display: flex;
 	flex-direction: row;

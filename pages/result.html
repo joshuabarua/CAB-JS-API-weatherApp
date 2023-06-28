@@ -8,8 +8,52 @@
 		<title>Result</title>
 	</head>
 	<body>
+		<div id="modal-overlay">
+			<div id="modal">
+				<div class="modal-header">
+					<h2>Welcome to Weather Aware!</h2>
+					<p>
+						For us to better provide you with personlised clothing information,
+						we need your clothing preferences for cold - normal - hot
+						temperatures and access to your Geolocation.
+					</p>
+				</div>
+
+				<div id="modal-content">
+					<form id="checkbox-container"></form>
+				</div>
+				<div id="modal-footer">
+					<button id="close-modal">Close</button>
+					<button id="saveBtn">Save</button>
+				</div>
+			</div>
+		</div>
+
+		<header class="header">
+			<div class="page-title">
+				<lottie-player
+					src="https://assets3.lottiefiles.com/packages/lf20_xlky4kvh.json"
+					background="transparent"
+					speed="1"
+					style="width: 30px; height: 30px"
+					loop
+					autoplay
+				></lottie-player>
+				<h1 style="font-family: 'Josefin Sans', sans-serif">Weather-Aware</h1>
+			</div>
+
+			<nav class="navbar"></nav>
+
+			<div id="clothing-preferences-icon">
+				<img
+					src="../assets/svgs/hanger.svg"
+					alt="Click here to open clothing preferences"
+					title="Open clothing preferences"
+				/>
+			</div>
+		</header>
 		<section>
-			<div id="header">
+			<div id="location-date">
 				<h5 id="title">RESULTS</h5>
 				<h5 id="date"></h5>
 			</div>
@@ -26,5 +70,7 @@
 			</container>
 		</section>
 	</body>
+	<script src="../scripts/modalPreferences.js" type="text/javascript"></script>
+
 	<script src="../scripts/results.js" type="text/javascript"></script>
 </html>
