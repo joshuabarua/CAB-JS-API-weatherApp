@@ -5,6 +5,7 @@
 		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<link rel="stylesheet" href="../styles/result.css" type="text/css" />
+		<script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
 		<title>Result</title>
 	</head>
 	<body>
@@ -31,14 +32,15 @@
 
 		<header class="header">
 			<div class="page-title">
-				<lottie-player
+				<!-- <lottie-player
 					src="https://assets3.lottiefiles.com/packages/lf20_xlky4kvh.json"
 					background="transparent"
 					speed="1"
 					style="width: 30px; height: 30px"
 					loop
 					autoplay
-				></lottie-player>
+					id="lottie1"
+				></lottie-player> -->
 				<h1 style="font-family: 'Josefin Sans', sans-serif">Weather-Aware</h1>
 			</div>
 
@@ -53,24 +55,30 @@
 			</div>
 		</header>
 		<section>
-			<div id="location-date">
-				<h5 id="title">RESULTS</h5>
-				<h5 id="date"></h5>
-			</div>
-			<container id="mainContainer">
-				<div id="weatherDataDisplay">
-					<!-- TODO: THINK about how i want to display the data. 
-                        4. Figure out a solution for working out what constitutes evening,morning and AFTERNOON so user can select a button that tells when they will be outside. 
-                        5. A function is needed that takes adds a new field to the json if a value of temperature, wind and condition is a certain setting. It will tell the user what to pack based on these in the data. This might take a long time to conceptualise.
-                    -->
-				</div>
-			</container>
-			<container id="rightSideBar">
+			<container id="leftSideBar">
 				<div id="toolbar"></div>
+			</container>
+			<container id="mainContainer">
+				<div id="location-date">
+					<h5 id="title">RESULTS</h5>
+					<h5 id="date"></h5>
+				</div>
+				<div id="weatherDataDisplay">
+					<p>aaaaa</p>
+					<h5>hello</h5>
+				</div>
+				<lottie-player
+					src="../assets/lotties/partly-cloudy.json"
+					background="transparent"
+					speed="1"
+					style="width: 100px; height: 100px"
+					loop
+					autoplay
+					id="lottieCondition"
+				></lottie-player>
 			</container>
 		</section>
 	</body>
 	<script src="../scripts/modalPreferences.js" type="text/javascript"></script>
-
 	<script src="../scripts/results.js" type="text/javascript"></script>
 </html>

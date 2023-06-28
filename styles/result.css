@@ -1,9 +1,10 @@
+@import url("https://fonts.googleapis.com/css2?family=Josefin+Sans:ital@0;1&family=Lexend+Peta:wght@900&family=Lexend+Peta:wght@400&display=swap");
+
 body {
 	margin: auto;
 	background-color: #e9f1f7;
 	font-family: Arial, Helvetica, sans-serif;
 	height: 100vh;
-	overflow: hidden;
 }
 
 .header {
@@ -71,7 +72,7 @@ body {
 section {
 	display: flex;
 	flex-direction: row;
-	justify-content: space-between;
+	justify-content: space-evenly;
 }
 
 #header {
@@ -84,14 +85,32 @@ section {
 	justify-content: center;
 	align-items: center;
 	flex-direction: column;
+	width: 100%;
+	height: 100vh;
+	background-color: white;
 }
 
-#rightSideBar {
+#title {
+	font-size: 3vw;
+	overflow-wrap: break-word;
+	font-family: "Lexend Peta", sans-serif;
+}
+
+#date {
+	font-size: 1.5vw;
+	font-family: "Lexend Peta", sans-serif;
+	font-weight: 400;
+}
+
+#leftSideBar {
+	background-color: skyblue;
 	display: flex;
-	flex-direction: column;
+	flex-direction: row;
 	align-items: flex-end;
 	justify-content: space-between;
 	height: 100vh;
+	max-width: 40vw;
+	width: 100%;
 }
 
 #toolbar {
@@ -120,12 +139,10 @@ section {
 }
 
 #weatherDataDisplay {
-	background: url("../assets/imgs/sky-bg2.jpg") center center;
 	min-height: 30vw;
 	min-width: 30vw;
 	flex: 0 1 auto;
-	border-radius: 50%;
-	border: black 5px solid;
+
 	display: flex;
 	flex-direction: column;
 	justify-content: space-evenly;

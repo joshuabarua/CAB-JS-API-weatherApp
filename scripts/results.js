@@ -13,20 +13,31 @@ const dateOptions = {
 
 const lottieConditions = {
 	day: {
-		cloudy: "../assets/lotties/windy.json",
-		partlyCloudy: "../assets/lotties/partly-cloudy.json",
-		partlyShowers: "../assets/lotties/partly-showers.json",
-		rain: "../assets/lotties/rain.json",
-		dry: "../assets/lotties/sunny1.json",
-		thunderstorm: "../assets/lotties/thunder.json",
-		snow: "../assets/lotties/snow.json",
-		windy: "../assets/lotties/mist.json",
+		cloudy: { src: "../assets/lotties/windy.json" },
+		partlyCloudy: { src: "../assets/lotties/partly-cloudy.json" },
+
+		partlyShowers: { src: "../assets/lotties/partly-cloudy.json" },
+
+		rain: { src: "../assets/lotties/rain.json" },
+
+		dry: { src: "../assets/lotties/sunny1.json" },
+
+		thunderstorm: { src: "../assets/lotties/thunder.json" },
+
+		snow: { src: "../assets/lotties/snow.json" },
+
+		windy: { src: "../assets/lotties/mist.json" },
 	},
 	night: {
-		cloudy: "../assets/lotties/cloudy-night.json",
-		dry: "../assets/lotties/night.json",
-		rain: "../assets/lotties/rainy-night.json",
-		snow: "../assets/lotties/snow-night.json",
+		cloudy: { src: "../assets/lotties/cloudy-night.json" },
+
+		dry: { src: "../assets/lotties/night.json" },
+
+		rain: { src: "../assets/lotties/rainy-night.json" },
+
+		thunderstorm: { src: "../assets/lotties/thunder.json" },
+
+		snow: { src: "../assets/lotties/snow-night.json" },
 	},
 };
 
@@ -56,11 +67,19 @@ const getSessionResultData = () => {
 	controller(weatherData);
 };
 
-/*
-TODO: make layout of page ready to display:
-2: toolbar for filtering based on clothing preference and gender)
-3: hourly temp filling view, on button select, switch/slide to next temperature
-*/
+const createLottiePlayer = (src) => {
+	let lottiePlayer = document.getElementById("lottieCondition");
+	lottiePlayer.src = src;
+	lottiePlayer.background = "transparent";
+	lottiePlayer.speed = "1";
+	lottiePlayer.style.width = "300px";
+	lottiePlayer.style.height = "300px";
+	lottiePlayer.loop = true;
+	lottiePlayer.controls = true;
+	lottiePlayer.autoplay = true;
+
+	return lottiePlayer;
+};
 
 // create layout
 const createHeaderLayout = (weatherData) => {
@@ -93,15 +112,15 @@ const modifyConditionsToImg = (weatherConditionData) => {
 			weatherConditionData[i].timestamp <= "18:00" &&
 			weatherConditionData[i].timestamp >= "05:00"
 		) {
-			for (let [key, value] of Object.entries(emojiConditions.day)) {
+			for (let [key, value] of Object.entries(lottieConditions.day)) {
 				if (key === weatherConditionData[i].condition) {
-					weatherConditionData[i].condition = value;
+					weatherConditionData[i].condition = value.src;
 				}
 			}
 		} else {
-			for (let [key, value] of Object.entries(emojiConditions.night)) {
+			for (let [key, value] of Object.entries(lottieConditions.night)) {
 				if (key === weatherConditionData[i].condition) {
-					weatherConditionData[i].condition = value;
+					weatherConditionData[i].condition = value.src;
 				}
 			}
 		}
@@ -110,7 +129,7 @@ const modifyConditionsToImg = (weatherConditionData) => {
 
 const createButtonLayout = (tempTimes) => {
 	let toolbar = document.getElementById("toolbar");
-	// loop over timestamps conver and print as button
+	//  over timestamps conver and print as button
 	for (let i = 0; i < tempTimes.length; i++) {
 		let hourlyBtn = document.createElement("button");
 		hourlyBtn.classList.add("hourlyBtn");
@@ -138,17 +157,21 @@ const mainTemperatureArea = (weatherData, hourlyTemps) => {
 		},
 	];
 
+	//TODO: Get setattribute and the lotties to display inside the condition logic, and average tempt and clothing option below it.
+	const lottieEl = document.querySelector("lottie-player");
+	lottieEl.setAttribute("src", `${defaultHour.condition}`);
+	console.log(lottieEl);
+
 	// Update the weatherData object with the formatted condition
 	let avgDiv = document.createElement("div");
 	avgDiv.setAttribute("id", "avgTempDiv");
 	let ulAvgWeatherData = document.createElement("ul");
 	// avgTemperature.appendChild(ulAvgWeatherData);
-	const liItem = document.createElement("li");
-	liItem.innerText = defaultHour.condition;
-	liItem.classList.add("emojis");
+	console.log(defaultHour.condition);
+	console.log(document);
 	const avgLi = document.createElement("li");
 	avgLi.innerText = ` ${weatherData.temperature_max}°C / ${weatherData.temperature_min}°C `;
-	ulAvgWeatherData.appendChild(liItem);
+	ulAvgWeatherData.appendChild(listItem);
 	ulAvgWeatherData.appendChild(avgLi);
 	avgDiv.appendChild(ulAvgWeatherData);
 
@@ -172,28 +195,45 @@ const mainTemperatureArea = (weatherData, hourlyTemps) => {
 		listItem.appendChild(valueSpan);
 		ulHourlyWeatherData.appendChild(listItem);
 
-		if (key === "🌡️" && parseInt(value) <= 8) {
-			const valueSpan = document.createElement("span");
-			valueSpan.innerText = clothingPref.cold.join(", ");
-
-			avgDiv.appendChild(valueSpan);
-			// valueSpan =
-			// Check if cold preferences exist and display them
-			console.log("cold", clothingPref.cold);
-			// Use the cold preferences to determine appropriate actions
-			// based on the temperature being below 8°C
-		} else if (key === "🌡️" && parseInt(value) <= 18) {
-			const valueSpan = document.createElement("span");
-			valueSpan.innerText = clothingPref.normal.join(", ");
-			avgDiv.appendChild(valueSpan);
-			console.log(clothingPref.normal);
-		} else if (key === "🌡️" && parseInt(value) <= 40 && parseInt(value) > 18) {
-			const valueSpan = document.createElement("span");
-			valueSpan.innerText = clothingPref.hot.join(", ");
-			avgDiv.appendChild(valueSpan);
-			console.log(clothingPref.hot);
+		if (key === "🌡️") {
+			const intValue = parseInt(value);
+			if (intValue <= 8) {
+				const valueSpan = document.createElement("span");
+				valueSpan.innerText = clothingPref.cold.join(", ");
+				avgDiv.appendChild(valueSpan);
+				console.log("cold", clothingPref.cold);
+			} else if (intValue <= 18) {
+				const valueSpan = document.createElement("span");
+				valueSpan.innerText = clothingPref.normal.join(", ");
+				avgDiv.appendChild(valueSpan);
+				console.log(clothingPref.normal);
+			} else if (intValue <= 40 && intValue > 18) {
+				const valueSpan = document.createElement("span");
+				valueSpan.innerText = clothingPref.hot.join(", ");
+				avgDiv.appendChild(valueSpan);
+				console.log(clothingPref.hot);
+			}
 		}
 	});
+	// if (
+	// 	defaultHour.condition.("☀️") ||
+	// 	defaultHour.condition.includes("⛅")
+	// ) {
+	// 	const valueSpan = document.createElement("span");
+	// 	valueSpan.innerText = ", Sunnies and wear sunscreen!";
+	// 	avgDiv.appendChild(valueSpan);
+	// }
+	// if (
+	// 	defaultHour.condition === "🌧️" ||
+	// 	defaultHour.condition === "🌦️" ||
+	// 	defaultHour.condition === "⛈️" ||
+	// 	defaultHour.condition === "🌧️🌙" ||
+	// 	defaultHour.condition === "⛈️🌙"
+	// ) {
+	// 	const valueSpan = document.createElement("span");
+	// 	valueSpan.innerText = ", bring an umbrella and a raincoat!";
+	// 	avgDiv.appendChild(valueSpan);
+	// }
 };
 
 // make controller
