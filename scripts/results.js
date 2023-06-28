@@ -18,22 +18,15 @@ const lottieConditions = {
 		partlyShowers: { src: "../assets/lotties/partly-shower.json" },
 		rain: { src: "../assets/lotties/rain.json" },
 		dry: { src: "../assets/lotties/sunny1.json" },
-
 		thunderstorm: { src: "../assets/lotties/thunder.json" },
-
 		snow: { src: "../assets/lotties/snow.json" },
-
 		windy: { src: "../assets/lotties/mist.json" },
 	},
 	night: {
 		cloudy: { src: "../assets/lotties/cloudy-night.json" },
-
 		dry: { src: "../assets/lotties/night.json" },
-
 		rain: { src: "../assets/lotties/rainy-night.json" },
-
 		thunderstorm: { src: "../assets/lotties/thunder.json" },
-
 		snow: { src: "../assets/lotties/snow-night.json" },
 	},
 };
@@ -49,8 +42,8 @@ const createLottiePlayer = (src) => {
 	lottiePlayer.setAttribute("src", src);
 	lottiePlayer.setAttribute("background", "transparent");
 	lottiePlayer.setAttribute("speed", "1");
-	lottiePlayer.style.width = "200px";
-	lottiePlayer.style.height = "200px";
+	lottiePlayer.style.width = "250px";
+	lottiePlayer.style.height = "250px";
 	lottiePlayer.setAttribute("loop", true);
 	lottiePlayer.setAttribute("autoplay", true);
 	return lottiePlayer;
@@ -60,14 +53,13 @@ const createLottiePlayer = (src) => {
 const createHeaderLayout = (weatherData) => {
 	let title = document.getElementById("title");
 	let date = document.getElementById("date");
-	let currentDateTime = new Date(weatherData.hours[0].timestamp).toLocaleString(
+	let currentDateTime = new Date(weatherData.hours[0].timestamp).toLocaleDateString(
 		[],
 		{
-			...timeOptions,
 			...dateOptions,
 		}
 	);
-	title.innerText = `${weatherData.location} Weather`;
+	title.innerText = `${weatherData.location}`;
 	date.innerText = `${currentDateTime}`;
 };
 
@@ -125,6 +117,7 @@ const mainTemperatureArea = (weatherData, hourlyTemps) => {
 	weatherDataDisplay.appendChild(lottieEl);
 
 	let mainTempContainer = document.createElement("div");
+	mainTempContainer.setAttribute("class", "flexContainer");
 
 	//Create temp numbers container
 	let temperatureValuesContainer = document.createElement("div");
@@ -141,8 +134,8 @@ const mainTemperatureArea = (weatherData, hourlyTemps) => {
 	timestamp.innerText = defaultHour.timestamp;
 	windSpeed.innerText = ` ${defaultHour.wind_speed} ${defaultHour.wind_speed_unit}`;
 
-	otherValues.appendChild(temperatureAvgs);
 	otherValues.appendChild(timestamp);
+	otherValues.appendChild(temperatureAvgs);
 	otherValues.appendChild(windSpeed);
 	mainTempContainer.appendChild(temperatureValuesContainer);
 	mainTempContainer.appendChild(otherValues);
@@ -152,8 +145,10 @@ const mainTemperatureArea = (weatherData, hourlyTemps) => {
 	let clothingPrefsContainer = document.createElement("div");
 
 	const subHead = document.createElement("h4");
-	subHead.innerText = "Make sure to pack these items:";
+	subHead.innerText = "Clothing Options:";
 	clothingPrefsContainer.appendChild(subHead);
+	clothingPrefsContainer.setAttribute("class", "clothingPrefsDiv");
+
 	const valueSpan = document.createElement("span");
 
 	if (defaultHour.temperature <= 8) {

@@ -2,9 +2,9 @@
 
 body {
 	margin: auto;
-	background-color: #e9f1f7;
 	font-family: Arial, Helvetica, sans-serif;
 	height: 100vh;
+	overflow: hidden;
 }
 
 .header {
@@ -13,11 +13,17 @@ body {
 	background-color: transparent;
 	opacity: 1;
 	display: flex;
-	z-index: 2;
 	flex-direction: row;
 	justify-content: space-between;
 	align-items: center;
 	padding: 20px;
+}
+
+.page-tile {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	align-items: center;
 }
 
 #clothing-preferences-icon img {
@@ -57,112 +63,117 @@ body {
 
 #modal-overlay #modal {
 	display: flex;
-	justify-content: space-between;
+	justify-content: space-evenly;
 	align-items: center;
 	flex-direction: column;
 	text-align: center;
 	max-width: 750px;
 	width: 70vw;
 	background: white;
-	height: 70vh;
+	height: 60vh;
+	min-height: 500px;
 	border-radius: 10px;
-	padding: 10px;
 }
 
 section {
 	display: flex;
 	flex-direction: row;
 	justify-content: space-evenly;
-}
-
-#header {
-	padding-left: 30px;
-	flex: 0 5 auto;
-}
-
-#mainContainer {
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	flex-direction: column;
-
-	width: 100%;
-	height: 100vh;
-	background-color: white;
-}
-
-#title {
-	font-size: 3vw;
-	overflow-wrap: break-word;
-	font-family: "Lexend Peta", sans-serif;
-}
-
-#date {
-	font-size: 1.5vw;
-	font-family: "Lexend Peta", sans-serif;
-	font-weight: 400;
+	min-height: 500px;
+	flex-shrink: 0;
 }
 
 #leftSideBar {
 	background-color: skyblue;
 	display: flex;
-	flex-direction: row;
-	align-items: flex-end;
-	justify-content: space-between;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
 	height: 100vh;
-	max-width: 40vw;
-	width: 100%;
+	width: 40vw;
+	flex-shrink: 10;
 }
 
 #toolbar {
-	background-color: #f8ffa9;
+	background-color: skyblue;
 	padding: 10px;
 	cursor: pointer;
-	max-width: 10vw;
-	height: 100vh;
-	min-height: 20vh;
+	height: 50vh;
+	width: 50%;
 	display: flex;
 	flex-direction: column;
-	align-items: flex-end;
-	overflow-y: scroll;
-	flex-shrink: 3;
+	align-items: center;
 }
 
 #toolbar button:hover {
-	background-color: #f8c9c9;
+	background-color: aquamarine;
+	transition: 1s ease-in-out;
 }
 
 #toolbar button {
 	min-height: 50px;
 	border-radius: 50%;
 	width: 50px;
-	margin-bottom: 5px;
+	margin-bottom: 15px;
+}
+
+#mainContainer {
+	display: flex;
+	justify-content: space-evenly;
+	align-items: center;
+	flex-direction: column;
+	width: 60vw;
+	min-width: 400px;
+	height: 90vh;
+	background-color: white;
+	flex-shrink: 0;
+}
+
+#location-date {
+	display: flex;
+	justify-content: flex-start;
+	flex-direction: row;
+	align-items: center;
+	padding: 10px;
+}
+
+#date {
+	font-size: min(1.8vw, 40px);
+	font-family: "Lexend Peta", sans-serif;
+	font-weight: 200;
+}
+#title {
+	font-size: min(2vw, 40px);
+	overflow-wrap: break-word;
+	font-family: "Lexend Peta", sans-serif;
+	margin-bottom: -20px;
 }
 
 #weatherDataDisplay {
-	min-height: 30vw;
-	min-width: 30vw;
-	flex: 0 1 auto;
-
 	display: flex;
 	flex-direction: column;
+	align-items: center;
+	width: 100%;
+	margin-top: -70px;
+}
+
+.flexContainer {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
 	justify-content: space-evenly;
-	align-items: center;
+	margin-top: -20px;
+	z-index: 5;
+	width: 100%;
+	font-size: min(1.7vw, 40px);
+	padding: 12px;
 }
 
-/* #weatherDataDisplay ul {
-	list-style: none;
-	font-size: 20px;
-	line-height: 60px;
-	margin-left: -40px;
-} */
-.mainTempAreaVals {
-	padding-left: 40px;
-}
-
-/* #avgTempDiv ul {
+.clothingPrefsDiv {
 	display: flex;
-	flex-direction: column;
-	justify-content: center;
+	flex-direction: row;
 	align-items: center;
-} */
+	justify-content: space-evenly;
+	width: 100%;
+	font-size: min(1.7vw, 40px);
+}
