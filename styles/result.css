@@ -85,6 +85,7 @@ section {
 	justify-content: center;
 	align-items: center;
 	flex-direction: column;
+
 	width: 100%;
 	height: 100vh;
 	background-color: white;
@@ -149,23 +150,19 @@ section {
 	align-items: center;
 }
 
-#weatherDataDisplay ul {
+/* #weatherDataDisplay ul {
 	list-style: none;
 	font-size: 20px;
 	line-height: 60px;
 	margin-left: -40px;
-}
+} */
 .mainTempAreaVals {
 	padding-left: 40px;
 }
 
-.emojis {
-	font-size: 60px;
-}
-
-#avgTempDiv ul {
+/* #avgTempDiv ul {
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
-}
+} */

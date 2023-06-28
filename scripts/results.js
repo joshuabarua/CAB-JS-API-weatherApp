@@ -15,11 +15,8 @@ const lottieConditions = {
 	day: {
 		cloudy: { src: "../assets/lotties/windy.json" },
 		partlyCloudy: { src: "../assets/lotties/partly-cloudy.json" },
-
-		partlyShowers: { src: "../assets/lotties/partly-cloudy.json" },
-
+		partlyShowers: { src: "../assets/lotties/partly-shower.json" },
 		rain: { src: "../assets/lotties/rain.json" },
-
 		dry: { src: "../assets/lotties/sunny1.json" },
 
 		thunderstorm: { src: "../assets/lotties/thunder.json" },
@@ -41,26 +38,6 @@ const lottieConditions = {
 	},
 };
 
-const emojiConditions = {
-	day: {
-		cloudy: "☁️",
-		partlyCloudy: "⛅",
-		partlyShowers: "🌦️",
-		rain: "🌧️",
-		dry: "☀️",
-		thunderstorm: "⛈️",
-		snow: "❄️",
-		windy: "💨",
-	},
-	night: {
-		cloudy: "☁️🌙",
-		dry: "🌙",
-		rain: " 🌧️🌙",
-		thunderstorm: "⛈️🌙",
-		snow: " ❄️🌙",
-	},
-};
-
 // get data
 const getSessionResultData = () => {
 	let weatherData = JSON.parse(sessionStorage.getItem("data"));
@@ -68,16 +45,14 @@ const getSessionResultData = () => {
 };
 
 const createLottiePlayer = (src) => {
-	let lottiePlayer = document.getElementById("lottieCondition");
-	lottiePlayer.src = src;
-	lottiePlayer.background = "transparent";
-	lottiePlayer.speed = "1";
-	lottiePlayer.style.width = "300px";
-	lottiePlayer.style.height = "300px";
-	lottiePlayer.loop = true;
-	lottiePlayer.controls = true;
-	lottiePlayer.autoplay = true;
-
+	let lottiePlayer = document.createElement("lottie-player");
+	lottiePlayer.setAttribute("src", src);
+	lottiePlayer.setAttribute("background", "transparent");
+	lottiePlayer.setAttribute("speed", "1");
+	lottiePlayer.style.width = "200px";
+	lottiePlayer.style.height = "200px";
+	lottiePlayer.setAttribute("loop", true);
+	lottiePlayer.setAttribute("autoplay", true);
 	return lottiePlayer;
 };
 
@@ -142,98 +117,79 @@ const createButtonLayout = (tempTimes) => {
 const mainTemperatureArea = (weatherData, hourlyTemps) => {
 	let clothingPref = JSON.parse(sessionStorage.getItem("clothingPreferences"));
 	let weatherDataDisplay = document.getElementById("weatherDataDisplay");
-
-	weatherDataDisplay.innerHTML = "";
-	let ulHourlyWeatherData = document.createElement("ul");
-
 	const defaultHour = hourlyTemps[0];
 
-	const dataElements = [
-		{ key: "🕰️", value: ` ${defaultHour.timestamp}` },
-		{ key: "🌡️", value: ` ${defaultHour.temperature}°C` },
-		{
-			key: "🌬️",
-			value: ` ${defaultHour.wind_speed} ${defaultHour.wind_speed_unit}`,
-		},
-	];
+	weatherDataDisplay.innerHTML = "";
 
-	//TODO: Get setattribute and the lotties to display inside the condition logic, and average tempt and clothing option below it.
-	const lottieEl = document.querySelector("lottie-player");
-	lottieEl.setAttribute("src", `${defaultHour.condition}`);
-	console.log(lottieEl);
+	let lottieEl = createLottiePlayer(defaultHour.condition);
+	weatherDataDisplay.appendChild(lottieEl);
 
-	// Update the weatherData object with the formatted condition
-	let avgDiv = document.createElement("div");
-	avgDiv.setAttribute("id", "avgTempDiv");
-	let ulAvgWeatherData = document.createElement("ul");
-	// avgTemperature.appendChild(ulAvgWeatherData);
-	console.log(defaultHour.condition);
-	console.log(document);
-	const avgLi = document.createElement("li");
-	avgLi.innerText = ` ${weatherData.temperature_max}°C / ${weatherData.temperature_min}°C `;
-	ulAvgWeatherData.appendChild(listItem);
-	ulAvgWeatherData.appendChild(avgLi);
-	avgDiv.appendChild(ulAvgWeatherData);
+	let mainTempContainer = document.createElement("div");
 
-	weatherDataDisplay.appendChild(ulHourlyWeatherData);
-	weatherDataDisplay.appendChild(avgDiv);
+	//Create temp numbers container
+	let temperatureValuesContainer = document.createElement("div");
+	let temperatureHeading = document.createElement("h2");
+	temperatureHeading.innerText = ` ${defaultHour.temperature}°C`;
+	temperatureValuesContainer.appendChild(temperatureHeading);
+
+	//OtherValues Container
+	let otherValues = document.createElement("div");
+	let temperatureAvgs = document.createElement("p");
+	let timestamp = document.createElement("p");
+	let windSpeed = document.createElement("p");
+	temperatureAvgs.innerText = ` ${weatherData.temperature_max}°C / ${weatherData.temperature_min}°C `;
+	timestamp.innerText = defaultHour.timestamp;
+	windSpeed.innerText = ` ${defaultHour.wind_speed} ${defaultHour.wind_speed_unit}`;
+
+	otherValues.appendChild(temperatureAvgs);
+	otherValues.appendChild(timestamp);
+	otherValues.appendChild(windSpeed);
+	mainTempContainer.appendChild(temperatureValuesContainer);
+	mainTempContainer.appendChild(otherValues);
+
+	weatherDataDisplay.appendChild(mainTempContainer);
+
+	let clothingPrefsContainer = document.createElement("div");
 
 	const subHead = document.createElement("h4");
 	subHead.innerText = "Make sure to pack these items:";
-	avgDiv.appendChild(subHead);
+	clothingPrefsContainer.appendChild(subHead);
+	const valueSpan = document.createElement("span");
 
-	dataElements.forEach(({ key, value }) => {
-		const listItem = document.createElement("li");
-		const keySpan = document.createElement("span");
-		keySpan.classList.add("emojis");
+	if (defaultHour.temperature <= 8) {
+		valueSpan.innerText = clothingPref.cold.join(", ");
+		clothingPrefsContainer.appendChild(valueSpan);
+		console.log("cold", clothingPref.cold);
+	} else if (defaultHour.temperature <= 18) {
+		valueSpan.innerText = clothingPref.normal.join(", ");
+		clothingPrefsContainer.appendChild(valueSpan);
+		console.log(clothingPref.normal);
+	} else if (defaultHour.temperature <= 40 && defaultHour.temperature > 18) {
+		valueSpan.innerText = clothingPref.hot.join(", ");
+		clothingPrefsContainer.appendChild(valueSpan);
+		console.log(clothingPref.hot);
+	}
 
-		keySpan.innerText = key;
+	if (
+		defaultHour.condition.includes("../assets/lotties/sunny.json") ||
+		defaultHour.condition.includes("../assets/lotties/partly-cloudy.json")
+	) {
 		const valueSpan = document.createElement("span");
-		valueSpan.classList.add("mainTempAreaVals");
-		valueSpan.innerText = value;
-		listItem.appendChild(keySpan);
-		listItem.appendChild(valueSpan);
-		ulHourlyWeatherData.appendChild(listItem);
-
-		if (key === "🌡️") {
-			const intValue = parseInt(value);
-			if (intValue <= 8) {
-				const valueSpan = document.createElement("span");
-				valueSpan.innerText = clothingPref.cold.join(", ");
-				avgDiv.appendChild(valueSpan);
-				console.log("cold", clothingPref.cold);
-			} else if (intValue <= 18) {
-				const valueSpan = document.createElement("span");
-				valueSpan.innerText = clothingPref.normal.join(", ");
-				avgDiv.appendChild(valueSpan);
-				console.log(clothingPref.normal);
-			} else if (intValue <= 40 && intValue > 18) {
-				const valueSpan = document.createElement("span");
-				valueSpan.innerText = clothingPref.hot.join(", ");
-				avgDiv.appendChild(valueSpan);
-				console.log(clothingPref.hot);
-			}
-		}
-	});
-	// if (
-	// 	defaultHour.condition.("☀️") ||
-	// 	defaultHour.condition.includes("⛅")
-	// ) {
-	// 	const valueSpan = document.createElement("span");
-	// 	valueSpan.innerText = ", Sunnies and wear sunscreen!";
-	// 	avgDiv.appendChild(valueSpan);
-	// }
-	// if (
-	// 	defaultHour.condition === "🌧️" ||
-	// 	defaultHour.condition === "🌦️" ||
-	// 	defaultHour.condition === "⛈️" ||
-	// 	defaultHour.condition === "🌧️🌙" ||
-	// 	defaultHour.condition === "⛈️🌙"
-	// ) {
-	// 	const valueSpan = document.createElement("span");
-	// 	valueSpan.innerText = ", bring an umbrella and a raincoat!";
-	// 	avgDiv.appendChild(valueSpan);
-	// }
+		valueSpan.innerText = ", Sunnies and wear sunscreen!";
+		clothingPrefsContainer.appendChild(valueSpan);
+	}
+	if (
+		defaultHour.condition.includes("../assets/lotties/partly-shower.json") ||
+		defaultHour.condition.includes("../assets/lotties/rain.json") ||
+		defaultHour.condition.includes("../assets/lotties/thunder.json") ||
+		defaultHour.condition.includes("../assets/lotties/rainy-night.json") ||
+		defaultHour.condition.includes("../assets/lotties/thunder.json")
+	) {
+		const valueSpan = document.createElement("span");
+		valueSpan.innerText = ", bring an umbrella and a raincoat!";
+		clothingPrefsContainer.appendChild(valueSpan);
+	}
+	weatherDataDisplay.appendChild(clothingPrefsContainer);
 };
 
 // make controller
