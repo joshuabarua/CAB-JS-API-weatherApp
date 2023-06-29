@@ -11,6 +11,18 @@ const dateOptions = {
 	day: "numeric",
 };
 
+const sunnyConditions = [
+	"../assets/lotties/sunny1.json",
+	"../assets/lotties/partly-cloudy.json",
+];
+const rainyConditions = [
+	"../assets/lotties/partly-shower.json",
+	"../assets/lotties/rain.json",
+	"../assets/lotties/thunder.json",
+	"../assets/lotties/rainy-night.json",
+	"../assets/lotties/windy.json",
+];
+
 const lottieConditions = {
 	day: {
 		cloudy: { src: "../assets/lotties/windy.json" },
@@ -30,6 +42,7 @@ const lottieConditions = {
 		snow: { src: "../assets/lotties/snow-night.json" },
 	},
 };
+//TODO: SETUP UNSPLASH API, to randomise picture in the left blue panel, check to see  if the lottie is correctly displaying weather values or not.
 
 // get data
 const getSessionResultData = () => {
@@ -117,31 +130,29 @@ const createButtonLayout = (tempTimes) => {
 
 // Main temp area
 const mainTemperatureArea = (weatherData, hourlyTemps) => {
-	let clothingPref = JSON.parse(
+	const clothingPref = JSON.parse(
 		sessionStorage.getItem("modifiedClothingPreferences")
 	);
-	let weatherDataDisplay = document.getElementById("weatherDataDisplay");
+	const weatherDataDisplay = document.getElementById("weatherDataDisplay");
 	const defaultHour = hourlyTemps[0];
 
 	weatherDataDisplay.innerHTML = "";
 
-	let lottieEl = createLottiePlayer(defaultHour.condition);
+	const lottieEl = createLottiePlayer(defaultHour.condition);
 	weatherDataDisplay.appendChild(lottieEl);
 
-	let mainTempContainer = document.createElement("div");
-	mainTempContainer.setAttribute("class", "temperatureContainer");
+	const mainTempContainer = document.createElement("div");
+	mainTempContainer.className = "temperatureContainer";
 
-	//Create temp numbers container
-	let temperatureValuesContainer = document.createElement("div");
-	let temperatureHeading = document.createElement("h2");
+	const temperatureValuesContainer = document.createElement("div");
+	const temperatureHeading = document.createElement("h2");
 	temperatureHeading.innerText = ` ${defaultHour.temperature}°C`;
 	temperatureValuesContainer.appendChild(temperatureHeading);
 
-	//OtherValues Container
-	let otherValues = document.createElement("div");
-	let temperatureAvgs = document.createElement("p");
-	let timestamp = document.createElement("p");
-	let windSpeed = document.createElement("p");
+	const otherValues = document.createElement("div");
+	const temperatureAvgs = document.createElement("p");
+	const timestamp = document.createElement("p");
+	const windSpeed = document.createElement("p");
 	temperatureAvgs.innerText = ` ${weatherData.temperature_max}°C / ${weatherData.temperature_min}°C `;
 	timestamp.innerText = defaultHour.timestamp;
 	windSpeed.innerText = ` ${defaultHour.wind_speed} ${defaultHour.wind_speed_unit}`;
@@ -154,13 +165,13 @@ const mainTemperatureArea = (weatherData, hourlyTemps) => {
 
 	weatherDataDisplay.appendChild(mainTempContainer);
 
-	let clothingPrefsContainer = document.createElement("div");
+	const clothingPrefsContainer = document.createElement("div");
+	clothingPrefsContainer.className = "clothingPrefsDiv";
 
 	const subHead = document.createElement("h4");
 	subHead.style.margin = 0;
 	subHead.innerText = "Clothing Options:";
 	clothingPrefsContainer.appendChild(subHead);
-	clothingPrefsContainer.setAttribute("class", "clothingPrefsDiv");
 
 	const valueImg = document.createElement("span");
 
@@ -175,27 +186,27 @@ const mainTemperatureArea = (weatherData, hourlyTemps) => {
 		clothingPrefsContainer.appendChild(valueImg);
 	}
 
-	if (
-		defaultHour.condition.includes("../assets/lotties/sunny1.json") ||
-		defaultHour.condition.includes("../assets/lotties/partly-cloudy.json")
-	) {
+	if (defaultHour.wind_speed > 15) {
 		const valueImg = document.createElement("span");
-		valueImg.innerHTML = `Think about using <img src="../assets/clothing-icons/Sunnies.png" alt="Sunnies"> and wear sunscreen!`;
+		valueImg.innerHTML = `Think about using a <img src="../assets/clothing-icons/Jacket.png" alt="Windbreaker"> for the wind!`;
 		valueImg.style.fontStyle = "italic";
 		clothingPrefsContainer.appendChild(valueImg);
 	}
-	if (
-		defaultHour.condition.includes("../assets/lotties/partly-shower.json") ||
-		defaultHour.condition.includes("../assets/lotties/rain.json") ||
-		defaultHour.condition.includes("../assets/lotties/thunder.json") ||
-		defaultHour.condition.includes("../assets/lotties/rainy-night.json") ||
-		defaultHour.condition.includes("../assets/lotties/windy.json")
-	) {
+
+	if (sunnyConditions.includes(defaultHour.condition)) {
 		const valueImg = document.createElement("span");
-		valueImg.innerHTML = `Probably bring an <img src="../assets/clothing-icons/Umbrella.png" alt="Umbrella"> or a  <img src="../assets/clothing-icons/Raincoat.png" alt="Raincoat">`;
+		valueImg.innerHTML = `Think about using some <img src="../assets/clothing-icons/Sunnies.png" alt="Sunnies"> and wear sunscreen!`;
 		valueImg.style.fontStyle = "italic";
 		clothingPrefsContainer.appendChild(valueImg);
 	}
+
+	if (rainyConditions.includes(defaultHour.condition)) {
+		const valueImg = document.createElement("span");
+		valueImg.innerHTML = `Probably bring an <img src="../assets/clothing-icons/Umbrella.png" alt="Umbrella"> or a <img src="../assets/clothing-icons/Raincoat.png" alt="Raincoat">`;
+		valueImg.style.fontStyle = "italic";
+		clothingPrefsContainer.appendChild(valueImg);
+	}
+
 	weatherDataDisplay.appendChild(clothingPrefsContainer);
 };
 
