@@ -17,7 +17,7 @@ const lottieConditions = {
 		partlyCloudy: { src: "../assets/lotties/partly-cloudy.json" },
 		partlyShowers: { src: "../assets/lotties/partly-shower.json" },
 		rain: { src: "../assets/lotties/rain.json" },
-		dry: { src: "../assets/lotties/sunny1.json" },
+		dry: { src: "../assets/lotties/windy.json" },
 		thunderstorm: { src: "../assets/lotties/thunder.json" },
 		snow: { src: "../assets/lotties/snow.json" },
 		windy: { src: "../assets/lotties/mist.json" },
@@ -59,7 +59,7 @@ const createHeaderLayout = (weatherData) => {
 			...dateOptions,
 		}
 	);
-	title.innerText = `${weatherData.location}`;
+	title.innerText = `${weatherData.location.split("-")[0]}`;
 	date.innerText = `${currentDateTime}`;
 };
 
@@ -98,7 +98,7 @@ const createButtonLayout = (tempTimes) => {
 	let toolbar = document.getElementById("toolbar");
 	//  over timestamps conver and print as button
 	for (let i = 0; i < tempTimes.length; i++) {
-		let hourlyBtn = document.createElement("button");
+		let hourlyBtn = document.createElement("a");
 		hourlyBtn.classList.add("hourlyBtn");
 		hourlyBtn.innerText = tempTimes[i].timestamp;
 		toolbar.appendChild(hourlyBtn);
@@ -117,7 +117,7 @@ const mainTemperatureArea = (weatherData, hourlyTemps) => {
 	weatherDataDisplay.appendChild(lottieEl);
 
 	let mainTempContainer = document.createElement("div");
-	mainTempContainer.setAttribute("class", "flexContainer");
+	mainTempContainer.setAttribute("class", "mainTempContainer");
 
 	//Create temp numbers container
 	let temperatureValuesContainer = document.createElement("div");
@@ -166,11 +166,11 @@ const mainTemperatureArea = (weatherData, hourlyTemps) => {
 	}
 
 	if (
-		defaultHour.condition.includes("../assets/lotties/sunny.json") ||
+		defaultHour.condition.includes("../assets/lotties/sunny1.json") ||
 		defaultHour.condition.includes("../assets/lotties/partly-cloudy.json")
 	) {
 		const valueSpan = document.createElement("span");
-		valueSpan.innerText = ", Sunnies and wear sunscreen!";
+		valueSpan.innerText = " Sunnies and wear sunscreen!";
 		clothingPrefsContainer.appendChild(valueSpan);
 	}
 	if (
@@ -178,7 +178,7 @@ const mainTemperatureArea = (weatherData, hourlyTemps) => {
 		defaultHour.condition.includes("../assets/lotties/rain.json") ||
 		defaultHour.condition.includes("../assets/lotties/thunder.json") ||
 		defaultHour.condition.includes("../assets/lotties/rainy-night.json") ||
-		defaultHour.condition.includes("../assets/lotties/thunder.json")
+		defaultHour.condition.includes("../assets/lotties/windy.json")
 	) {
 		const valueSpan = document.createElement("span");
 		valueSpan.innerText = ", bring an umbrella and a raincoat!";
@@ -186,11 +186,20 @@ const mainTemperatureArea = (weatherData, hourlyTemps) => {
 	}
 	weatherDataDisplay.appendChild(clothingPrefsContainer);
 };
+const slideOutToggler = () => {
+	const slideOut = document.querySelector("#slideOut");
+	const slideOutTab = document.querySelector(".slideOutTab");
+
+	slideOutTab.addEventListener("click", () => {
+		slideOut.classList.toggle("showSlideOut");
+	});
+};
 
 // make controller
 const controller = (weatherData) => {
 	console.log(weatherData);
 	const { hours } = weatherData;
+	slideOutToggler();
 	createHeaderLayout(weatherData);
 	modifyTimeFormat(hours);
 	modifyConditionsToImg(hours);
@@ -201,11 +210,14 @@ const controller = (weatherData) => {
 
 //set Event Listener on button and change event
 const setEventListener = (weatherData, hours) => {
+	const closeTab = document.querySelector(".close");
 	let buttons = document.querySelectorAll(".hourlyBtn");
+
 	buttons.forEach((button) => {
 		button.addEventListener("click", () => {
 			const selectedBtn = button.textContent;
 			filterData(weatherData, hours, selectedBtn);
+			document.querySelector("#slideOut").classList.toggle("showSlideOut");
 		});
 	});
 };
