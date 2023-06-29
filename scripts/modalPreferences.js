@@ -86,12 +86,6 @@ const addEventListeners = () => {
 	const savedPreferences = sessionStorage.getItem("clothingPreferences");
 	if (savedPreferences) {
 		let preferences = JSON.parse(savedPreferences);
-		try {
-			preferences = JSON.parse(savedPreferences);
-		} catch (error) {
-			console.error("Error parsing clothing preferences:", error);
-			return;
-		}
 
 		// Iterate through each temperature bracket and set checkbox values
 		for (const temperature in preferences) {

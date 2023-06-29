@@ -17,7 +17,7 @@ const lottieConditions = {
 		partlyCloudy: { src: "../assets/lotties/partly-cloudy.json" },
 		partlyShowers: { src: "../assets/lotties/partly-shower.json" },
 		rain: { src: "../assets/lotties/rain.json" },
-		dry: { src: "../assets/lotties/windy.json" },
+		dry: { src: "../assets/lotties/sunny1.json" },
 		thunderstorm: { src: "../assets/lotties/thunder.json" },
 		snow: { src: "../assets/lotties/snow.json" },
 		windy: { src: "../assets/lotties/mist.json" },
@@ -188,10 +188,10 @@ const mainTemperatureArea = (weatherData, hourlyTemps) => {
 	if (defaultHour.temperature <= 8) {
 		valueImg.innerHTML = clothingPref.cold.join(" ");
 		clothingPrefsContainer.appendChild(valueImg);
-	} else if (defaultHour.temperature <= 18) {
+	} else if (defaultHour.temperature <= 20) {
 		valueImg.innerHTML = clothingPref.normal.join(" ");
 		clothingPrefsContainer.appendChild(valueImg);
-	} else if (defaultHour.temperature <= 40 && defaultHour.temperature > 18) {
+	} else if (defaultHour.temperature <= 40 && defaultHour.temperature > 20) {
 		valueImg.innerHTML = clothingPref.hot.join(" ");
 		clothingPrefsContainer.appendChild(valueImg);
 	}
@@ -219,6 +219,7 @@ const mainTemperatureArea = (weatherData, hourlyTemps) => {
 	}
 	weatherDataDisplay.appendChild(clothingPrefsContainer);
 };
+
 const slideOutToggler = () => {
 	const slideOut = document.querySelector("#slideOut");
 	const slideOutTab = document.querySelector(".slideOutTab");
@@ -245,9 +246,7 @@ const controller = (weatherData) => {
 
 //set Event Listener on button and change event
 const setEventListener = (weatherData, hours) => {
-	const closeTab = document.querySelector(".close");
 	let buttons = document.querySelectorAll(".hourlyBtn");
-
 	buttons.forEach((button) => {
 		button.addEventListener("click", () => {
 			const selectedBtn = button.textContent;
@@ -255,6 +254,12 @@ const setEventListener = (weatherData, hours) => {
 			document.querySelector("#slideOut").classList.toggle("showSlideOut");
 		});
 	});
+	const sunLogo = document.getElementById("sunLogo");
+	sunLogo.addEventListener(
+		"click",
+		() => (document.location.href = "../pages/index.html")
+	);
+	sunLogo.style.cursor = "pointer";
 };
 
 const filterData = (weatherData, hours, selectedTimestamp) => {

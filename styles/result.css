@@ -2,7 +2,8 @@
 
 body {
 	margin: auto;
-	font-family: Arial, Helvetica, sans-serif;
+	font-family: "Lexend Peta", sans-serif;
+
 	height: 100vh;
 	overflow: hidden;
 }
@@ -220,10 +221,15 @@ section {
 	flex-direction: column;
 	align-items: center;
 	justify-content: space-evenly;
+	font-weight: 200;
 	height: 100%;
 	width: 100%;
 	font-size: min(4vw, 25px);
 	padding: 0px 30px 20px 30px;
+}
+
+.clothingPrefsDiv h4 {
+	font-weight: 200;
 }
 
 /* TAB SLIDE OUT  */
@@ -235,7 +241,7 @@ section {
 	align-items: flex-end;
 	background-color: aliceblue;
 	width: 300px;
-	height: 300px;
+	height: 375px;
 	bottom: 0px;
 	right: -300px;
 	/* Animation  */
@@ -266,12 +272,16 @@ section {
 	left: -40px;
 	height: 200px;
 	border: black 1px solid;
-
 	width: 40px;
-	-webkit-box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
 	box-shadow: 0 1px 5px 0px rgba(0, 0, 0, 0.5);
 	background-color: aquamarine;
 	border-radius: 15px 0 0 0;
+}
+
+.slideOutTab:hover {
+	cursor: pointer;
+	background-color: aqua;
+	transition: 1s ease-in-out;
 }
 
 /* Slide out tab timePicker div  */
@@ -285,6 +295,12 @@ section {
 	transform: rotate(270deg);
 }
 
+.slideOutTab div:hover {
+	cursor: pointer;
+	background-color: aqua;
+	transition: 1s ease-in-out;
+}
+
 .tab-content {
 	width: 100%;
 	height: 100%;
@@ -292,7 +308,7 @@ section {
 
 .tab-header {
 	width: 100%;
-	height: 50px;
+	height: 80px;
 	display: flex;
 	flex-direction: row;
 	align-items: flex-start;
@@ -302,6 +318,14 @@ section {
 .tab-header p {
 	padding: 10px;
 	text-align: center;
+
 	font-size: 12px;
 	font-style: italic;
+}
+
+.tab-times {
+	height: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
 }
