@@ -5,9 +5,36 @@ const preferences = {
 	hot: [],
 };
 
-const cold = ["Jacket", "Gloves", "Hoodie", "Beanie", "Thermals", "Jeans"];
+const cold = ["Jacket", "Gloves", "Hoodie", "Beanie", "Leggings", "Jeans"];
 const normal = ["T-Shirt", "Dress", "Jeans", "Shirt", "Cardigan", "Pullover"];
-const hot = ["Shorts", "Tank Top", "T-Shirt", "Skirt", "Dress", "Hat/Cap"];
+const hot = [
+	"Shorts",
+	"Tank Top",
+	"T-Shirt",
+	"Skirt",
+	"Dress",
+	"Cap",
+	"Short Sleeved Shirt",
+];
+
+const clothingImages = {
+	Jacket: "../assets/clothing-icons/Jacket.png",
+	Gloves: "../assets/clothing-icons/Gloves.png",
+	Hoodie: "../assets/clothing-icons/Hoodie.png",
+	Beanie: "../assets/clothing-icons/Beanie.png",
+	Leggings: "../assets/clothing-icons/Leggings.png",
+	Jeans: "../assets/clothing-icons/Jeans.png",
+	TShirt: "../assets/clothing-icons/T-shirt.png",
+	Dress: "../assets/clothing-icons/Dress.png",
+	Shirt: "../assets/clothing-icons/Shirt.png",
+	Cardigan: "../assets/clothing-icons/Cardigan.png",
+	Pullover: "../assets/clothing-icons/Pullover.png",
+	Shorts: "../assets/clothing-icons/Shorts.png",
+	TankTop: "../assets/clothing-icons/Tank-Top.png",
+	Skirt: "../assets/clothing-icons/Skirt.png",
+	ShortSleevedShirt: "../assets/clothing-icons/Short-Sleeved-Shirt.png",
+	Cap: "../assets/clothing-icons/Cap.png",
+};
 
 const createCheckboxes = (temperature, items) => {
 	const formContainer = document.createElement("div");
@@ -58,7 +85,13 @@ const addEventListeners = () => {
 
 	const savedPreferences = sessionStorage.getItem("clothingPreferences");
 	if (savedPreferences) {
-		const preferences = JSON.parse(savedPreferences);
+		let preferences = JSON.parse(savedPreferences);
+		try {
+			preferences = JSON.parse(savedPreferences);
+		} catch (error) {
+			console.error("Error parsing clothing preferences:", error);
+			return;
+		}
 
 		// Iterate through each temperature bracket and set checkbox values
 		for (const temperature in preferences) {

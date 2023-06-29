@@ -94,12 +94,43 @@ const modifyConditionsToImg = (weatherConditionData) => {
 	}
 };
 
+const modifyClothingPrefsToImg = (clothingPref) => {
+	let modifiedClothingPrefs = {}; // New variable to store modified clothing preferences
+	// Drill into the  nested elements  if the object
+	for (const conditionType in clothingPref) {
+		const prefList = clothingPref[conditionType];
+		let modifiedPrefList = [];
+		// Iterate through the preferences list and swap out text with image
+		for (let i = 0; i < prefList.length; i++) {
+			prefList[i] = prefList[i].replace(/[\s-]/g, "");
+			const clothingItem = prefList[i];
+			if (clothingImages.hasOwnProperty(clothingItem)) {
+				// Replace text with image
+				modifiedPrefList.push(
+					`<img src="${clothingImages[clothingItem]}" alt="${clothingItem}">`
+				);
+				prefList[
+					i
+				] = `<img src="${clothingImages[clothingItem]}" alt="${clothingItem}">`;
+				console.log(prefList[i]);
+			}
+		}
+		modifiedClothingPrefs[conditionType] = modifiedPrefList;
+	}
+	sessionStorage.setItem(
+		"modifiedClothingPreferences",
+		JSON.stringify(modifiedClothingPrefs)
+	);
+};
+
 const createButtonLayout = (tempTimes) => {
 	let toolbar = document.getElementById("toolbar");
 	//  over timestamps conver and print as button
 	for (let i = 0; i < tempTimes.length; i++) {
 		let hourlyBtn = document.createElement("a");
 		hourlyBtn.classList.add("hourlyBtn");
+		hourlyBtn.classList.add("bouncy");
+		hourlyBtn.style.animationDelay = `${0.07 * i}s`;
 		hourlyBtn.innerText = tempTimes[i].timestamp;
 		toolbar.appendChild(hourlyBtn);
 	}
@@ -107,7 +138,9 @@ const createButtonLayout = (tempTimes) => {
 
 // Main temp area
 const mainTemperatureArea = (weatherData, hourlyTemps) => {
-	let clothingPref = JSON.parse(sessionStorage.getItem("clothingPreferences"));
+	let clothingPref = JSON.parse(
+		sessionStorage.getItem("modifiedClothingPreferences")
+	);
 	let weatherDataDisplay = document.getElementById("weatherDataDisplay");
 	const defaultHour = hourlyTemps[0];
 
@@ -145,33 +178,32 @@ const mainTemperatureArea = (weatherData, hourlyTemps) => {
 	let clothingPrefsContainer = document.createElement("div");
 
 	const subHead = document.createElement("h4");
+	subHead.style.margin = 0;
 	subHead.innerText = "Clothing Options:";
 	clothingPrefsContainer.appendChild(subHead);
 	clothingPrefsContainer.setAttribute("class", "clothingPrefsDiv");
 
-	const valueSpan = document.createElement("span");
+	const valueImg = document.createElement("span");
 
 	if (defaultHour.temperature <= 8) {
-		valueSpan.innerText = clothingPref.cold.join(", ");
-		clothingPrefsContainer.appendChild(valueSpan);
-		console.log("cold", clothingPref.cold);
+		valueImg.innerHTML = clothingPref.cold.join(" ");
+		clothingPrefsContainer.appendChild(valueImg);
 	} else if (defaultHour.temperature <= 18) {
-		valueSpan.innerText = clothingPref.normal.join(", ");
-		clothingPrefsContainer.appendChild(valueSpan);
-		console.log(clothingPref.normal);
+		valueImg.innerHTML = clothingPref.normal.join(" ");
+		clothingPrefsContainer.appendChild(valueImg);
 	} else if (defaultHour.temperature <= 40 && defaultHour.temperature > 18) {
-		valueSpan.innerText = clothingPref.hot.join(", ");
-		clothingPrefsContainer.appendChild(valueSpan);
-		console.log(clothingPref.hot);
+		valueImg.innerHTML = clothingPref.hot.join(" ");
+		clothingPrefsContainer.appendChild(valueImg);
 	}
 
 	if (
 		defaultHour.condition.includes("../assets/lotties/sunny1.json") ||
 		defaultHour.condition.includes("../assets/lotties/partly-cloudy.json")
 	) {
-		const valueSpan = document.createElement("span");
-		valueSpan.innerText = " Sunnies and wear sunscreen!";
-		clothingPrefsContainer.appendChild(valueSpan);
+		const valueImg = document.createElement("span");
+		valueImg.innerHTML = `Think about using <img src="../assets/clothing-icons/Sunnies.png" alt="Sunnies"> and wear sunscreen!`;
+		valueImg.style.fontStyle = "italic";
+		clothingPrefsContainer.appendChild(valueImg);
 	}
 	if (
 		defaultHour.condition.includes("../assets/lotties/partly-shower.json") ||
@@ -180,9 +212,10 @@ const mainTemperatureArea = (weatherData, hourlyTemps) => {
 		defaultHour.condition.includes("../assets/lotties/rainy-night.json") ||
 		defaultHour.condition.includes("../assets/lotties/windy.json")
 	) {
-		const valueSpan = document.createElement("span");
-		valueSpan.innerText = ", bring an umbrella and a raincoat!";
-		clothingPrefsContainer.appendChild(valueSpan);
+		const valueImg = document.createElement("span");
+		valueImg.innerHTML = `Probably bring an <img src="../assets/clothing-icons/Umbrella.png" alt="Umbrella"> or a  <img src="../assets/clothing-icons/Raincoat.png" alt="Raincoat">`;
+		valueImg.style.fontStyle = "italic";
+		clothingPrefsContainer.appendChild(valueImg);
 	}
 	weatherDataDisplay.appendChild(clothingPrefsContainer);
 };
@@ -197,8 +230,10 @@ const slideOutToggler = () => {
 
 // make controller
 const controller = (weatherData) => {
+	let clothingPref = JSON.parse(sessionStorage.getItem("clothingPreferences"));
 	console.log(weatherData);
 	const { hours } = weatherData;
+	modifyClothingPrefsToImg(clothingPref);
 	slideOutToggler();
 	createHeaderLayout(weatherData);
 	modifyTimeFormat(hours);
