@@ -94,11 +94,11 @@ section {
 	align-items: center;
 	justify-content: center;
 	height: 100vh;
-	width: 40vw;
-	flex-shrink: 10;
+	width: 30vw;
+	flex-shrink: 1;
 }
 
-#toolbar {
+#timeContainer {
 	background-color: aliceblue;
 	padding: 10px;
 	width: 95%;
@@ -108,7 +108,7 @@ section {
 	justify-content: center;
 }
 
-#toolbar a {
+#timeContainer a {
 	display: inline-block;
 	padding: 0.35em 1.2em;
 	border: 0.1em solid black;
@@ -123,7 +123,7 @@ section {
 	transition: all 0.2s;
 	cursor: pointer;
 }
-#toolbar a:hover {
+#timeContainer a:hover {
 	color: #000000;
 	background-color: aquamarine;
 }
@@ -168,11 +168,11 @@ section {
 	justify-content: space-evenly;
 	align-items: center;
 	flex-direction: column;
-	width: 60vw;
+	width: 70vw;
 	min-width: 400px;
 	height: 90vh;
 	background-color: white;
-	flex-shrink: 0;
+	flex-shrink: 10;
 }
 
 #location-date {
@@ -184,12 +184,12 @@ section {
 }
 
 #date {
-	font-size: min(1.8vw, 40px);
+	font-size: min(4vw, 30px);
 	font-family: "Lexend Peta", sans-serif;
 	font-weight: 200;
 }
 #title {
-	font-size: min(2vw, 40px);
+	font-size: min(4vw, 30px);
 	overflow-wrap: break-word;
 	font-family: "Lexend Peta", sans-serif;
 	margin-bottom: -20px;
@@ -199,21 +199,20 @@ section {
 	display: flex;
 	flex-direction: column;
 	align-items: center;
+	justify-content: space-evenly;
 	width: 100%;
 	height: 100%;
-	margin-top: -70px;
 }
 
-.mainTempContainer {
+.temperatureContainer {
 	display: flex;
 	flex-direction: row;
 	align-items: center;
 	justify-content: space-evenly;
-	margin-top: -20px;
+	margin-top: -40px;
 	z-index: 5;
 	width: 100%;
-	font-size: min(1.7vw, 40px);
-	padding: 12px;
+	font-size: min(2.5vw, 20px);
 }
 
 .clothingPrefsDiv {
@@ -223,7 +222,8 @@ section {
 	justify-content: space-evenly;
 	height: 100%;
 	width: 100%;
-	font-size: min(1.7vw, 40px);
+	font-size: min(4vw, 25px);
+	padding: 0px 30px 20px 30px;
 }
 
 /* TAB SLIDE OUT  */

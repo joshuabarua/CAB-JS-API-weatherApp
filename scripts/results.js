@@ -124,7 +124,7 @@ const modifyClothingPrefsToImg = (clothingPref) => {
 };
 
 const createButtonLayout = (tempTimes) => {
-	let toolbar = document.getElementById("toolbar");
+	let timeContainer = document.getElementById("timeContainer");
 	//  over timestamps conver and print as button
 	for (let i = 0; i < tempTimes.length; i++) {
 		let hourlyBtn = document.createElement("a");
@@ -132,7 +132,7 @@ const createButtonLayout = (tempTimes) => {
 		hourlyBtn.classList.add("bouncy");
 		hourlyBtn.style.animationDelay = `${0.07 * i}s`;
 		hourlyBtn.innerText = tempTimes[i].timestamp;
-		toolbar.appendChild(hourlyBtn);
+		timeContainer.appendChild(hourlyBtn);
 	}
 };
 
@@ -150,7 +150,7 @@ const mainTemperatureArea = (weatherData, hourlyTemps) => {
 	weatherDataDisplay.appendChild(lottieEl);
 
 	let mainTempContainer = document.createElement("div");
-	mainTempContainer.setAttribute("class", "mainTempContainer");
+	mainTempContainer.setAttribute("class", "temperatureContainer");
 
 	//Create temp numbers container
 	let temperatureValuesContainer = document.createElement("div");
