@@ -74,48 +74,27 @@ const modifyTimeFormat = (hourlyTemps) => {
 };
 
 const modifyConditionsToImg = (weatherConditionData) => {
-	for (let i = 0; i < weatherConditionData.length; i++) {
-		if (
-			weatherConditionData[i].timestamp <= "18:00" &&
-			weatherConditionData[i].timestamp >= "05:00"
-		) {
-			for (let [key, value] of Object.entries(lottieConditions.day)) {
-				if (key === weatherConditionData[i].condition) {
-					weatherConditionData[i].condition = value.src;
-				}
-			}
-		} else {
-			for (let [key, value] of Object.entries(lottieConditions.night)) {
-				if (key === weatherConditionData[i].condition) {
-					weatherConditionData[i].condition = value.src;
-				}
-			}
+	weatherConditionData.forEach((hour) => {
+		const isDay = hour.timestamp >= "05:00" && hour.timestamp <= "20:00";
+		const conditionSet = isDay ? lottieConditions.day : lottieConditions.night;
+		if (conditionSet[hour.condition]) {
+			hour.condition = conditionSet[hour.condition].src;
 		}
-	}
+	});
 };
 
 const modifyClothingPrefsToImg = (clothingPref) => {
-	let modifiedClothingPrefs = {}; // New variable to store modified clothing preferences
-	// Drill into the  nested elements  if the object
+	let modifiedClothingPrefs = {};
 	for (const conditionType in clothingPref) {
-		const prefList = clothingPref[conditionType];
-		let modifiedPrefList = [];
-		// Iterate through the preferences list and swap out text with image
-		for (let i = 0; i < prefList.length; i++) {
-			prefList[i] = prefList[i].replace(/[\s-]/g, "");
-			const clothingItem = prefList[i];
-			if (clothingImages.hasOwnProperty(clothingItem)) {
-				// Replace text with image
-				modifiedPrefList.push(
-					`<img src="${clothingImages[clothingItem]}" alt="${clothingItem}">`
-				);
-				prefList[
-					i
-				] = `<img src="${clothingImages[clothingItem]}" alt="${clothingItem}">`;
-				console.log(prefList[i]);
+		modifiedClothingPrefs[conditionType] = clothingPref[conditionType].map(
+			(clothingItem) => {
+				clothingItem = clothingItem.replace(/[\s-]/g, "");
+				if (clothingImages.hasOwnProperty(clothingItem)) {
+					return `<img src="${clothingImages[clothingItem]}" alt="${clothingItem}">`;
+				}
+				return clothingItem;
 			}
-		}
-		modifiedClothingPrefs[conditionType] = modifiedPrefList;
+		);
 	}
 	sessionStorage.setItem(
 		"modifiedClothingPreferences",
@@ -145,6 +124,8 @@ const mainTemperatureArea = (weatherData, hourlyTemps) => {
 	const defaultHour = hourlyTemps[0];
 
 	weatherDataDisplay.innerHTML = "";
+
+	console.log(defaultHour);
 
 	let lottieEl = createLottiePlayer(defaultHour.condition);
 	weatherDataDisplay.appendChild(lottieEl);
@@ -231,6 +212,8 @@ const slideOutToggler = () => {
 
 // make controller
 const controller = (weatherData) => {
+	console.log(weatherData);
+
 	let clothingPref = JSON.parse(sessionStorage.getItem("clothingPreferences"));
 	console.log(weatherData);
 	const { hours } = weatherData;

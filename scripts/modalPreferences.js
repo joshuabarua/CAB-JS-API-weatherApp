@@ -121,8 +121,6 @@ const addEventListeners = () => {
 			location.reload();
 		}
 	});
-
-	console.log(sessionStorage.getItem("clothingPreferences"));
 };
 
 const showModalWindow = () => {
