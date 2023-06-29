@@ -125,8 +125,6 @@ const mainTemperatureArea = (weatherData, hourlyTemps) => {
 
 	weatherDataDisplay.innerHTML = "";
 
-	console.log(defaultHour);
-
 	let lottieEl = createLottiePlayer(defaultHour.condition);
 	weatherDataDisplay.appendChild(lottieEl);
 
@@ -212,10 +210,7 @@ const slideOutToggler = () => {
 
 // make controller
 const controller = (weatherData) => {
-	console.log(weatherData);
-
 	let clothingPref = JSON.parse(sessionStorage.getItem("clothingPreferences"));
-	console.log(weatherData);
 	const { hours } = weatherData;
 	modifyClothingPrefsToImg(clothingPref);
 	slideOutToggler();
