@@ -1,3 +1,4 @@
+
 // Variable to be used/destructured for use in code
 const {
 	var: {
@@ -6,13 +7,17 @@ const {
 		baseTomorrowIOURL,
 		baseFlexWeatherURL,
 		baseOpenWeatherURL,
+		reverseGeocodeURL,
 		tomorrowApikey,
 		openWeatherMapApiKey,
 		fields,
 		startTime,
 		endTime,
+		getRequestHeaders,
 	},
 } = config;
+
+//Default Variables
 
 // 1: Get user position data
 
@@ -29,28 +34,35 @@ const getPositionData = async () => {
 		const latitude = position.coords.latitude;
 		const longitude = position.coords.longitude;
 
-		makeApiRequest(latitude, longitude);
+		weatherApiRequest(latitude, longitude);
+		cityNameFromGeoLocation(latitude, longitude);
 	} catch (error) {
 		console.error(error);
 	}
 };
 
+const cityNameFromGeoLocation = async (lat, long) => {
+	const userLocationRequest = `${reverseGeocodeURL}?latitude=${lat}&longitude=${long}&localityLanguage=en`;
+
+	await fetch(userLocationRequest, getRequestHeaders)
+		.then(async (response) => {
+			const cityData = await response.json();
+			sessionStorage.setItem("cityData", JSON.stringify(cityData));
+		})
+		.catch((err) => console.error(err));
+};
+
 // 2: Make api request using user location
 
-const makeApiRequest = async (lat, long) => {
-	const userLocation = `${lat},${long}`;
-	const options = { method: "GET", headers: { accept: "application/json" } };
-	const flexWeatherAPI = `${baseFlexWeatherURL}/today?lat=${lat}&lon=${long}&units=${units}`;
-
+const weatherApiRequest = async (lat, long) => {
+	// const userLocation = `${lat},${long}`;
 	// const tomorrowIOUrl = `${baseTomorrowIOURL}/weather/realtime?location=${userLocation}&units=${units}&timesteps=${timesteps}&startTime=${startTime}&endTime=${endTime}&apikey=${apikey}`;
-
 	// const openWeatherMapApi = `${baseOpenWeatherURL}weather?lat=${lat}&lon=${long}&appid=${openWeatherMapApiKey}`;
-
-	await fetch(flexWeatherAPI, options)
+	const flexWeatherAPI = `${baseFlexWeatherURL}/today?lat=${lat}&lon=${long}&units=${units}`;
+	await fetch(flexWeatherAPI, getRequestHeaders)
 		.then(async (response) => {
 			const weatherData = await response.json();
 			sessionStorage.setItem("data", JSON.stringify(weatherData));
-			console.log(weatherData);
 		})
 		.catch((err) => console.error(err));
 };

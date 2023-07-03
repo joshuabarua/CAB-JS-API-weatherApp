@@ -3,7 +3,6 @@
 body {
 	margin: auto;
 	font-family: "Lexend Peta", sans-serif;
-
 	height: 100vh;
 	overflow: hidden;
 }
@@ -91,12 +90,30 @@ section {
 #leftSideBar {
 	background-color: skyblue;
 	display: flex;
-	flex-direction: column;
-	align-items: center;
+	flex-direction: row;
+	align-items: flex-end;
 	justify-content: center;
 	height: 100vh;
 	width: 30vw;
-	flex-shrink: 1;
+	flex-shrink: 5;
+}
+
+#leftSideBar span {
+	display: none;
+	padding-bottom: 120px;
+}
+
+#leftSideBar span.show,
+#leftSideBar a,
+#leftSideBar p {
+	font-size: 1vw;
+	text-decoration: none;
+	color: white;
+	display: flex;
+}
+
+#leftSideBar a:hover {
+	text-decoration: underline;
 }
 
 #timeContainer {
@@ -221,15 +238,17 @@ section {
 	flex-direction: column;
 	align-items: center;
 	justify-content: space-evenly;
+	text-align: center;
 	font-weight: 200;
 	height: 100%;
 	width: 100%;
-	font-size: min(4vw, 25px);
 	padding: 0px 30px 20px 30px;
 }
 
-.clothingPrefsDiv h4 {
+.clothingPrefsDiv h4,
+.clothingPrefsDiv span {
 	font-weight: 200;
+	font-size: min(2vw, 25px);
 }
 
 /* TAB SLIDE OUT  */

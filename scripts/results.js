@@ -1,53 +1,23 @@
-const timeOptions = {
-	hour12: false,
-	hour: "2-digit",
-	minute: "2-digit",
-};
-
-const dateOptions = {
-	weekday: "long",
-	year: "numeric",
-	month: "long",
-	day: "numeric",
-};
-
-const sunnyConditions = [
-	"../assets/lotties/sunny1.json",
-	"../assets/lotties/partly-cloudy.json",
-];
-const rainyConditions = [
-	"../assets/lotties/partly-shower.json",
-	"../assets/lotties/rain.json",
-	"../assets/lotties/thunder.json",
-	"../assets/lotties/rainy-night.json",
-	"../assets/lotties/windy.json",
-];
-
-const lottieConditions = {
-	day: {
-		cloudy: { src: "../assets/lotties/windy.json" },
-		partlyCloudy: { src: "../assets/lotties/partly-cloudy.json" },
-		partlyShowers: { src: "../assets/lotties/partly-shower.json" },
-		rain: { src: "../assets/lotties/rain.json" },
-		dry: { src: "../assets/lotties/sunny1.json" },
-		thunderstorm: { src: "../assets/lotties/thunder.json" },
-		snow: { src: "../assets/lotties/snow.json" },
-		windy: { src: "../assets/lotties/mist.json" },
+const {
+	var: {
+		getRequestHeaders,
+		unSplashURL,
+		unSplashAccessKey,
+		timeOptions,
+		dateOptions,
+		sunnyConditions,
+		rainyConditions,
+		lottieConditions,
 	},
-	night: {
-		cloudy: { src: "../assets/lotties/cloudy-night.json" },
-		dry: { src: "../assets/lotties/night.json" },
-		rain: { src: "../assets/lotties/rainy-night.json" },
-		thunderstorm: { src: "../assets/lotties/thunder.json" },
-		snow: { src: "../assets/lotties/snow-night.json" },
-	},
-};
+} = config;
+
 //TODO: SETUP UNSPLASH API, to randomise picture in the left blue panel, check to see  if the lottie is correctly displaying weather values or not.
 
 // get data
 const getSessionResultData = () => {
 	let weatherData = JSON.parse(sessionStorage.getItem("data"));
-	controller(weatherData);
+	let cityData = JSON.parse(sessionStorage.getItem("cityData"));
+	controller(weatherData, cityData);
 };
 
 const createLottiePlayer = (src) => {
@@ -74,6 +44,42 @@ const createHeaderLayout = (weatherData) => {
 	);
 	title.innerText = `${weatherData.location.split("-")[0]}`;
 	date.innerText = `${currentDateTime}`;
+};
+
+const createCityImageLeftSidebar = async (city) => {
+	const unsplashImageRequest = `${unSplashURL}?client_id=${unSplashAccessKey}&query=${city}&orientation=portrait&count=1&content_filter=high`;
+	if (!sessionStorage.getItem("cityImageData")) {
+		await fetch(unsplashImageRequest, getRequestHeaders)
+			.then(async (response) => {
+				const unSplashImageData = await response.json();
+				sessionStorage.setItem(
+					"cityImageData",
+					JSON.stringify(unSplashImageData)
+				);
+			})
+			.catch((err) => console.error(err));
+	}
+	const cityImageData = JSON.parse(sessionStorage.getItem("cityImageData"));
+	const leftSideBar = document.getElementById("leftSideBar");
+	const imageAttribution = document.createElement("span");
+	imageAttribution.innerHTML = `<p> Photo by <a href="${cityImageData[0].user.links.html}?utm_source=WhetherAware&utm_medium=referral"> ${cityImageData[0].user.name}  &nbsp; </a> on &nbsp;  
+		<a href="https://unsplash.com/?utm_source=whetherAware&utm_medium=referral"> Unsplash </a> </p>`;
+	leftSideBar.appendChild(imageAttribution);
+
+	leftSideBar.addEventListener("mouseover", (e) => {
+		imageAttribution.classList.add("show");
+	});
+
+	leftSideBar.addEventListener("mouseout", (e) => {
+		imageAttribution.classList.remove("show");
+	});
+
+	leftSideBar.style.setProperty(
+		"background-image",
+		`url(${cityImageData[0].urls.full})`
+	);
+	leftSideBar.style.setProperty("background-size", "cover");
+	leftSideBar.style.setProperty("background-position", "center");
 };
 
 const modifyTimeFormat = (hourlyTemps) => {
@@ -164,17 +170,14 @@ const mainTemperatureArea = (weatherData, hourlyTemps) => {
 	mainTempContainer.appendChild(otherValues);
 
 	weatherDataDisplay.appendChild(mainTempContainer);
-
 	const clothingPrefsContainer = document.createElement("div");
 	clothingPrefsContainer.className = "clothingPrefsDiv";
-
 	const subHead = document.createElement("h4");
 	subHead.style.margin = 0;
 	subHead.innerText = "Clothing Options:";
 	clothingPrefsContainer.appendChild(subHead);
 
 	const valueImg = document.createElement("span");
-
 	if (defaultHour.temperature <= 8) {
 		valueImg.innerHTML = clothingPref.cold.join(" ");
 		clothingPrefsContainer.appendChild(valueImg);
@@ -185,28 +188,24 @@ const mainTemperatureArea = (weatherData, hourlyTemps) => {
 		valueImg.innerHTML = clothingPref.hot.join(" ");
 		clothingPrefsContainer.appendChild(valueImg);
 	}
-
 	if (defaultHour.wind_speed > 15) {
 		const valueImg = document.createElement("span");
 		valueImg.innerHTML = `Think about using a <img src="../assets/clothing-icons/Jacket.png" alt="Windbreaker"> for the wind!`;
 		valueImg.style.fontStyle = "italic";
 		clothingPrefsContainer.appendChild(valueImg);
 	}
-
 	if (sunnyConditions.includes(defaultHour.condition)) {
 		const valueImg = document.createElement("span");
 		valueImg.innerHTML = `Think about using some <img src="../assets/clothing-icons/Sunnies.png" alt="Sunnies"> and wear sunscreen!`;
 		valueImg.style.fontStyle = "italic";
 		clothingPrefsContainer.appendChild(valueImg);
 	}
-
 	if (rainyConditions.includes(defaultHour.condition)) {
 		const valueImg = document.createElement("span");
 		valueImg.innerHTML = `Probably bring an <img src="../assets/clothing-icons/Umbrella.png" alt="Umbrella"> or a <img src="../assets/clothing-icons/Raincoat.png" alt="Raincoat">`;
 		valueImg.style.fontStyle = "italic";
 		clothingPrefsContainer.appendChild(valueImg);
 	}
-
 	weatherDataDisplay.appendChild(clothingPrefsContainer);
 };
 
@@ -220,12 +219,14 @@ const slideOutToggler = () => {
 };
 
 // make controller
-const controller = (weatherData) => {
+const controller = (weatherData, cityData) => {
 	let clothingPref = JSON.parse(sessionStorage.getItem("clothingPreferences"));
 	const { hours } = weatherData;
+	const { city } = cityData;
 	modifyClothingPrefsToImg(clothingPref);
 	slideOutToggler();
 	createHeaderLayout(weatherData);
+	createCityImageLeftSidebar(city);
 	modifyTimeFormat(hours);
 	modifyConditionsToImg(hours);
 	mainTemperatureArea(weatherData, hours);
