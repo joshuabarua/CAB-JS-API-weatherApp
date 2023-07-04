@@ -7,77 +7,6 @@ body {
 	overflow: hidden;
 }
 
-/* Header Styles */
-
-.header {
-	height: 60px;
-	width: 100%;
-	background-color: transparent;
-	opacity: 1;
-	display: flex;
-	flex-direction: row;
-	justify-content: space-between;
-	align-items: center;
-	padding: 20px;
-}
-
-.page-tile {
-	display: flex;
-	flex-direction: column;
-	justify-content: space-between;
-	align-items: center;
-}
-
-#clothing-preferences-icon img {
-	margin-right: 50px;
-	width: 40px;
-	height: 40px;
-	background-color: aquamarine;
-	border-radius: 20px;
-	border-width: 40px;
-	border-color: aquamarine;
-	border: 10px solid aquamarine;
-	cursor: pointer;
-}
-
-#clothing-preferences-icon img:hover {
-	background-color: aqua;
-	border-radius: 20px;
-	border: 10px solid aqua;
-	cursor: pointer;
-	transition: ease-in-out 0.3s;
-}
-
-/* Modal Pop UP */
-#modal-overlay {
-	display: none;
-	justify-content: center;
-	align-items: center;
-	width: 100%;
-	height: 100vh;
-	position: absolute;
-	background: rgba(0, 0, 0, 0.4);
-	z-index: 10;
-}
-
-#modal-overlay.open {
-	display: flex;
-}
-
-#modal-overlay #modal {
-	display: flex;
-	justify-content: space-evenly;
-	align-items: center;
-	flex-direction: column;
-	text-align: center;
-	max-width: 750px;
-	width: 70vw;
-	background: white;
-	height: 60vh;
-	min-height: 500px;
-	border-radius: 10px;
-}
-
 /* Main body */
 section {
 	display: flex;
@@ -202,12 +131,12 @@ section {
 }
 
 #date {
-	font-size: min(4vw, 30px);
+	font-size: max(2.5vw, 16px);
 	font-family: "Lexend Peta", sans-serif;
 	font-weight: 200;
 }
 #title {
-	font-size: min(4vw, 30px);
+	font-size: max(3vw, 16px);
 	overflow-wrap: break-word;
 	font-family: "Lexend Peta", sans-serif;
 	margin-bottom: -20px;
@@ -230,7 +159,11 @@ section {
 	margin-top: -40px;
 	z-index: 5;
 	width: 100%;
-	font-size: min(2.5vw, 20px);
+}
+
+.temperatureContainer p,
+h2 {
+	font-size: max(2.5vw, 16px);
 }
 
 .clothingPrefsDiv {
@@ -248,7 +181,7 @@ section {
 .clothingPrefsDiv h4,
 .clothingPrefsDiv span {
 	font-weight: 200;
-	font-size: min(2vw, 25px);
+	font-size: max(1.8vw, 12px);
 }
 
 /* TAB SLIDE OUT  */
@@ -285,21 +218,25 @@ section {
 /* Tab */
 
 .slideOutTab {
+	font-size: 1vw;
 	cursor: pointer;
 	margin-top: 50px;
 	position: absolute;
 	left: -40px;
-	height: 200px;
-	border: black 1px solid;
-	width: 40px;
+	height: min(30vh, 200px);
+	border: black 0.5px solid;
+	width: 39px;
 	box-shadow: 0 1px 5px 0px rgba(0, 0, 0, 0.5);
 	background-color: aquamarine;
 	border-radius: 15px 0 0 0;
 }
 
+.slideOutTab p {
+	font-size: min(12px, 18px);
+	background-color: transparent;
+}
 .slideOutTab:hover {
 	cursor: pointer;
-	background-color: aqua;
 	transition: 1s ease-in-out;
 }
 
@@ -309,14 +246,14 @@ section {
 	position: relative;
 	right: 70px;
 	top: 80px;
-	background-color: aquamarine;
+	background-color: transparent;
 	width: 180px;
 	transform: rotate(270deg);
 }
 
 .slideOutTab div:hover {
 	cursor: pointer;
-	background-color: aqua;
+	background-color: transparent;
 	transition: 1s ease-in-out;
 }
 
@@ -337,8 +274,7 @@ section {
 .tab-header p {
 	padding: 10px;
 	text-align: center;
-
-	font-size: 12px;
+	font-size: min(4vw, 14px);
 	font-style: italic;
 }
 
@@ -347,4 +283,36 @@ section {
 	display: flex;
 	justify-content: center;
 	align-items: center;
+}
+
+@media only screen and (max-width: 569px) and (max-height: 882px) {
+	#slideOut {
+		width: 250px;
+		right: -250px;
+	}
+
+	.tab-content {
+		overflow-y: scroll;
+	}
+
+	.slideOutTab div {
+		top: 60px;
+	}
+}
+
+@media only screen and (max-width: 320px) and (max-height: 568px) {
+	#slideOut {
+		width: 150px;
+		right: -150px;
+	}
+
+	.slideOutTab div {
+		top: 60px;
+	}
+
+	.tab-header p {
+		padding: 5px;
+		text-align: center;
+		font-size: min(3.5vw, 14px);
+	}
 }

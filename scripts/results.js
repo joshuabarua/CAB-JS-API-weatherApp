@@ -62,7 +62,7 @@ const createCityImageLeftSidebar = async (city) => {
 	const cityImageData = JSON.parse(sessionStorage.getItem("cityImageData"));
 	const leftSideBar = document.getElementById("leftSideBar");
 	const imageAttribution = document.createElement("span");
-	imageAttribution.innerHTML = `<p> Photo by <a href="${cityImageData[0].user.links.html}?utm_source=WhetherAware&utm_medium=referral"> ${cityImageData[0].user.name}  &nbsp; </a> on &nbsp;  
+	imageAttribution.innerHTML = `<p> Photo by <a href="${cityImageData[0].user.links.html}?utm_source=WhetherAware&utm_medium=referral"> ${cityImageData[0].user.name}  </a>  &nbsp; on &nbsp;  
 		<a href="https://unsplash.com/?utm_source=whetherAware&utm_medium=referral"> Unsplash </a> </p>`;
 	leftSideBar.appendChild(imageAttribution);
 
@@ -174,7 +174,7 @@ const mainTemperatureArea = (weatherData, hourlyTemps) => {
 	clothingPrefsContainer.className = "clothingPrefsDiv";
 	const subHead = document.createElement("h4");
 	subHead.style.margin = 0;
-	subHead.innerText = "Clothing Options:";
+	subHead.innerText = "Clothing Options";
 	clothingPrefsContainer.appendChild(subHead);
 
 	const valueImg = document.createElement("span");

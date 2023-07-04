@@ -37,11 +37,12 @@ const clothingImages = {
 };
 
 const createCheckboxes = (temperature, items) => {
-	const formContainer = document.createElement("div");
+	const checkboxSectioncontainer = document.createElement("div");
 	const heading = document.createElement("h4");
 	heading.textContent = `${temperature}`;
-	formContainer.appendChild(heading);
-
+	checkboxSectioncontainer.appendChild(heading);
+	const checkboxContainer = document.createElement("div");
+	checkboxContainer.setAttribute("class", "checkboxSectionDiv");
 	items.forEach((item) => {
 		const label = document.createElement("label");
 		const checkbox = document.createElement("input");
@@ -50,19 +51,20 @@ const createCheckboxes = (temperature, items) => {
 		checkbox.value = item;
 		label.appendChild(checkbox);
 		label.appendChild(document.createTextNode(item));
-		formContainer.appendChild(label);
+		checkboxContainer.appendChild(label);
+		checkboxSectioncontainer.appendChild(checkboxContainer);
 	});
-	return formContainer;
+	return checkboxSectioncontainer; // Return the created checkboxes container
 };
 
 const buildModal = () => {
 	const modalContent = document.getElementById("modal-content");
-	const container = document.getElementById("checkbox-container");
-
+	const container = document.getElementById("checkbox-form-container");
 	// Create checkboxes for each temperature array
 	const coldCheckboxes = createCheckboxes("Cold", cold);
 	const normalCheckboxes = createCheckboxes("Normal", normal);
 	const hotCheckboxes = createCheckboxes("Hot", hot);
+	console.log(coldCheckboxes);
 	container.appendChild(coldCheckboxes);
 	container.appendChild(normalCheckboxes);
 	container.appendChild(hotCheckboxes);
