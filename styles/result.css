@@ -74,7 +74,7 @@ section {
 	color: #000000;
 	background-color: aquamarine;
 }
-@media all and (max-width: 30em) {
+@media all and (min-width: 30em) {
 	a {
 		display: block;
 		margin: 0.4em auto;
@@ -131,12 +131,12 @@ section {
 }
 
 #date {
-	font-size: max(2.5vw, 16px);
+	font-size: min(2.5vw, 16px);
 	font-family: "Lexend Peta", sans-serif;
 	font-weight: 200;
 }
 #title {
-	font-size: max(3vw, 16px);
+	font-size: min(3vw, 16px);
 	overflow-wrap: break-word;
 	font-family: "Lexend Peta", sans-serif;
 	margin-bottom: -20px;
@@ -163,7 +163,7 @@ section {
 
 .temperatureContainer p,
 h2 {
-	font-size: max(2.5vw, 16px);
+	font-size: min(2.5vw, 16px);
 }
 
 .clothingPrefsDiv {
@@ -181,7 +181,7 @@ h2 {
 .clothingPrefsDiv h4,
 .clothingPrefsDiv span {
 	font-weight: 200;
-	font-size: max(1.8vw, 12px);
+	font-size: min(1.8vw, 12px);
 }
 
 /* TAB SLIDE OUT  */
@@ -285,7 +285,7 @@ h2 {
 	align-items: center;
 }
 
-@media only screen and (max-width: 569px) and (max-height: 882px) {
+@media only screen and (min-width: 569px) and (min-height: 882px) {
 	#slideOut {
 		width: 250px;
 		right: -250px;
@@ -300,7 +300,7 @@ h2 {
 	}
 }
 
-@media only screen and (max-width: 320px) and (max-height: 568px) {
+@media only screen and (min-width: 320px) and (min-height: 568px) {
 	#slideOut {
 		width: 150px;
 		right: -150px;

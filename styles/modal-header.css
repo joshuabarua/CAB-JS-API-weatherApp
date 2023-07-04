@@ -11,7 +11,7 @@
 }
 
 .header h1 {
-	font-size: max(4vw, 18px);
+	font-size: min(3vw, 28px);
 }
 
 #clothing-preferences-icon img {
@@ -67,7 +67,7 @@
 .modal-header p,
 h2 {
 	padding: 5px;
-	font-size: max(2.2vw, 16px);
+	font-size: min(2.2vw, 18px);
 }
 
 .checkboxSectionDiv {
