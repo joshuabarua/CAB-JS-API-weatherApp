@@ -74,12 +74,6 @@ section {
 	color: #000000;
 	background-color: aquamarine;
 }
-@media all and (min-width: 30em) {
-	a {
-		display: block;
-		margin: 0.4em auto;
-	}
-}
 
 .bouncy {
 	animation: bouncy 5s infinite linear;
@@ -285,7 +279,7 @@ h2 {
 	align-items: center;
 }
 
-@media only screen and (min-width: 569px) and (min-height: 882px) {
+@media only screen and (min-width: 569px) and (max-width: 882px) {
 	#slideOut {
 		width: 250px;
 		right: -250px;
@@ -295,12 +289,18 @@ h2 {
 		overflow-y: scroll;
 	}
 
+	.tab-header p {
+		padding: 5px;
+		text-align: center;
+		font-size: min(3.5vw, 14px);
+	}
+
 	.slideOutTab div {
 		top: 60px;
 	}
 }
 
-@media only screen and (min-width: 320px) and (min-height: 568px) {
+@media only screen and (min-width: 300px) and (max-width: 568px) {
 	#slideOut {
 		width: 150px;
 		right: -150px;
@@ -313,6 +313,6 @@ h2 {
 	.tab-header p {
 		padding: 5px;
 		text-align: center;
-		font-size: min(3.5vw, 14px);
+		font-size: min(1.8vw, 12px);
 	}
 }
