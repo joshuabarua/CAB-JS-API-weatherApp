@@ -7,14 +7,14 @@ const {
 		baseFlexWeatherURL,
 		baseOpenWeatherURL,
 		reverseGeocodeURL,
-		tomorrowApikey,
-		openWeatherMapApiKey,
 		fields,
 		startTime,
 		endTime,
 		getRequestHeaders,
 	},
 } = config;
+
+const { OPENWEATHERMAPAPIKEY } = secrets;
 
 //Default Variables
 
@@ -81,7 +81,7 @@ const cityNameFromGeoLocation = async (lat, long) => {
 const weatherApiRequest = async (lat, long) => {
 	// const userLocation = `${lat},${long}`;
 	// const tomorrowIOUrl = `${baseTomorrowIOURL}/weather/realtime?location=${userLocation}&units=${units}&timesteps=${timesteps}&startTime=${startTime}&endTime=${endTime}&apikey=${apikey}`;
-	const openWeatherMapApi = `${baseOpenWeatherURL}forecast?lat=${lat}&lon=${long}&appid=${openWeatherMapApiKey}&cnt=24`;
+	const openWeatherMapApi = `${baseOpenWeatherURL}forecast?lat=${lat}&lon=${long}&appid=${OPENWEATHERMAPAPIKEY}&cnt=24`;
 	const flexWeatherAPI = `${baseFlexWeatherURL}/today?lat=${lat}&lon=${long}&units=${units}`;
 	await fetch(flexWeatherAPI, getRequestHeaders)
 		.then(async (response) => {

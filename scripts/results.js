@@ -2,7 +2,6 @@ const {
 	var: {
 		getRequestHeaders,
 		unSplashURL,
-		unSplashAccessKey,
 		timeOptions,
 		dateOptions,
 		sunnyConditions,
@@ -10,6 +9,8 @@ const {
 		lottieConditions,
 	},
 } = config;
+
+const { UNSPLASHACCESSKEY } = secrets;
 
 //TODO: SETUP UNSPLASH API, to randomise picture in the left blue panel, check to see  if the lottie is correctly displaying weather values or not.
 
@@ -47,7 +48,7 @@ const createHeaderLayout = (weatherData) => {
 };
 
 const createCityImageLeftSidebar = async (city) => {
-	const unsplashImageRequest = `${unSplashURL}?client_id=${unSplashAccessKey}&query=${city}&orientation=portrait&count=1&content_filter=high`;
+	const unsplashImageRequest = `${unSplashURL}?client_id=${UNSPLASHACCESSKEY}&query=${city}&orientation=portrait&count=1&content_filter=high`;
 	if (!sessionStorage.getItem("cityImageData")) {
 		await fetch(unsplashImageRequest, getRequestHeaders)
 			.then(async (response) => {
