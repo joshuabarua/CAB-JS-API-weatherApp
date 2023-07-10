@@ -64,7 +64,6 @@ const buildModal = () => {
 	const coldCheckboxes = createCheckboxes("Cold", cold);
 	const normalCheckboxes = createCheckboxes("Normal", normal);
 	const hotCheckboxes = createCheckboxes("Hot", hot);
-	console.log(coldCheckboxes);
 	container.appendChild(coldCheckboxes);
 	container.appendChild(normalCheckboxes);
 	container.appendChild(hotCheckboxes);
