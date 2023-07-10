@@ -1,4 +1,3 @@
-
 // Variable to be used/destructured for use in code
 const {
 	var: {
@@ -21,23 +20,48 @@ const {
 
 // 1: Get user position data
 
+const showError = (errorMessage) => {
+	document.body.innerHTML = "";
+	const errorContainer = document.body;
+	errorContainer.style.display = "flex";
+	errorContainer.style.justifyContent = "center";
+	errorContainer.style.alignItems = "center";
+	errorContainer.style.paddingTop = "50vh";
+	errorContainer.innerText = errorMessage;
+	setTimeout(() => {
+		document.location.href = "../pages/index.html";
+	}, 4000);
+};
+
 const getCurrentPosition = () => {
 	return new Promise((resolve, reject) => {
-		0;
-		navigator.geolocation.getCurrentPosition(resolve, reject);
+		const options = {
+			timeout: 3000,
+			maximumAge: Infinity,
+		};
+		navigator.geolocation.getCurrentPosition(resolve, reject, options);
 	});
 };
 
 const getPositionData = async () => {
 	try {
 		const position = await getCurrentPosition();
+		console.log(position);
 		const latitude = position.coords.latitude;
 		const longitude = position.coords.longitude;
 
 		weatherApiRequest(latitude, longitude);
 		cityNameFromGeoLocation(latitude, longitude);
+
+		setTimeout(() => {
+			document.location.href = "../pages/result.html";
+		}, 2000);
 	} catch (error) {
 		console.error(error);
+		const { code, message } = error;
+		showError(
+			`Code: ${code} - Access Denied: ${message}, could not complete request. Redirecting...  `
+		);
 	}
 };
 
@@ -57,7 +81,7 @@ const cityNameFromGeoLocation = async (lat, long) => {
 const weatherApiRequest = async (lat, long) => {
 	// const userLocation = `${lat},${long}`;
 	// const tomorrowIOUrl = `${baseTomorrowIOURL}/weather/realtime?location=${userLocation}&units=${units}&timesteps=${timesteps}&startTime=${startTime}&endTime=${endTime}&apikey=${apikey}`;
-	// const openWeatherMapApi = `${baseOpenWeatherURL}weather?lat=${lat}&lon=${long}&appid=${openWeatherMapApiKey}`;
+	const openWeatherMapApi = `${baseOpenWeatherURL}forecast?lat=${lat}&lon=${long}&appid=${openWeatherMapApiKey}&cnt=24`;
 	const flexWeatherAPI = `${baseFlexWeatherURL}/today?lat=${lat}&lon=${long}&units=${units}`;
 	await fetch(flexWeatherAPI, getRequestHeaders)
 		.then(async (response) => {
@@ -65,14 +89,20 @@ const weatherApiRequest = async (lat, long) => {
 			sessionStorage.setItem("data", JSON.stringify(weatherData));
 		})
 		.catch((err) => console.error(err));
+	await fetch(openWeatherMapApi, getRequestHeaders)
+		.then(async (response) => {
+			const openWeatherMapData = await response.json();
+			sessionStorage.setItem(
+				"openWeatherMapData",
+				JSON.stringify(openWeatherMapData)
+			);
+		})
+		.catch((err) => console.error(err));
 };
 
 // 3: Create onClick  event that triggers the other functions
 const triggerEvent = () => {
 	getPositionData();
-	setTimeout(() => {
-		document.location.href = "../pages/result.html";
-	}, 3500);
 };
 
 document.getElementById("get-weather-btn").addEventListener("click", triggerEvent);
