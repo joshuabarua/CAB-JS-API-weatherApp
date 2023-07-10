@@ -29,7 +29,7 @@ const showError = (errorMessage) => {
 	errorContainer.style.paddingTop = "50vh";
 	errorContainer.innerText = errorMessage;
 	setTimeout(() => {
-		document.location.href = "../pages/index.html";
+		document.location.href = "../index.html";
 	}, 4000);
 };
 

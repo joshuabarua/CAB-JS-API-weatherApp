@@ -247,7 +247,7 @@ const setEventListener = (weatherData, hours) => {
 	const sunLogo = document.getElementById("sunLogo");
 	sunLogo.addEventListener(
 		"click",
-		() => (document.location.href = "../pages/index.html")
+		() => (document.location.href = "../index.html")
 	);
 	sunLogo.style.cursor = "pointer";
 };
