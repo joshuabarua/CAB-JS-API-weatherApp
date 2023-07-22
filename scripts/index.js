@@ -74,7 +74,7 @@ const cityNameFromGeoLocation = async (lat, long) => {
 const weatherApiRequest = async (lat, long) => {
 	// const userLocation = `${lat},${long}`;
 	// const tomorrowIOUrl = `${baseTomorrowIOURL}/weather/realtime?location=${userLocation}&units=${units}&timesteps=${timesteps}&startTime=${startTime}&endTime=${endTime}&apikey=${apikey}`;
-	const openWeatherMapApi = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${long}&appid=${OPENWEATHERMAPAPIKEY}&cnt=24`;
+	const openWeatherMapApi = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${long}&appid=${OPENWEATHERMAPAPIKEY}&cnt=24&units=metric`;
 	// const flexWeatherAPI = `${baseFlexWeatherURL}/today?lat=${lat}&lon=${long}&units=${units}`;
 	// await fetch(flexWeatherAPI, getRequestHeaders)
 	// 	.then(async (response) => {

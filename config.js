@@ -26,7 +26,7 @@ const config = {
 			"sunsetTime",
 			"moonPhase",
 		],
-		getRequestHeaders: { method: "GET", headers: { accept: "application/json" } },
+		getRequestHeaders: {method: "GET", headers: {accept: "application/json"}},
 		timeOptions: {
 			hour12: false,
 			hour: "2-digit",
@@ -41,7 +41,7 @@ const config = {
 		},
 
 		sunnyConditions: [
-			"../assets/lotties/sunny1.json",
+			"../assets/lotties/clear.json",
 			"../assets/lotties/partly-cloudy.json",
 		],
 		rainyConditions: [
@@ -54,21 +54,21 @@ const config = {
 
 		lottieConditions: {
 			day: {
-				cloudy: { src: "../assets/lotties/windy.json" },
-				partlyCloudy: { src: "../assets/lotties/partly-cloudy.json" },
-				partlyShowers: { src: "../assets/lotties/partly-shower.json" },
-				rain: { src: "../assets/lotties/rain.json" },
-				dry: { src: "../assets/lotties/sunny1.json" },
-				thunderstorm: { src: "../assets/lotties/thunder.json" },
-				snow: { src: "../assets/lotties/snow.json" },
-				windy: { src: "../assets/lotties/mist.json" },
+				cloudy: {src: "../assets/lotties/windy.json"},
+				partlyCloudy: {src: "../assets/lotties/partly-cloudy.json"},
+				partlyShowers: {src: "../assets/lotties/partly-shower.json"},
+				rain: {src: "../assets/lotties/rain.json"},
+				clear: {src: "../assets/lotties/clear.json"},
+				thunderstorm: {src: "../assets/lotties/thunder.json"},
+				snow: {src: "../assets/lotties/snow.json"},
+				windy: {src: "../assets/lotties/mist.json"},
 			},
 			night: {
-				cloudy: { src: "../assets/lotties/cloudy-night.json" },
-				dry: { src: "../assets/lotties/night.json" },
-				rain: { src: "../assets/lotties/rainy-night.json" },
-				thunderstorm: { src: "../assets/lotties/thunder.json" },
-				snow: { src: "../assets/lotties/snow-night.json" },
+				cloudy: {src: "../assets/lotties/cloudy-night.json"},
+				clear: {src: "../assets/lotties/night.json"},
+				rain: {src: "../assets/lotties/rainy-night.json"},
+				thunderstorm: {src: "../assets/lotties/thunder.json"},
+				snow: {src: "../assets/lotties/snow-night.json"},
 			},
 		},
 	},

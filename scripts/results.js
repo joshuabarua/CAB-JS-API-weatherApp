@@ -90,12 +90,11 @@ const modifyTimeFormat = (hourlyTimes) => {
 };
 
 const modifyConditionsToImg = (weatherConditionData) => {
-	console.log(weatherConditionData);
+	//TODO: Make an else statement, find all the description values  and rename lottie conditions that match those values
 	weatherConditionData.forEach((hour) => {
-		const isDay = hour.sys.pod === "d";
-		const conditionSet = isDay ? lottieConditions.day : lottieConditions.night;
-		if (conditionSet[hour.condition]) {
-			hour.condition = conditionSet[hour.condition].src;
+		console.log(hour);
+		if (hour.sys.pod === "d") {
+			hour.weather[0].description = lottieConditions.day.src;
 		}
 	});
 };
@@ -142,11 +141,11 @@ const mainTemperatureArea = (weatherData, hourlyTemps) => {
 		sessionStorage.getItem("modifiedClothingPreferences")
 	);
 	const weatherDataDisplay = document.getElementById("weatherDataDisplay");
-	const defaultHour = hourlyTemps[0];
+	const defaultHour = weatherData[0];
 
 	weatherDataDisplay.innerHTML = "";
 
-	const lottieEl = createLottiePlayer(defaultHour.condition);
+	const lottieEl = createLottiePlayer(defaultHour.weather[0].main.toLowerCase());
 	weatherDataDisplay.appendChild(lottieEl);
 
 	const mainTempContainer = document.createElement("div");
@@ -154,16 +153,16 @@ const mainTemperatureArea = (weatherData, hourlyTemps) => {
 
 	const temperatureValuesContainer = document.createElement("div");
 	const temperatureHeading = document.createElement("h2");
-	temperatureHeading.innerText = ` ${defaultHour.temperature}°C`;
+	temperatureHeading.innerText = ` ${defaultHour.main.feels_like}°C`;
 	temperatureValuesContainer.appendChild(temperatureHeading);
 
 	const otherValues = document.createElement("div");
 	const temperatureAvgs = document.createElement("p");
 	const timestamp = document.createElement("p");
 	const windSpeed = document.createElement("p");
-	temperatureAvgs.innerText = ` ${weatherData.temperature_max}°C / ${weatherData.temperature_min}°C `;
-	timestamp.innerText = defaultHour.timestamp;
-	windSpeed.innerText = ` ${defaultHour.wind_speed} ${defaultHour.wind_speed_unit}`;
+	temperatureAvgs.innerText = ` ${defaultHour.main.temp_max}°C / ${defaultHour.main.temp_min}°C `;
+	timestamp.innerText = defaultHour.dt;
+	windSpeed.innerText = ` ${defaultHour.wind.speed}-${defaultHour.wind.gust} km/h`;
 
 	otherValues.appendChild(timestamp);
 	otherValues.appendChild(temperatureAvgs);
@@ -228,7 +227,6 @@ const controller = (weatherData, cityData) => {
 
 	let hours = "hours";
 
-	console.log(cityData);
 	modifyClothingPrefsToImg(clothingPref);
 	slideOutToggler();
 	createHeaderLayout(weatherData, cityData);
