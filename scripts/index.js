@@ -14,7 +14,7 @@ const {
 	},
 } = config;
 
-const { OPENWEATHERMAPAPIKEY } = secrets;
+const {OPENWEATHERMAPAPIKEY} = secrets;
 
 //Default Variables
 
@@ -28,9 +28,6 @@ const showError = (errorMessage) => {
 	errorContainer.style.alignItems = "center";
 	errorContainer.style.paddingTop = "50vh";
 	errorContainer.innerText = errorMessage;
-	setTimeout(() => {
-		document.location.href = "../index.html";
-	}, 4000);
 };
 
 const getCurrentPosition = () => {
@@ -52,13 +49,9 @@ const getPositionData = async () => {
 
 		weatherApiRequest(latitude, longitude);
 		cityNameFromGeoLocation(latitude, longitude);
-
-		setTimeout(() => {
-			document.location.href = "../pages/result.html";
-		}, 2000);
 	} catch (error) {
 		console.error(error);
-		const { code, message } = error;
+		const {code, message} = error;
 		showError(
 			`Code: ${code} - Access Denied: ${message}, could not complete request. Redirecting...  `
 		);
@@ -81,14 +74,14 @@ const cityNameFromGeoLocation = async (lat, long) => {
 const weatherApiRequest = async (lat, long) => {
 	// const userLocation = `${lat},${long}`;
 	// const tomorrowIOUrl = `${baseTomorrowIOURL}/weather/realtime?location=${userLocation}&units=${units}&timesteps=${timesteps}&startTime=${startTime}&endTime=${endTime}&apikey=${apikey}`;
-	const openWeatherMapApi = `${baseOpenWeatherURL}forecast?lat=${lat}&lon=${long}&appid=${OPENWEATHERMAPAPIKEY}&cnt=24`;
-	const flexWeatherAPI = `${baseFlexWeatherURL}/today?lat=${lat}&lon=${long}&units=${units}`;
-	await fetch(flexWeatherAPI, getRequestHeaders)
-		.then(async (response) => {
-			const weatherData = await response.json();
-			sessionStorage.setItem("data", JSON.stringify(weatherData));
-		})
-		.catch((err) => console.error(err));
+	const openWeatherMapApi = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${long}&appid=${OPENWEATHERMAPAPIKEY}&cnt=24`;
+	// const flexWeatherAPI = `${baseFlexWeatherURL}/today?lat=${lat}&lon=${long}&units=${units}`;
+	// await fetch(flexWeatherAPI, getRequestHeaders)
+	// 	.then(async (response) => {
+	// 		const weatherData = await response.json();
+	// 		sessionStorage.setItem("data", JSON.stringify(weatherData));
+	// 	})
+	// 	.catch((err) => console.error(err));
 	await fetch(openWeatherMapApi, getRequestHeaders)
 		.then(async (response) => {
 			const openWeatherMapData = await response.json();
@@ -96,6 +89,9 @@ const weatherApiRequest = async (lat, long) => {
 				"openWeatherMapData",
 				JSON.stringify(openWeatherMapData)
 			);
+			setTimeout(() => {
+				document.location.href = "../pages/result.html";
+			}, 2000);
 		})
 		.catch((err) => console.error(err));
 };

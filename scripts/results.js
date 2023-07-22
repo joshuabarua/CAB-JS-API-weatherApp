@@ -10,15 +10,16 @@ const {
 	},
 } = config;
 
-const { UNSPLASHACCESSKEY } = secrets;
+const {UNSPLASHACCESSKEY} = secrets;
 
 //TODO: SETUP UNSPLASH API, to randomise picture in the left blue panel, check to see  if the lottie is correctly displaying weather values or not.
 
 // get data
 const getSessionResultData = () => {
-	let weatherData = JSON.parse(sessionStorage.getItem("data"));
+	// let weatherData = JSON.parse(sessionStorage.getItem("data"));
 	let cityData = JSON.parse(sessionStorage.getItem("cityData"));
-	controller(weatherData, cityData);
+	let openWeatherData = JSON.parse(sessionStorage.getItem("openWeatherMapData"));
+	controller(openWeatherData.list, cityData);
 };
 
 const createLottiePlayer = (src) => {
@@ -34,16 +35,14 @@ const createLottiePlayer = (src) => {
 };
 
 // create layout
-const createHeaderLayout = (weatherData) => {
+const createHeaderLayout = (weatherData, cityData) => {
 	let title = document.getElementById("title");
 	let date = document.getElementById("date");
-	let currentDateTime = new Date(weatherData.hours[0].timestamp).toLocaleDateString(
-		[],
-		{
-			...dateOptions,
-		}
-	);
-	title.innerText = `${weatherData.location.split("-")[0]}`;
+	let currentDateTime = new Date(weatherData[0].dt * 1000).toLocaleDateString([], {
+		...dateOptions,
+	});
+	console.log(currentDateTime);
+	title.innerText = `${cityData.locality}, ${cityData.city} - ${cityData.countryName}`;
 	date.innerText = `${currentDateTime}`;
 };
 
@@ -222,11 +221,14 @@ const slideOutToggler = () => {
 // make controller
 const controller = (weatherData, cityData) => {
 	let clothingPref = JSON.parse(sessionStorage.getItem("clothingPreferences"));
-	const { hours } = weatherData;
-	const { city } = cityData;
+	console.log(weatherData, cityData);
+
+	const {hours} = weatherData;
+	const {city} = cityData;
+
 	modifyClothingPrefsToImg(clothingPref);
 	slideOutToggler();
-	createHeaderLayout(weatherData);
+	createHeaderLayout(weatherData, cityData);
 	createCityImageLeftSidebar(city);
 	modifyTimeFormat(hours);
 	modifyConditionsToImg(hours);
