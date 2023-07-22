@@ -41,7 +41,6 @@ const createHeaderLayout = (weatherData, cityData) => {
 	let currentDateTime = new Date(weatherData[0].dt * 1000).toLocaleDateString([], {
 		...dateOptions,
 	});
-	console.log(currentDateTime);
 	title.innerText = `${cityData.locality}, ${cityData.city} - ${cityData.countryName}`;
 	date.innerText = `${currentDateTime}`;
 };
@@ -82,19 +81,18 @@ const createCityImageLeftSidebar = async (city) => {
 	leftSideBar.style.setProperty("background-position", "center");
 };
 
-const modifyTimeFormat = (hourlyTemps) => {
-	for (let i = 0; i < hourlyTemps.length; i++) {
-		let localTimestamp = new Date(hourlyTemps[i].timestamp).toLocaleTimeString(
-			[],
-			timeOptions
-		);
-		hourlyTemps[i].timestamp = localTimestamp;
+const modifyTimeFormat = (hourlyTimes) => {
+	for (let i = 0; i < hourlyTimes.length; i++) {
+		let timeStamp = hourlyTimes[i].dt_txt;
+		const time_part = timeStamp.match(/\d{2}:\d{2}/)[0];
+		hourlyTimes[i].dt = time_part;
 	}
 };
 
 const modifyConditionsToImg = (weatherConditionData) => {
+	console.log(weatherConditionData);
 	weatherConditionData.forEach((hour) => {
-		const isDay = hour.timestamp >= "05:00" && hour.timestamp <= "20:00";
+		const isDay = hour.sys.pod === "d";
 		const conditionSet = isDay ? lottieConditions.day : lottieConditions.night;
 		if (conditionSet[hour.condition]) {
 			hour.condition = conditionSet[hour.condition].src;
@@ -129,8 +127,12 @@ const createButtonLayout = (tempTimes) => {
 		hourlyBtn.classList.add("hourlyBtn");
 		hourlyBtn.classList.add("bouncy");
 		hourlyBtn.style.animationDelay = `${0.07 * i}s`;
-		hourlyBtn.innerText = tempTimes[i].timestamp;
-		timeContainer.appendChild(hourlyBtn);
+		const currentDate = new Date();
+		const formattedDate = currentDate.toISOString().slice(0, 10);
+		if (tempTimes[i].dt_txt.includes(formattedDate)) {
+			hourlyBtn.innerText = tempTimes[i].dt;
+			timeContainer.appendChild(hourlyBtn);
+		}
 	}
 };
 
@@ -221,19 +223,20 @@ const slideOutToggler = () => {
 // make controller
 const controller = (weatherData, cityData) => {
 	let clothingPref = JSON.parse(sessionStorage.getItem("clothingPreferences"));
-	console.log(weatherData, cityData);
 
-	const {hours} = weatherData;
 	const {city} = cityData;
 
+	let hours = "hours";
+
+	console.log(cityData);
 	modifyClothingPrefsToImg(clothingPref);
 	slideOutToggler();
 	createHeaderLayout(weatherData, cityData);
 	createCityImageLeftSidebar(city);
-	modifyTimeFormat(hours);
-	modifyConditionsToImg(hours);
+	modifyTimeFormat(weatherData);
+	modifyConditionsToImg(weatherData);
 	mainTemperatureArea(weatherData, hours);
-	createButtonLayout(hours);
+	createButtonLayout(weatherData);
 	setEventListener(weatherData, hours);
 };
 
