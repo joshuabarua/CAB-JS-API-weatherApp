@@ -1,17 +1,6 @@
 // Variable to be used/destructured for use in code
 const {
-	var: {
-		units,
-		timesteps,
-		baseTomorrowIOURL,
-		baseFlexWeatherURL,
-		baseOpenWeatherURL,
-		reverseGeocodeURL,
-		fields,
-		startTime,
-		endTime,
-		getRequestHeaders,
-	},
+	var: {units, timesteps, baseTomorrowIOURL, baseFlexWeatherURL, baseOpenWeatherURL, reverseGeocodeURL, fields, startTime, endTime, getRequestHeaders},
 } = config;
 
 const {OPENWEATHERMAPAPIKEY} = secrets;
@@ -21,12 +10,12 @@ const {OPENWEATHERMAPAPIKEY} = secrets;
 // 1: Get user position data
 
 const showError = (errorMessage) => {
-	document.body.innerHTML = "";
+	document.body.innerHTML = '';
 	const errorContainer = document.body;
-	errorContainer.style.display = "flex";
-	errorContainer.style.justifyContent = "center";
-	errorContainer.style.alignItems = "center";
-	errorContainer.style.paddingTop = "50vh";
+	errorContainer.style.display = 'flex';
+	errorContainer.style.justifyContent = 'center';
+	errorContainer.style.alignItems = 'center';
+	errorContainer.style.paddingTop = '50vh';
 	errorContainer.innerText = errorMessage;
 };
 
@@ -52,9 +41,7 @@ const getPositionData = async () => {
 	} catch (error) {
 		console.error(error);
 		const {code, message} = error;
-		showError(
-			`Code: ${code} - Access Denied: ${message}, could not complete request. Redirecting...  `
-		);
+		showError(`Code: ${code} - Access Denied: ${message}, could not complete request. Redirecting...  `);
 	}
 };
 
@@ -64,7 +51,7 @@ const cityNameFromGeoLocation = async (lat, long) => {
 	await fetch(userLocationRequest, getRequestHeaders)
 		.then(async (response) => {
 			const cityData = await response.json();
-			sessionStorage.setItem("cityData", JSON.stringify(cityData));
+			sessionStorage.setItem('cityData', JSON.stringify(cityData));
 		})
 		.catch((err) => console.error(err));
 };
@@ -85,12 +72,9 @@ const weatherApiRequest = async (lat, long) => {
 	await fetch(openWeatherMapApi, getRequestHeaders)
 		.then(async (response) => {
 			const openWeatherMapData = await response.json();
-			sessionStorage.setItem(
-				"openWeatherMapData",
-				JSON.stringify(openWeatherMapData)
-			);
+			sessionStorage.setItem('openWeatherMapData', JSON.stringify(openWeatherMapData));
 			setTimeout(() => {
-				document.location.href = "../pages/result.html";
+				document.location.href = '../result.html';
 			}, 2000);
 		})
 		.catch((err) => console.error(err));
@@ -101,7 +85,7 @@ const triggerEvent = () => {
 	getPositionData();
 };
 
-document.getElementById("get-weather-btn").addEventListener("click", triggerEvent);
+document.getElementById('get-weather-btn').addEventListener('click', triggerEvent);
 
 // const addEventListeners = () => {};
 // //Get Weather data button
