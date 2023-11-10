@@ -249,6 +249,7 @@ const setEventListener = (weatherData, hours) => {
 	sunLogo.style.cursor = 'pointer';
 };
 
+// TODO: Fix this function to change main temp value based on array
 const filterData = (weatherData, hours, selectedTimestamp) => {
 	const filteredData = hours.filter((hour) => hour.timestamp === selectedTimestamp);
 	mainTemperatureArea(weatherData, filteredData);
