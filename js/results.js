@@ -15,6 +15,7 @@ const getSessionResultData = () => {
 	let cityData = JSON.parse(sessionStorage.getItem('cityData'));
 	let openWeatherData = JSON.parse(sessionStorage.getItem('openWeatherMapData'));
 	const {list} = openWeatherData;
+	console.log(openWeatherData);
 	//filter out other dates other than today
 	const weatherDataToday = list.filter((el) => {
 		if (el.dt_txt.includes(today)) {
@@ -81,17 +82,18 @@ const modifyTimeFormat = (hourlyTimes) => {
 	for (let i = 0; i < hourlyTimes.length; i++) {
 		let timeStamp = hourlyTimes[i].dt_txt;
 		const time_part = timeStamp.match(/\d{2}:\d{2}/)[0];
-		console.log(time_part);
 		hourlyTimes[i].time = time_part;
 	}
 };
 
+//Sets weather to use day or night lotties
 const modifyConditionsToImg = (weatherConditionData) => {
-	//TODO: Make an else statement, find all the description values  and rename lottie conditions that match those values
-	weatherConditionData.forEach((hour) => {
-		console.log(hour);
-		if (hour.sys.pod === 'd') {
-			hour.weather[0].description = lottieConditions.day.src;
+	//TODO:find all the description values and rename lottie conditions that match those values
+	weatherConditionData.forEach((time) => {
+		if (time.sys.pod === 'd') {
+			time.lottieCondition = lottieConditions.day;
+		} else {
+			time.lottieCondition = lottieConditions.night;
 		}
 	});
 };
@@ -215,18 +217,20 @@ const slideOutToggler = () => {
 const controller = (weatherData, cityData) => {
 	let clothingPref = JSON.parse(sessionStorage.getItem('clothingPreferences'));
 	const {city} = cityData;
-	let hours = 'hours';
 	// Checking:
 	modifyClothingPrefsToImg(clothingPref);
 	slideOutToggler();
 	createHeaderLayout(weatherData, cityData);
 	createCityImageLeftSidebar(city);
-
-	// Need Checking
-	modifyTimeFormat(weatherData); // changes time format to in dt to the time, consider changing the field to just include a time field?
+	modifyTimeFormat(weatherData);
 	modifyConditionsToImg(weatherData);
-	mainTemperatureArea(weatherData, hours);
 	createButtonLayout(weatherData);
+
+	//TODO: Make the main temp and event listener work
+	let hours = weatherData[0].time;
+	console.log(hours);
+	// Need Checking
+	mainTemperatureArea(weatherData, hours);
 	setEventListener(weatherData, hours);
 };
 
