@@ -81,7 +81,8 @@ const modifyTimeFormat = (hourlyTimes) => {
 	for (let i = 0; i < hourlyTimes.length; i++) {
 		let timeStamp = hourlyTimes[i].dt_txt;
 		const time_part = timeStamp.match(/\d{2}:\d{2}/)[0];
-		hourlyTimes[i].dt = time_part;
+		console.log(time_part);
+		hourlyTimes[i].time = time_part;
 	}
 };
 
@@ -99,9 +100,12 @@ const modifyClothingPrefsToImg = (clothingPref) => {
 	let modifiedClothingPrefs = {};
 	for (const conditionType in clothingPref) {
 		modifiedClothingPrefs[conditionType] = clothingPref[conditionType].map((clothingItem) => {
+			//Takes away spaces or hyphens as object in config can't have
 			clothingItem = clothingItem.replace(/[\s-]/g, '');
 			if (clothingImages.hasOwnProperty(clothingItem)) {
 				return `<img src="${clothingImages[clothingItem]}" alt="${clothingItem}">`;
+			} else {
+				console.log('Error, clothing images do not have property of clothingItem >>:', clothingItem);
 			}
 			return clothingItem;
 		});
@@ -111,16 +115,14 @@ const modifyClothingPrefsToImg = (clothingPref) => {
 
 const createButtonLayout = (tempTimes) => {
 	let timeContainer = document.getElementById('timeContainer');
-	//  over timestamps conver and print as button
+	//  loop over timestamps and print as buttons
 	for (let i = 0; i < tempTimes.length; i++) {
 		let hourlyBtn = document.createElement('a');
 		hourlyBtn.classList.add('hourlyBtn');
 		hourlyBtn.classList.add('bouncy');
 		hourlyBtn.style.animationDelay = `${0.07 * i}s`;
-		const currentDate = new Date();
-		const formattedDate = currentDate.toISOString().slice(0, 10);
-		if (tempTimes[i].dt_txt.includes(formattedDate)) {
-			hourlyBtn.innerText = tempTimes[i].dt;
+		if (tempTimes[i].dt_txt.includes(today)) {
+			hourlyBtn.innerText = tempTimes[i].time;
 			timeContainer.appendChild(hourlyBtn);
 		}
 	}
@@ -150,7 +152,7 @@ const mainTemperatureArea = (weatherData, hourlyTemps) => {
 	const timestamp = document.createElement('p');
 	const windSpeed = document.createElement('p');
 	temperatureAvgs.innerText = ` ${defaultHour.main.temp_max}°C / ${defaultHour.main.temp_min}°C `;
-	timestamp.innerText = defaultHour.dt;
+	timestamp.innerText = defaultHour.time;
 	windSpeed.innerText = ` ${defaultHour.wind.speed}-${defaultHour.wind.gust} km/h`;
 
 	otherValues.appendChild(timestamp);
@@ -214,12 +216,14 @@ const controller = (weatherData, cityData) => {
 	let clothingPref = JSON.parse(sessionStorage.getItem('clothingPreferences'));
 	const {city} = cityData;
 	let hours = 'hours';
-
+	// Checking:
 	modifyClothingPrefsToImg(clothingPref);
 	slideOutToggler();
 	createHeaderLayout(weatherData, cityData);
 	createCityImageLeftSidebar(city);
-	modifyTimeFormat(weatherData);
+
+	// Need Checking
+	modifyTimeFormat(weatherData); // changes time format to in dt to the time, consider changing the field to just include a time field?
 	modifyConditionsToImg(weatherData);
 	mainTemperatureArea(weatherData, hours);
 	createButtonLayout(weatherData);
