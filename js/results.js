@@ -6,6 +6,19 @@ const {UNSPLASHACCESSKEY} = secrets;
 
 const date = new Date();
 const today = date.toISOString().substring(0, 10);
+const timeNow = date.toISOString().substring(11, 16);
+const timeList = [
+	new Date(0, 0, 0, 0, 0).toLocaleTimeString(),
+	new Date(0, 0, 0, 3, 0).toISOString().substring(11, 16),
+	new Date(0, 0, 0, 6, 0).toISOString().substring(11, 16),
+	new Date(0, 0, 0, 9, 0).toISOString().substring(11, 16),
+	new Date(0, 0, 0, 12, 0).toISOString().substring(11, 16),
+	new Date(0, 0, 0, 15, 0).toISOString().substring(11, 16),
+	new Date(0, 0, 0, 18, 0).toISOString().substring(11, 16),
+	new Date(0, 0, 0, 21, 0).toISOString().substring(11, 16),
+];
+console.log(timeNow);
+console.log(timeList);
 
 //TODO: check to see if the lottie is correctly displaying weather values or not.
 
@@ -82,6 +95,7 @@ const modifyTimeFormat = (hourlyTimes) => {
 	for (let i = 0; i < hourlyTimes.length; i++) {
 		let timeStamp = hourlyTimes[i].dt_txt;
 		const time_part = timeStamp.match(/\d{2}:\d{2}/)[0];
+		console.log(timeStamp.substring(10, 16), time_part);
 		hourlyTimes[i].time = time_part;
 	}
 };
@@ -131,14 +145,21 @@ const createButtonLayout = (tempTimes) => {
 };
 
 // Main temp area
-const mainTemperatureArea = (weatherData, hourlyTemps) => {
+const mainTemperatureArea = (weatherData) => {
+	//make main temp area select the current weather
+	// console.log('today', date.getHours() * 60 + date.getMinutes());
+	// for (let i = 0; i < weatherData.length; i++) {
+	// 	const element = weatherData[i];
+	// 	console.log('mainTemp area for loop >>: ', element);
+	// }
+
+	//TODO: Fix lotties to display based on weather condition matching description text
+	const defaultHour = weatherData[0];
 	const clothingPref = JSON.parse(sessionStorage.getItem('modifiedClothingPreferences'));
 	const weatherDataDisplay = document.getElementById('weatherDataDisplay');
-	const defaultHour = weatherData[0];
-
 	weatherDataDisplay.innerHTML = '';
-
-	const lottieEl = createLottiePlayer(defaultHour.weather[0].main.toLowerCase());
+	console.log('DEFAULTHOUR:', defaultHour.lottieCondition);
+	const lottieEl = createLottiePlayer(defaultHour.lottieCondition.clouds.src);
 	weatherDataDisplay.appendChild(lottieEl);
 
 	const mainTempContainer = document.createElement('div');
@@ -226,21 +247,20 @@ const controller = (weatherData, cityData) => {
 	modifyConditionsToImg(weatherData);
 	createButtonLayout(weatherData);
 
-	//TODO: Make the main temp and event listener work
-	let hours = weatherData[0].time;
-	console.log(hours);
+	let time = weatherData[0].time;
 	// Need Checking
-	mainTemperatureArea(weatherData, hours);
-	setEventListener(weatherData, hours);
+	mainTemperatureArea(weatherData, time);
+	//Done
+	setEventListeners(weatherData, time);
 };
 
 //set Event Listener on button and change event
-const setEventListener = (weatherData, hours) => {
+const setEventListeners = (weatherData, time) => {
 	let buttons = document.querySelectorAll('.hourlyBtn');
 	buttons.forEach((button) => {
 		button.addEventListener('click', () => {
 			const selectedBtn = button.textContent;
-			filterData(weatherData, hours, selectedBtn);
+			filterData(weatherData, time, selectedBtn);
 			document.querySelector('#slideOut').classList.toggle('showSlideOut');
 		});
 	});
@@ -249,10 +269,10 @@ const setEventListener = (weatherData, hours) => {
 	sunLogo.style.cursor = 'pointer';
 };
 
-// TODO: Fix this function to change main temp value based on array
-const filterData = (weatherData, hours, selectedTimestamp) => {
-	const filteredData = hours.filter((hour) => hour.timestamp === selectedTimestamp);
-	mainTemperatureArea(weatherData, filteredData);
+const filterData = (weatherData, time, selectedTimestamp) => {
+	console.log('filterData func runs>>:', weatherData, time, selectedTimestamp);
+	const filteredData = weatherData.filter((el) => el.time === selectedTimestamp);
+	mainTemperatureArea(filteredData);
 };
 
 getSessionResultData();
