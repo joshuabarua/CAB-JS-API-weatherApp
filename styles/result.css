@@ -1,8 +1,8 @@
-@import url("https://fonts.googleapis.com/css2?family=Josefin+Sans:ital@0;1&family=Lexend+Peta:wght@900&family=Lexend+Peta:wght@400&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:ital@0;1&family=Lexend+Peta:wght@900&family=Lexend+Peta:wght@400&display=swap');
 
 body {
 	margin: auto;
-	font-family: "Lexend Peta", sans-serif;
+	font-family: 'Lexend Peta', sans-serif;
 	height: 100vh;
 	overflow: hidden;
 }
@@ -63,7 +63,7 @@ section {
 	border-radius: 0.12em;
 	box-sizing: border-box;
 	text-decoration: none;
-	font-family: "Roboto", sans-serif;
+	font-family: 'Roboto', sans-serif;
 	font-weight: 300;
 	color: black;
 	text-align: center;
@@ -126,13 +126,13 @@ section {
 
 #date {
 	font-size: min(2.5vw, 16px);
-	font-family: "Lexend Peta", sans-serif;
+	font-family: 'Lexend Peta', sans-serif;
 	font-weight: 200;
 }
 #title {
 	font-size: min(3vw, 16px);
 	overflow-wrap: break-word;
-	font-family: "Lexend Peta", sans-serif;
+	font-family: 'Lexend Peta', sans-serif;
 	margin-bottom: -20px;
 }
 
@@ -141,6 +141,7 @@ section {
 	flex-direction: column;
 	align-items: center;
 	justify-content: space-evenly;
+	gap: 100px;
 	width: 100%;
 	height: 100%;
 }
@@ -164,11 +165,14 @@ h2 {
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-	justify-content: space-evenly;
+	justify-content: flex-start;
+	gap: 50px;
 	text-align: center;
 	font-weight: 200;
 	height: 100%;
-	width: 100%;
+	width: 40%;
+	max-width: 400px;
+	min-width: 345px;
 	padding: 0px 30px 20px 30px;
 }
 
@@ -176,6 +180,10 @@ h2 {
 .clothingPrefsDiv span {
 	font-weight: 200;
 	font-size: min(1.8vw, 12px);
+	display: flex;
+	flex-wrap: wrap;
+	gap: 10px;
+	justify-content: center;
 }
 
 /* TAB SLIDE OUT  */

@@ -46,12 +46,12 @@ const config = {
 			'/assets/lotties/rain.json',
 			'/assets/lotties/thunder.json',
 			'/assets/lotties/rainy-night.json',
-			'/assets/lotties/windy.json',
+			'/assets/lotties/cloudy.json',
 		],
 
 		lottieConditions: {
 			day: {
-				clouds: {src: '/assets/lotties/windy.json'},
+				clouds: {src: '/assets/lotties/cloudy.json'},
 				partlyCloudy: {src: '/assets/lotties/partly-cloudy.json'},
 				partlyShowers: {src: '/assets/lotties/partly-shower.json'},
 				rain: {src: '/assets/lotties/rain.json'},
