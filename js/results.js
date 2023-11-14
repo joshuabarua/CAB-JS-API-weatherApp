@@ -17,10 +17,6 @@ const timeList = [
 	new Date(0, 0, 0, 19, 0).toISOString().substring(11, 16),
 	new Date(0, 0, 0, 22, 0).toISOString().substring(11, 16),
 ];
-console.log(timeNow);
-console.log(timeList);
-
-//TODO: check to see if the lottie is correctly displaying weather values or not.
 
 // 1: get data
 const getSessionResultData = () => {
@@ -28,7 +24,6 @@ const getSessionResultData = () => {
 	let cityData = JSON.parse(sessionStorage.getItem('cityData'));
 	let openWeatherData = JSON.parse(sessionStorage.getItem('openWeatherMapData'));
 	const {list} = openWeatherData;
-	console.log(openWeatherData);
 	//filter out other dates other than today
 	const weatherDataToday = list.filter((el) => {
 		if (el.dt_txt.includes(today)) {
@@ -95,7 +90,6 @@ const modifyTimeFormat = (hourlyTimes) => {
 	for (let i = 0; i < hourlyTimes.length; i++) {
 		let timeStamp = hourlyTimes[i].dt_txt;
 		const time_part = timeStamp.match(/\d{2}:\d{2}/)[0];
-		console.log(timeStamp.substring(10, 16), time_part);
 		hourlyTimes[i].time = time_part;
 	}
 };
@@ -167,19 +161,12 @@ const createButtonLayout = (tempTimes) => {
 // Main temp area
 const mainTemperatureArea = (weatherData) => {
 	//make main temp area select the current weather
-	// console.log('today', date.getHours() * 60 + date.getMinutes());
-	// for (let i = 0; i < weatherData.length; i++) {
-	// 	const element = weatherData[i];
-	// 	console.log('mainTemp area for loop >>: ', element);
-	// }
 
-	//TODO: Fix lotties to display based on weather condition matching description text
 	const defaultHour = weatherData[0]; //can be default or selected weather data form time picker
 	const lottieAnimationSrc = getLottieAnimation(defaultHour);
 	const clothingPref = JSON.parse(sessionStorage.getItem('modifiedClothingPreferences'));
 	const weatherDataDisplay = document.getElementById('weatherDataDisplay');
 	weatherDataDisplay.innerHTML = '';
-	console.log('DEFAULTHOUR condition:', defaultHour.lottieCondition);
 
 	if (lottieAnimationSrc) {
 		const lottieEl = createLottiePlayer(lottieAnimationSrc);
@@ -218,27 +205,20 @@ const mainTemperatureArea = (weatherData) => {
 	subHead.innerText = 'Clothing Options';
 	clothingPrefsContainer.appendChild(subHead);
 
-	console.log('Clothomg pref, main temp func:>>', clothingPref);
-	console.log('data', weatherData[0]);
-
 	const valueImg = document.createElement('span');
 	if (defaultHour.main.feels_like <= 8) {
-		console.log('feels like 8 runs');
 		valueImg.innerHTML = clothingPref.cold.join(' ');
 		clothingPrefsContainer.appendChild(valueImg);
 	}
 	if (defaultHour.main.feels_like <= 17) {
-		console.log('feels like < 20 runs');
 		valueImg.innerHTML = clothingPref.normal.join(' ');
 		clothingPrefsContainer.appendChild(valueImg);
 	}
 	if (defaultHour.main.feels_like <= 40 && defaultHour.feels_like > 17) {
-		console.log('feels like > 20 runs');
 		valueImg.innerHTML = clothingPref.hot.join(' ');
 		clothingPrefsContainer.appendChild(valueImg);
 	}
 	if (defaultHour.wind.speed > 12) {
-		console.log('wind runs', defaultHour.wind);
 		const valueImg = document.createElement('span');
 		valueImg.innerHTML = `Think about using a <img src="/assets/clothing-icons/Jacket.png" alt="Windbreaker" /> for the wind!`;
 		valueImg.style.fontStyle = 'italic';
@@ -305,7 +285,6 @@ const setEventListeners = (weatherData, time) => {
 };
 
 const filterData = (weatherData, time, selectedTimestamp) => {
-	console.log('filterData func runs>>:', weatherData, time, selectedTimestamp);
 	const filteredData = weatherData.filter((el) => el.time === selectedTimestamp);
 	mainTemperatureArea(filteredData);
 };
