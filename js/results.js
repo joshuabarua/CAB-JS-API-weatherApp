@@ -8,14 +8,14 @@ const date = new Date();
 const today = date.toISOString().substring(0, 10);
 const timeNow = date.toISOString().substring(11, 16);
 const timeList = [
-	new Date(0, 0, 0, 0, 0).toLocaleTimeString(),
-	new Date(0, 0, 0, 3, 0).toISOString().substring(11, 16),
-	new Date(0, 0, 0, 6, 0).toISOString().substring(11, 16),
-	new Date(0, 0, 0, 9, 0).toISOString().substring(11, 16),
-	new Date(0, 0, 0, 12, 0).toISOString().substring(11, 16),
-	new Date(0, 0, 0, 15, 0).toISOString().substring(11, 16),
-	new Date(0, 0, 0, 18, 0).toISOString().substring(11, 16),
-	new Date(0, 0, 0, 21, 0).toISOString().substring(11, 16),
+	new Date(0, 0, 0, 1, 0).toISOString().substring(11, 16),
+	new Date(0, 0, 0, 4, 0).toISOString().substring(11, 16),
+	new Date(0, 0, 0, 7, 0).toISOString().substring(11, 16),
+	new Date(0, 0, 0, 10, 0).toISOString().substring(11, 16),
+	new Date(0, 0, 0, 13, 0).toISOString().substring(11, 16),
+	new Date(0, 0, 0, 16, 0).toISOString().substring(11, 16),
+	new Date(0, 0, 0, 19, 0).toISOString().substring(11, 16),
+	new Date(0, 0, 0, 22, 0).toISOString().substring(11, 16),
 ];
 console.log(timeNow);
 console.log(timeList);
@@ -154,11 +154,11 @@ const mainTemperatureArea = (weatherData) => {
 	// }
 
 	//TODO: Fix lotties to display based on weather condition matching description text
-	const defaultHour = weatherData[0];
+	const defaultHour = weatherData[0]; //can be default or selected weather data form time picker
 	const clothingPref = JSON.parse(sessionStorage.getItem('modifiedClothingPreferences'));
 	const weatherDataDisplay = document.getElementById('weatherDataDisplay');
 	weatherDataDisplay.innerHTML = '';
-	console.log('DEFAULTHOUR:', defaultHour.lottieCondition);
+	console.log('DEFAULTHOUR condition:', defaultHour.lottieCondition);
 	const lottieEl = createLottiePlayer(defaultHour.lottieCondition.clouds.src);
 	weatherDataDisplay.appendChild(lottieEl);
 
@@ -192,32 +192,41 @@ const mainTemperatureArea = (weatherData) => {
 	subHead.innerText = 'Clothing Options';
 	clothingPrefsContainer.appendChild(subHead);
 
+	console.log('Clothomg pref, main temp func:>>', clothingPref);
+	console.log('data', weatherData[0]);
+
 	const valueImg = document.createElement('span');
-	if (defaultHour.temperature <= 8) {
+	if (defaultHour.main.feels_like <= 8) {
+		console.log('feels like 8 runs');
 		valueImg.innerHTML = clothingPref.cold.join(' ');
 		clothingPrefsContainer.appendChild(valueImg);
-	} else if (defaultHour.temperature <= 20) {
+	}
+	if (defaultHour.main.feels_like <= 17) {
+		console.log('feels like < 20 runs');
 		valueImg.innerHTML = clothingPref.normal.join(' ');
 		clothingPrefsContainer.appendChild(valueImg);
-	} else if (defaultHour.temperature <= 40 && defaultHour.temperature > 20) {
+	}
+	if (defaultHour.main.feels_like <= 40 && defaultHour.feels_like > 17) {
+		console.log('feels like > 20 runs');
 		valueImg.innerHTML = clothingPref.hot.join(' ');
 		clothingPrefsContainer.appendChild(valueImg);
 	}
-	if (defaultHour.wind_speed > 15) {
+	if (defaultHour.wind.speed > 12) {
+		console.log('wind runs', defaultHour.wind);
 		const valueImg = document.createElement('span');
-		valueImg.innerHTML = `Think about using a <img src="../assets/clothing-icons/Jacket.png" alt="Windbreaker"> for the wind!`;
+		valueImg.innerHTML = `Think about using a <img src="/assets/clothing-icons/Jacket.png" alt="Windbreaker" /> for the wind!`;
 		valueImg.style.fontStyle = 'italic';
 		clothingPrefsContainer.appendChild(valueImg);
 	}
-	if (sunnyConditions.includes(defaultHour.condition)) {
+	if (sunnyConditions.includes(defaultHour.lottieCondition.day)) {
 		const valueImg = document.createElement('span');
-		valueImg.innerHTML = `Think about using some <img src="../assets/clothing-icons/Sunnies.png" alt="Sunnies"> and wear sunscreen!`;
+		valueImg.innerHTML = `Think about using some <img src="/assets/clothing-icons/Sunnies.png" alt="Sunnies" /> and wear sunscreen!`;
 		valueImg.style.fontStyle = 'italic';
 		clothingPrefsContainer.appendChild(valueImg);
 	}
-	if (rainyConditions.includes(defaultHour.condition)) {
+	if (rainyConditions.includes(defaultHour.lottieCondition.night)) {
 		const valueImg = document.createElement('span');
-		valueImg.innerHTML = `Probably bring an <img src="../assets/clothing-icons/Umbrella.png" alt="Umbrella"> or a <img src="../assets/clothing-icons/Raincoat.png" alt="Raincoat">`;
+		valueImg.innerHTML = `Probably bring an <img src="/assets/clothing-icons/Umbrella.png" alt="Umbrella" /> or a <img src="/assets/clothing-icons/Raincoat.png" alt="Raincoat" />`;
 		valueImg.style.fontStyle = 'italic';
 		clothingPrefsContainer.appendChild(valueImg);
 	}
