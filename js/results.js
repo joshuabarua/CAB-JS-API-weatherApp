@@ -47,12 +47,14 @@ const createLottiePlayer = (src) => {
 
 // create layout
 const createHeaderLayout = (weatherData, cityData) => {
+	const {city, countryName, localityInfo} = cityData;
 	let title = document.getElementById('title');
 	let date = document.getElementById('date');
 	let currentDateTime = new Date(weatherData[0].dt * 1000).toLocaleDateString([], {
 		...dateOptions,
 	});
-	title.innerText = `${cityData.locality}, ${cityData.city} - ${cityData.countryName}`;
+	console.log(cityData);
+	title.innerText = `${localityInfo.informative[4].name ? localityInfo.informative[4].name : city}, ${localityInfo.informative[3].name}, ${countryName}`;
 	date.innerText = `${currentDateTime}`;
 };
 
@@ -63,14 +65,11 @@ const createCityImageLeftSidebar = async (city) => {
 	await fetch(unsplashImageRequest, getRequestHeaders)
 		.then(async (response) => {
 			unSplashImageData = await response.json();
-			// sessionStorage.setItem('cityImageData', JSON.stringify(unSplashImageData));
-
-			imageAttribution.innerHTML = `<p> Photo by <a href="${unSplashImageData[0].user.links.html}?utm_source=WhetherAware&utm_medium=referral"> ${unSplashImageData[0].user.name}  </a>  &nbsp; on &nbsp;  
+			imageAttribution.innerHTML = `<p><a href="${unSplashImageData[0].user.links.html}?utm_source=WhetherAware&utm_medium=referral"> ${unSplashImageData[0].user.name}  </a>  &nbsp;on&nbsp;  
 				<a href="https://unsplash.com/?utm_source=whetherAware&utm_medium=referral"> Unsplash </a> </p>`;
 		})
 		.catch((err) => console.warn(`Couldn't find image for matching ${city}, defaulting to colour`, err));
 
-	// const cityImageData = JSON.parse(sessionStorage.getItem('cityImageData'));
 	const leftSideBar = document.getElementById('leftSideBar');
 	leftSideBar.appendChild(imageAttribution);
 
