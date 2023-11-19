@@ -58,19 +58,20 @@ const createHeaderLayout = (weatherData, cityData) => {
 
 const createCityImageLeftSidebar = async (city) => {
 	const unsplashImageRequest = `${unSplashURL}?client_id=${UNSPLASHACCESSKEY}&query=${city}&orientation=portrait&count=1&content_filter=high`;
-	if (!sessionStorage.getItem('cityImageData')) {
-		await fetch(unsplashImageRequest, getRequestHeaders)
-			.then(async (response) => {
-				const unSplashImageData = await response.json();
-				sessionStorage.setItem('cityImageData', JSON.stringify(unSplashImageData));
-			})
-			.catch((err) => console.error(err));
-	}
-	const cityImageData = JSON.parse(sessionStorage.getItem('cityImageData'));
-	const leftSideBar = document.getElementById('leftSideBar');
+	let unSplashImageData = [];
 	const imageAttribution = document.createElement('span');
-	imageAttribution.innerHTML = `<p> Photo by <a href="${cityImageData[0].user.links.html}?utm_source=WhetherAware&utm_medium=referral"> ${cityImageData[0].user.name}  </a>  &nbsp; on &nbsp;  
-		<a href="https://unsplash.com/?utm_source=whetherAware&utm_medium=referral"> Unsplash </a> </p>`;
+	await fetch(unsplashImageRequest, getRequestHeaders)
+		.then(async (response) => {
+			unSplashImageData = await response.json();
+			// sessionStorage.setItem('cityImageData', JSON.stringify(unSplashImageData));
+
+			imageAttribution.innerHTML = `<p> Photo by <a href="${unSplashImageData[0].user.links.html}?utm_source=WhetherAware&utm_medium=referral"> ${unSplashImageData[0].user.name}  </a>  &nbsp; on &nbsp;  
+				<a href="https://unsplash.com/?utm_source=whetherAware&utm_medium=referral"> Unsplash </a> </p>`;
+		})
+		.catch((err) => console.warn(`Couldn't find image for matching ${city}, defaulting to colour`, err));
+
+	// const cityImageData = JSON.parse(sessionStorage.getItem('cityImageData'));
+	const leftSideBar = document.getElementById('leftSideBar');
 	leftSideBar.appendChild(imageAttribution);
 
 	leftSideBar.addEventListener('mouseover', (e) => {
@@ -80,8 +81,7 @@ const createCityImageLeftSidebar = async (city) => {
 	leftSideBar.addEventListener('mouseout', (e) => {
 		imageAttribution.classList.remove('show');
 	});
-
-	leftSideBar.style.setProperty('background-image', `url(${cityImageData[0].urls.full})`);
+	if (unSplashImageData[0]) leftSideBar.style.setProperty('background-image', `url(${unSplashImageData[0].urls.full})`);
 	leftSideBar.style.setProperty('background-size', 'cover');
 	leftSideBar.style.setProperty('background-position', 'center');
 };
@@ -252,12 +252,12 @@ const slideOutToggler = () => {
 
 const controller = (weatherData, cityData) => {
 	let clothingPref = JSON.parse(sessionStorage.getItem('clothingPreferences'));
-	const {city} = cityData;
+	const {localityInfo} = cityData;
 	// Checking:
 	modifyClothingPrefsToImg(clothingPref);
 	slideOutToggler();
 	createHeaderLayout(weatherData, cityData);
-	createCityImageLeftSidebar(city);
+	createCityImageLeftSidebar(localityInfo.administrative[2].name);
 	modifyTimeFormat(weatherData);
 	modifyConditionsToImg(weatherData);
 	createButtonLayout(weatherData);
