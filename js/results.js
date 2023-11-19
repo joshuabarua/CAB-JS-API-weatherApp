@@ -53,13 +53,18 @@ const createHeaderLayout = (weatherData, cityData) => {
 	let currentDateTime = new Date(weatherData[0].dt * 1000).toLocaleDateString([], {
 		...dateOptions,
 	});
-	console.log(cityData);
-	title.innerText = `${localityInfo.informative[4].name ? localityInfo.informative[4].name : city}, ${localityInfo.informative[3].name}, ${countryName}`;
+	title.innerText = `${localityInfo.informative[4].name ? localityInfo.informative[4].name : localityInfo.informative[3].name}, ${
+		localityInfo.informative[3].name
+	}, ${countryName}`;
 	date.innerText = `${currentDateTime}`;
 };
 
-const createCityImageLeftSidebar = async (city) => {
-	const unsplashImageRequest = `${unSplashURL}?client_id=${UNSPLASHACCESSKEY}&query=${city}&orientation=portrait&count=1&content_filter=high`;
+const createCityImageLeftSidebar = async (cityData) => {
+	const {city, localityInfo} = cityData;
+
+	const unsplashImageRequest = `${unSplashURL}?client_id=${UNSPLASHACCESSKEY}&query=${
+		localityInfo.informative[4].name ? localityInfo.informative[4].name : localityInfo.informative[3].name
+	}&orientation=portrait&count=1&content_filter=medium`;
 	let unSplashImageData = [];
 	const imageAttribution = document.createElement('span');
 	await fetch(unsplashImageRequest, getRequestHeaders)
@@ -121,7 +126,7 @@ const getLottieAnimation = (weatherData) => {
 	} else if (weather[0].description.includes('windy')) {
 		return lottieCondition.mist.src;
 	} else {
-		console.log('No weather match data available for lottie icon!');
+		console.warn('No weather match data available for lottie icon!');
 	}
 };
 
@@ -134,7 +139,7 @@ const modifyClothingPrefsToImg = (clothingPref) => {
 			if (clothingImages.hasOwnProperty(clothingItem)) {
 				return `<img src="${clothingImages[clothingItem]}" alt="${clothingItem}">`;
 			} else {
-				console.log('Error, clothing images do not have property of clothingItem >>:', clothingItem);
+				console.warn('Error, clothing images do not have property of clothingItem >>:', clothingItem);
 			}
 			return clothingItem;
 		});
@@ -171,7 +176,7 @@ const mainTemperatureArea = (weatherData) => {
 		const lottieEl = createLottiePlayer(lottieAnimationSrc);
 		weatherDataDisplay.appendChild(lottieEl);
 	} else {
-		console.log('Error: could not attach animation src to lottie player');
+		console.warn('Error: could not attach animation src to lottie player');
 	}
 
 	const mainTempContainer = document.createElement('div');
@@ -256,7 +261,7 @@ const controller = (weatherData, cityData) => {
 	modifyClothingPrefsToImg(clothingPref);
 	slideOutToggler();
 	createHeaderLayout(weatherData, cityData);
-	createCityImageLeftSidebar(localityInfo.administrative[2].name);
+	createCityImageLeftSidebar(cityData);
 	modifyTimeFormat(weatherData);
 	modifyConditionsToImg(weatherData);
 	createButtonLayout(weatherData);

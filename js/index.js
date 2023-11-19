@@ -32,10 +32,8 @@ const getCurrentPosition = () => {
 const getPositionData = async () => {
 	try {
 		const position = await getCurrentPosition();
-		console.log(position);
 		const latitude = position.coords.latitude;
 		const longitude = position.coords.longitude;
-
 		weatherApiRequest(latitude, longitude);
 		cityNameFromGeoLocation(latitude, longitude);
 	} catch (error) {
