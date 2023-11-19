@@ -16,7 +16,7 @@ const clothingImages = {
 	Beanie: '/assets/clothing-icons/Beanie.png',
 	Leggings: '/assets/clothing-icons/Leggings.png',
 	Jeans: '/assets/clothing-icons/Jeans.png',
-	TShirt: '/assets/clothing-icons/T-shirt.png',
+	TShirt: '/assets/clothing-icons/T-Shirt.png',
 	Dress: '/assets/clothing-icons/Dress.png',
 	Shirt: '/assets/clothing-icons/Shirt.png',
 	Cardigan: '/assets/clothing-icons/Cardigan.png',
