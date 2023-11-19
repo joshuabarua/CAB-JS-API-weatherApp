@@ -48,22 +48,25 @@ const createLottiePlayer = (src) => {
 // create layout
 const createHeaderLayout = (weatherData, cityData) => {
 	const {city, countryName, localityInfo} = cityData;
+	const {informative, administrative} = localityInfo;
+	console.log(cityData);
 	let title = document.getElementById('title');
 	let date = document.getElementById('date');
 	let currentDateTime = new Date(weatherData[0].dt * 1000).toLocaleDateString([], {
 		...dateOptions,
 	});
-	title.innerText = `${localityInfo.informative[4].name ? localityInfo.informative[4].name : localityInfo.informative[3].name}, ${
-		localityInfo.informative[3].name
-	}, ${countryName}`;
+	title.innerText = `${informative[4] ? informative[4].name : informative[3] ? informative[3].name : administrative[2] ? administrative[2].name : city}, ${countryName}`;
 	date.innerText = `${currentDateTime}`;
+
+	console.log(informative[2].name, city);
 };
 
 const createCityImageLeftSidebar = async (cityData) => {
 	const {city, localityInfo} = cityData;
-
+	const {informative, administrative} = localityInfo;
 	const unsplashImageRequest = `${unSplashURL}?client_id=${UNSPLASHACCESSKEY}&query=${
-		localityInfo.informative[4].name ? localityInfo.informative[4].name : localityInfo.informative[3].name
+		informative[4] ? informative[4].name : informative[3] ? informative[3].name : administrative[2] ? administrative[2].name : city
+	}
 	}&orientation=portrait&count=1&content_filter=medium`;
 	let unSplashImageData = [];
 	const imageAttribution = document.createElement('span');
@@ -256,7 +259,6 @@ const slideOutToggler = () => {
 
 const controller = (weatherData, cityData) => {
 	let clothingPref = JSON.parse(sessionStorage.getItem('clothingPreferences'));
-	const {localityInfo} = cityData;
 	// Checking:
 	modifyClothingPrefsToImg(clothingPref);
 	slideOutToggler();
