@@ -1,20 +1,25 @@
-@import url("https://fonts.googleapis.com/css2?family=Josefin+Sans:ital@0;1&family=Lexend+Peta:wght@900&family=Lexend+Peta:wght@400&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:ital@0;1&family=Lexend+Peta:wght@900&family=Lexend+Peta:wght@400&display=swap');
 
 body {
 	margin: auto;
 	background-color: white;
-	font-family: "Lexend Peta", sans-serif;
+	font-family: 'Lexend Peta', sans-serif;
 	overflow: hidden;
 }
 /** INDEX PAGE **/
+
+#indexContainer {
+	overflow-y: hidden;
+	overflow-x: hidden;
+}
 
 .content {
 	display: flex;
 	justify-content: center;
 	align-items: center;
 	flex-direction: column;
-	height: 95vh;
-	background: url("../assets/imgs/sky-bg2.jpg") center center;
+	height: 91vh;
+	background: url('../assets/imgs/sky-bg2.jpg') center center;
 	z-index: 1;
 }
 
@@ -37,6 +42,7 @@ body {
 	background-color: #e9f1f7;
 	width: 35vw;
 	height: 35vw;
+	margin-bottom: 80px;
 	border-radius: 800px;
 	box-shadow: none;
 	border-width: 0px;

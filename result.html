@@ -10,70 +10,72 @@
 		<title>Result</title>
 	</head>
 	<body>
-		<div id="modal-overlay">
-			<div id="modal">
-				<div class="modal-header">
-					<h2>Welcome to Weather Wear!</h2>
-					<p>
-						For us to better provide you with personalised clothing information, we need your clothing preferences for cold - normal - hot temperatures and access to your
-						Geolocation.
-					</p>
-				</div>
+		<div id="resultContainer">
+			<div id="modal-overlay">
+				<div id="modal">
+					<div class="modal-header">
+						<h2>Welcome to Weather Wear!</h2>
+						<p>
+							For us to better provide you with personalised clothing information, we need your clothing preferences for cold - normal - hot temperatures and access to your
+							Geolocation.
+						</p>
+					</div>
 
-				<div id="modal-content">
-					<form id="checkbox-form-container"></form>
-				</div>
-				<div id="modal-footer">
-					<button id="close-modal">Close</button>
-					<button id="saveBtn">Save</button>
+					<div id="modal-content">
+						<form id="checkbox-form-container"></form>
+					</div>
+					<div id="modal-footer">
+						<button id="close-modal">Close</button>
+						<button id="saveBtn">Save</button>
+					</div>
 				</div>
 			</div>
+			<!-- // SlideOut -->
+			<div id="slideOut">
+				<div class="slideOutTab">
+					<div>
+						<p>Time Picker.</p>
+					</div>
+				</div>
+				<!--   // Tab -->
+				<div class="tab-content">
+					<div class="tab-header">
+						<p class="tab-title">Select a time to see the weather conditions and clothing options based on your preferences</p>
+					</div>
+					<div class="tab-times">
+						<div id="timeContainer"></div>
+					</div>
+				</div>
+			</div>
+
+			<header class="header">
+				<div id="sunLogo">
+					<lottie-player
+						src="https://assets3.lottiefiles.com/packages/lf20_xlky4kvh.json"
+						background="transparent"
+						speed="1"
+						style="width: 30px; height: 30px"
+						loop
+						autoplay></lottie-player>
+				</div>
+				<h1 style="font-family: 'Josefin Sans', sans-serif">Weather Wear</h1>
+
+				<div id="clothing-preferences-icon">
+					<img src="../assets/svgs/hanger.svg" alt="Click here to open clothing preferences" title="Open clothing preferences" />
+				</div>
+			</header>
+
+			<section>
+				<container id="leftSideBar"> </container>
+				<container id="mainContainer">
+					<div id="location-date">
+						<h5 id="date"></h5>
+						<h5 id="title">RESULTS</h5>
+					</div>
+					<div id="weatherDataDisplay"></div>
+				</container>
+			</section>
 		</div>
-		<!-- // SlideOut -->
-		<div id="slideOut">
-			<div class="slideOutTab">
-				<div>
-					<p>Time Picker.</p>
-				</div>
-			</div>
-			<!--   // Tab -->
-			<div class="tab-content">
-				<div class="tab-header">
-					<p class="tab-title">Select a time to see the weather conditions and clothing options based on your preferences</p>
-				</div>
-				<div class="tab-times">
-					<div id="timeContainer"></div>
-				</div>
-			</div>
-		</div>
-
-		<header class="header">
-			<div id="sunLogo">
-				<lottie-player
-					src="https://assets3.lottiefiles.com/packages/lf20_xlky4kvh.json"
-					background="transparent"
-					speed="1"
-					style="width: 30px; height: 30px"
-					loop
-					autoplay></lottie-player>
-			</div>
-			<h1 style="font-family: 'Josefin Sans', sans-serif">Weather Wear</h1>
-
-			<div id="clothing-preferences-icon">
-				<img src="../assets/svgs/hanger.svg" alt="Click here to open clothing preferences" title="Open clothing preferences" />
-			</div>
-		</header>
-
-		<section>
-			<container id="leftSideBar"> </container>
-			<container id="mainContainer">
-				<div id="location-date">
-					<h5 id="date"></h5>
-					<h5 id="title">RESULTS</h5>
-				</div>
-				<div id="weatherDataDisplay"></div>
-			</container>
-		</section>
 	</body>
 	<script src="../js/secrets.js" type="text/javascript"></script>
 	<script src="../js/config.js" type="text/javascript"></script>
