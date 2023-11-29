@@ -47,7 +47,7 @@ const createLottiePlayer = (src) => {
 
 // create layout
 const createHeaderLayout = (weatherData, cityData) => {
-	const {city, countryName, localityInfo} = cityData;
+	const {city, countryName} = cityData;
 	let title = document.getElementById('title');
 	let date = document.getElementById('date');
 	let currentDateTime = new Date(weatherData[0].dt * 1000).toLocaleDateString([], {
@@ -58,7 +58,7 @@ const createHeaderLayout = (weatherData, cityData) => {
 };
 
 const createCityImageLeftSidebar = async (cityData) => {
-	const {city, localityInfo} = cityData;
+	const {city} = cityData;
 	const unsplashImageRequest = `${unSplashURL}?client_id=${UNSPLASHACCESSKEY}&query=${city}&orientation=portrait&count=1&content_filter=low`;
 	let unSplashImageData = [];
 	const imageAttribution = document.createElement('span');
