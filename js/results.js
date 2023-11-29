@@ -183,15 +183,20 @@ const mainTemperatureArea = (weatherData) => {
 	temperatureValuesContainer.appendChild(temperatureHeading);
 
 	const otherValues = document.createElement('div');
-	const temperatureAvgs = document.createElement('p');
+	const temperatureAvgsH = document.createElement('p');
+	const temperatureAvgsL = document.createElement('p');
+
 	const timestamp = document.createElement('p');
 	const windSpeed = document.createElement('p');
-	temperatureAvgs.innerText = `Highest: ${defaultHour.main.temp_max}°C / Lowest: ${defaultHour.main.temp_min}°C `;
+	temperatureAvgsH.innerText = `Highest: ${defaultHour.main.temp_max}°C `;
+	temperatureAvgsL.innerText = `Lowest: ${defaultHour.main.temp_min}°C `;
+
 	timestamp.innerText = defaultHour.time;
 	windSpeed.innerText = `Wind: ${defaultHour.wind.speed}-${defaultHour.wind.gust} km/h`;
 
 	otherValues.appendChild(timestamp);
-	otherValues.appendChild(temperatureAvgs);
+	otherValues.appendChild(temperatureAvgsH);
+	otherValues.appendChild(temperatureAvgsL);
 	otherValues.appendChild(windSpeed);
 	mainTempContainer.appendChild(temperatureValuesContainer);
 	mainTempContainer.appendChild(otherValues);
