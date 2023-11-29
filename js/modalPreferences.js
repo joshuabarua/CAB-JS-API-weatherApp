@@ -35,6 +35,7 @@ const createCheckboxes = (temperature, items) => {
 	checkboxSectioncontainer.appendChild(heading);
 	const checkboxContainer = document.createElement('div');
 	checkboxContainer.setAttribute('class', 'checkboxSectionDiv');
+
 	items.forEach((item) => {
 		const label = document.createElement('label');
 		const checkbox = document.createElement('input');
@@ -47,6 +48,13 @@ const createCheckboxes = (temperature, items) => {
 		checkboxSectioncontainer.appendChild(checkboxContainer);
 	});
 	return checkboxSectioncontainer; // Return the created checkboxes container
+};
+
+const handleSelectDeselect = (select) => {
+	const allCheckboxes = document.querySelectorAll('input[type="checkbox"]');
+	allCheckboxes.forEach((checkbox) => {
+		checkbox.checked = select;
+	});
 };
 
 const buildModal = () => {
@@ -86,6 +94,12 @@ const addEventListeners = () => {
 			});
 		}
 	}
+
+	const selectAllButton = document.getElementById('slctAll');
+	selectAllButton.onclick = () => handleSelectDeselect(true);
+
+	const deselectAllButton = document.getElementById('deslctAll');
+	deselectAllButton.onclick = () => handleSelectDeselect(false);
 
 	// Save the preferences to sessionStorage when the save button is clicked
 	document.getElementById('saveBtn').addEventListener('click', () => {

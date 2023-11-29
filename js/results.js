@@ -48,26 +48,18 @@ const createLottiePlayer = (src) => {
 // create layout
 const createHeaderLayout = (weatherData, cityData) => {
 	const {city, countryName, localityInfo} = cityData;
-	const {informative, administrative} = localityInfo;
-	console.log(cityData);
 	let title = document.getElementById('title');
 	let date = document.getElementById('date');
 	let currentDateTime = new Date(weatherData[0].dt * 1000).toLocaleDateString([], {
 		...dateOptions,
 	});
-	title.innerText = `${informative[4] ? informative[4].name : informative[3] ? informative[3].name : administrative[2] ? administrative[2].name : city}, ${countryName}`;
+	title.innerText = `${city}, ${countryName}`;
 	date.innerText = `${currentDateTime}`;
-
-	console.log(informative[2].name, city);
 };
 
 const createCityImageLeftSidebar = async (cityData) => {
 	const {city, localityInfo} = cityData;
-	const {informative, administrative} = localityInfo;
-	const unsplashImageRequest = `${unSplashURL}?client_id=${UNSPLASHACCESSKEY}&query=${
-		informative[4] ? informative[4].name : informative[3] ? informative[3].name : administrative[2] ? administrative[2].name : city
-	}
-	}&orientation=portrait&count=1&content_filter=medium`;
+	const unsplashImageRequest = `${unSplashURL}?client_id=${UNSPLASHACCESSKEY}&query=${city}&orientation=portrait&count=1&content_filter=low`;
 	let unSplashImageData = [];
 	const imageAttribution = document.createElement('span');
 	await fetch(unsplashImageRequest, getRequestHeaders)
