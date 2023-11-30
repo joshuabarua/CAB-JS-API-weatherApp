@@ -6,6 +6,9 @@ const {UNSPLASHACCESSKEY} = secrets;
 
 const date = new Date();
 const today = date.toISOString().substring(0, 10);
+const tomorrow = new Date(today);
+tomorrow.setDate(tomorrow.getDate() + 1);
+const tomorrowString = tomorrow.toISOString().substring(0, 10);
 const timeNow = date.toISOString().substring(11, 16);
 const timeList = [
 	new Date(0, 0, 0, 1, 0).toISOString().substring(11, 16),
@@ -26,8 +29,14 @@ const getSessionResultData = () => {
 	const {list} = openWeatherData;
 	//filter out other dates other than today
 	const weatherDataToday = list.filter((el) => {
-		if (el.dt_txt.includes(today)) {
-			return el;
+		try {
+			if (el.dt_txt.includes(today)) {
+				return el;
+			} else if (el.dt_txt.includes(tomorrowString)) {
+				return el;
+			}
+		} catch (error) {
+			console.error(`Error with finding correct date, - ${error}`);
 		}
 	});
 	controller(weatherDataToday, cityData);
