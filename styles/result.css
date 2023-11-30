@@ -185,7 +185,7 @@ h2 {
 .clothingPrefsDiv h4,
 .clothingPrefsDiv span {
 	font-weight: 200;
-	font-size: min(2.8vw, 12px);
+	font-size: min(2.8vw, 16px);
 	display: flex;
 	flex-wrap: wrap;
 	gap: 10px;
@@ -347,5 +347,13 @@ h2 {
 
 	.clothingPrefsDiv {
 		gap: 2px;
+	}
+
+	.clothingPrefsDiv img {
+		width: 30px;
+	}
+	.clothingPrefsDiv p {
+		font-size: 10px;
+		width: 220px;
 	}
 }

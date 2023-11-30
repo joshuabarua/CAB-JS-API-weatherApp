@@ -160,7 +160,6 @@ const createButtonLayout = (tempTimes) => {
 // Main temp area
 const mainTemperatureArea = (weatherData) => {
 	//make main temp area select the current weather
-
 	const defaultHour = weatherData[0]; //can be default or selected weather data form time picker
 	const lottieAnimationSrc = getLottieAnimation(defaultHour);
 	const clothingPref = JSON.parse(sessionStorage.getItem('modifiedClothingPreferences'));
@@ -179,7 +178,7 @@ const mainTemperatureArea = (weatherData) => {
 
 	const temperatureValuesContainer = document.createElement('div');
 	const temperatureHeading = document.createElement('h2');
-	temperatureHeading.innerText = `Feels like: ${defaultHour.main.feels_like}°C`;
+	temperatureHeading.innerText = `Feels like: ${defaultHour.main.feels_like.toFixed(1)}°C`;
 	temperatureValuesContainer.appendChild(temperatureHeading);
 
 	const otherValues = document.createElement('div');
@@ -188,11 +187,11 @@ const mainTemperatureArea = (weatherData) => {
 
 	const timestamp = document.createElement('p');
 	const windSpeed = document.createElement('p');
-	temperatureAvgsH.innerText = `Highest: ${defaultHour.main.temp_max}°C `;
-	temperatureAvgsL.innerText = `Lowest: ${defaultHour.main.temp_min}°C `;
+	temperatureAvgsH.innerText = `Highest: ${defaultHour.main.temp_max.toFixed(1)}°C `;
+	temperatureAvgsL.innerText = `Lowest: ${defaultHour.main.temp_min.toFixed(1)}°C `;
 
 	timestamp.innerText = defaultHour.time;
-	windSpeed.innerText = `Wind: ${defaultHour.wind.speed}-${defaultHour.wind.gust} km/h`;
+	windSpeed.innerText = `Wind: ${Math.round(defaultHour.wind.speed)}-${Math.round(defaultHour.wind.gust)} km/h`;
 
 	otherValues.appendChild(timestamp);
 	otherValues.appendChild(temperatureAvgsH);
@@ -227,6 +226,21 @@ const mainTemperatureArea = (weatherData) => {
 		valueImg.innerHTML = `Think about using a <img src="/assets/clothing-icons/Jacket.png" alt="Windbreaker" /> for the wind!`;
 		valueImg.style.fontStyle = 'italic';
 		clothingPrefsContainer.appendChild(valueImg);
+	}
+	if (defaultHour.main.feels_like < 1) {
+		const warningContainer = document.createElement('div');
+
+		const warningImg = document.createElement('span');
+		warningImg.innerHTML = `<img src="/assets/clothing-icons/warning.png" alt="Warning" width="60px" />  `;
+		const valueImg = document.createElement('p');
+		valueImg.innerHTML = `Beware of ice on roads and footpaths and bring a jacket to stay warm`;
+		valueImg.style.fontStyle = 'italic';
+		const valueImg2 = document.createElement('div');
+		valueImg2.innerHTML = ` <img src="/assets/clothing-icons/icicle.png" alt="Icicle" width="60px" />  <img src="/assets/clothing-icons/Jacket.png" alt="Windbreaker"/>`;
+		warningContainer.appendChild(warningImg);
+		warningContainer.appendChild(valueImg);
+		warningContainer.appendChild(valueImg2);
+		clothingPrefsContainer.appendChild(warningContainer);
 	}
 	if (defaultHour.weather[0].description.includes('sunny', 'hot', 'sunshine')) {
 		const valueImg = document.createElement('span');
