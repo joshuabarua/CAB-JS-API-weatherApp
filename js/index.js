@@ -1,14 +1,10 @@
-// Variable to be used/destructured for use in code
 const {
 	var: {units, timesteps, baseTomorrowIOURL, baseFlexWeatherURL, baseOpenWeatherURL, reverseGeocodeURL, fields, startTime, endTime, getRequestHeaders},
 } = config;
 
 const {OPENWEATHERMAPAPIKEY} = secrets;
 
-//Default Variables
-
 // 1: Get user position data
-
 const showError = (errorMessage) => {
 	document.body.innerHTML = '';
 	const errorContainer = document.body;

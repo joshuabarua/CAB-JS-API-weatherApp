@@ -138,22 +138,22 @@ const modifyClothingPrefsToImg = (clothingPref) => {
 	let modifiedClothingPrefs = {};
 	for (const conditionType in clothingPref) {
 		modifiedClothingPrefs[conditionType] = clothingPref[conditionType].map((clothingItem) => {
-			//Takes away spaces or hyphens as object in config can't have
-			clothingItem = clothingItem.replace(/[\s-]/g, '');
+			clothingItem = clothingItem.replace(/\s/g, '');
 			if (clothingImages.hasOwnProperty(clothingItem)) {
-				return `<img src="${clothingImages[clothingItem]}" alt="${clothingItem}">`;
+				return clothingImages[clothingItem];
 			} else {
 				console.warn('Error, clothing images do not have property of clothingItem >>:', clothingItem);
 			}
+			console.log('clothing items', clothingItem);
 			return clothingItem;
 		});
 	}
+
 	sessionStorage.setItem('modifiedClothingPreferences', JSON.stringify(modifiedClothingPrefs));
 };
 
 const createButtonLayout = (tempTimes) => {
 	let timeContainer = document.getElementById('timeContainer');
-	//  loop over timestamps and print as buttons
 	for (let i = 0; i < tempTimes.length; i++) {
 		let hourlyBtn = document.createElement('a');
 		hourlyBtn.classList.add('hourlyBtn');
@@ -166,12 +166,82 @@ const createButtonLayout = (tempTimes) => {
 	}
 };
 
+//Clothing Prefs
+const createClothingPrefSection = (defaultHour, clothingPref) => {
+	const clothingPrefsContainer = document.createElement('div');
+	clothingPrefsContainer.className = 'clothingPrefsDiv';
+
+	const subHead = document.createElement('h4');
+	subHead.style.margin = 0;
+	subHead.innerText = 'Clothing Options';
+	clothingPrefsContainer.appendChild(subHead);
+
+	if (defaultHour.main.feels_like <= 14) {
+		const coldClothingDiv = document.createElement('div');
+		coldClothingDiv.classList.add('clothing-section');
+		clothingPrefsContainer.appendChild(coldClothingDiv);
+	}
+
+	if (defaultHour.main.feels_like > 14 && defaultHour.main.feels_like <= 21) {
+		const normalClothingDiv = document.createElement('div');
+		normalClothingDiv.classList.add('clothing-section');
+		normalClothingDiv.innerHTML = clothingPref.normal.map((item) => `<img src="${item}" alt="Normal clothing" loading="lazy" class="clothing-icon" />`).join('');
+		clothingPrefsContainer.appendChild(normalClothingDiv);
+	}
+
+	if (defaultHour.main.feels_like >= 22) {
+		const hotClothingDiv = document.createElement('div');
+		hotClothingDiv.classList.add('clothing-section');
+		hotClothingDiv.innerHTML = clothingPref.hot
+			.map((item) => {
+				return `<img src="${item}" alt="Hot clothing" loading="lazy" class="clothing-icon" />`;
+			})
+			.join('');
+		clothingPrefsContainer.appendChild(hotClothingDiv);
+	}
+
+	if (defaultHour.wind.speed > 12) {
+		const windWarning = `<p>Consider wearing a <img src="/assets/clothing-icons/Jacket.png" alt="Windbreaker" class="clothing-icon" /> due to high winds!</p>`;
+		clothingPrefsContainer.innerHTML += windWarning;
+	}
+
+	return clothingPrefsContainer;
+};
+
+const createWarningSection = (defaultHour) => {
+	const warningContainer = document.createElement('div');
+	warningContainer.className = 'warningContainer';
+
+	if (defaultHour.main.feels_like < 1) {
+		const warningMessage = `
+      <div class="warning">
+        <img src="/assets/clothing-icons/warning.png" alt="Warning" width="60px" loading="lazy" />  
+        <p>Beware of ice on roads. Bring a jacket to stay warm!</p>
+        <div>
+          <img src="/assets/clothing-icons/icicle.png" alt="Icicle" width="60px" loading="lazy" />  
+          <img src="/assets/clothing-icons/Jacket.png" alt="Jacket" class="clothing-icon" />
+        </div>
+      </div>
+    `;
+		warningContainer.innerHTML = warningMessage;
+	}
+
+	if (defaultHour.weather[0].description.includes('sunny')) {
+		const sunWarning = `
+      <div class="warning">
+        <p>Wear <img src="/assets/clothing-icons/Sunnies.png" alt="Sunnies" class="clothing-icon" /> and sunscreen!</p>
+      </div>
+    `;
+		warningContainer.innerHTML += sunWarning;
+	}
+
+	return warningContainer;
+};
+
 // Main temp area
 const mainTemperatureArea = (weatherData) => {
-	//make main temp area select the current weather
-	const defaultHour = weatherData[0]; //can be default or selected weather data form time picker
+	const defaultHour = weatherData[0];
 	const lottieAnimationSrc = getLottieAnimation(defaultHour);
-	const clothingPref = JSON.parse(sessionStorage.getItem('modifiedClothingPreferences'));
 	const weatherDataDisplay = document.getElementById('weatherDataDisplay');
 	weatherDataDisplay.innerHTML = '';
 
@@ -210,60 +280,13 @@ const mainTemperatureArea = (weatherData) => {
 	mainTempContainer.appendChild(otherValues);
 
 	weatherDataDisplay.appendChild(mainTempContainer);
-	const clothingPrefsContainer = document.createElement('div');
-	clothingPrefsContainer.className = 'clothingPrefsDiv';
-	const subHead = document.createElement('h4');
-	subHead.style.margin = 0;
-	subHead.innerText = 'Clothing Options';
-	clothingPrefsContainer.appendChild(subHead);
 
-	const valueImg = document.createElement('span');
-	if (defaultHour.main.feels_like <= 8) {
-		valueImg.innerHTML = clothingPref.cold.join(' ');
-		clothingPrefsContainer.appendChild(valueImg);
-	}
-	if (defaultHour.main.feels_like <= 17) {
-		valueImg.innerHTML = clothingPref.normal.join(' ');
-		clothingPrefsContainer.appendChild(valueImg);
-	}
-	if (defaultHour.main.feels_like <= 40 && defaultHour.feels_like > 17) {
-		valueImg.innerHTML = clothingPref.hot.join(' ');
-		clothingPrefsContainer.appendChild(valueImg);
-	}
-	if (defaultHour.wind.speed > 12) {
-		const valueImg = document.createElement('span');
-		valueImg.innerHTML = `Think about using a <img src="/assets/clothing-icons/Jacket.png" alt="Windbreaker" /> for the wind!`;
-		valueImg.style.fontStyle = 'italic';
-		clothingPrefsContainer.appendChild(valueImg);
-	}
-	if (defaultHour.main.feels_like < 1) {
-		const warningContainer = document.createElement('div');
+	const clothingPrefs = JSON.parse(sessionStorage.getItem('modifiedClothingPreferences'));
+	const clothingPrefsContainer = createClothingPrefSection(defaultHour, clothingPrefs);
+	const warningContainer = createWarningSection(defaultHour);
 
-		const warningImg = document.createElement('span');
-		warningImg.innerHTML = `<img src="/assets/clothing-icons/warning.png" alt="Warning" width="60px" />  `;
-		const valueImg = document.createElement('p');
-		valueImg.innerHTML = `Beware of ice on roads and footpaths and bring a jacket to stay warm`;
-		valueImg.style.fontStyle = 'italic';
-		const valueImg2 = document.createElement('div');
-		valueImg2.innerHTML = ` <img src="/assets/clothing-icons/icicle.png" alt="Icicle" width="60px" />  <img src="/assets/clothing-icons/Jacket.png" alt="Windbreaker"/>`;
-		warningContainer.appendChild(warningImg);
-		warningContainer.appendChild(valueImg);
-		warningContainer.appendChild(valueImg2);
-		clothingPrefsContainer.appendChild(warningContainer);
-	}
-	if (defaultHour.weather[0].description.includes('sunny', 'hot', 'sunshine')) {
-		const valueImg = document.createElement('span');
-		valueImg.innerHTML = `Think about using some <img src="/assets/clothing-icons/Sunnies.png" alt="Sunnies" /> and wear sunscreen!`;
-		valueImg.style.fontStyle = 'italic';
-		clothingPrefsContainer.appendChild(valueImg);
-	}
-	if (defaultHour.weather[0].description.includes('rain', 'storm', 'thunderstorm', 'snow', 'showers')) {
-		const valueImg = document.createElement('span');
-		valueImg.innerHTML = `Probably bring an <img src="/assets/clothing-icons/Umbrella.png" alt="Umbrella" /> or a <img src="/assets/clothing-icons/Raincoat.png" alt="Raincoat" />`;
-		valueImg.style.fontStyle = 'italic';
-		clothingPrefsContainer.appendChild(valueImg);
-	}
 	weatherDataDisplay.appendChild(clothingPrefsContainer);
+	weatherDataDisplay.appendChild(warningContainer);
 };
 
 const slideOutToggler = () => {
@@ -276,10 +299,8 @@ const slideOutToggler = () => {
 };
 
 // 2: call controller
-
 const controller = (weatherData, cityData) => {
 	let clothingPref = JSON.parse(sessionStorage.getItem('clothingPreferences'));
-	// Checking:
 	modifyClothingPrefsToImg(clothingPref);
 	slideOutToggler();
 	createHeaderLayout(weatherData, cityData);

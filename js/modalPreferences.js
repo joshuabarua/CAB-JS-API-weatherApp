@@ -6,8 +6,8 @@ const preferences = {
 };
 
 const cold = ['Jacket', 'Gloves', 'Hoodie', 'Beanie', 'Leggings', 'Jeans'];
-const normal = ['T-Shirt', 'Dress', 'Jeans', 'Shirt', 'Cardigan', 'Pullover'];
-const hot = ['Shorts', 'Tank Top', 'T-Shirt', 'Skirt', 'Dress', 'Cap', 'Short Sleeved Shirt'];
+const normal = ['T Shirt', 'Dress', 'Jeans', 'Shirt', 'Cardigan', 'Pullover'];
+const hot = ['Shorts', 'Tank Top', 'T Shirt', 'Skirt', 'Dress', 'Cap', 'Short Sleeved Shirt'];
 
 const clothingImages = {
 	Jacket: '/assets/clothing-icons/Jacket.png',
@@ -16,15 +16,15 @@ const clothingImages = {
 	Beanie: '/assets/clothing-icons/Beanie.png',
 	Leggings: '/assets/clothing-icons/Leggings.png',
 	Jeans: '/assets/clothing-icons/Jeans.png',
-	TShirt: '/assets/clothing-icons/T-Shirt.png',
+	TShirt: '/assets/clothing-icons/TShirt.png',
 	Dress: '/assets/clothing-icons/Dress.png',
 	Shirt: '/assets/clothing-icons/Shirt.png',
 	Cardigan: '/assets/clothing-icons/Cardigan.png',
 	Pullover: '/assets/clothing-icons/Pullover.png',
 	Shorts: '/assets/clothing-icons/Shorts.png',
-	TankTop: '/assets/clothing-icons/Tank-Top.png',
+	TankTop: '/assets/clothing-icons/TankTop.png',
 	Skirt: '/assets/clothing-icons/Skirt.png',
-	ShortSleevedShirt: '/assets/clothing-icons/Short-Sleeved-Shirt.png',
+	ShortSleevedShirt: '/assets/clothing-icons/ShortSleevedShirt.png',
 	Cap: '/assets/clothing-icons/Cap.png',
 };
 
@@ -47,7 +47,7 @@ const createCheckboxes = (temperature, items) => {
 		checkboxContainer.appendChild(label);
 		checkboxSectioncontainer.appendChild(checkboxContainer);
 	});
-	return checkboxSectioncontainer; // Return the created checkboxes container
+	return checkboxSectioncontainer; 
 };
 
 const handleSelectDeselect = (select) => {
@@ -60,7 +60,6 @@ const handleSelectDeselect = (select) => {
 const buildModal = () => {
 	const modalContent = document.getElementById('modal-content');
 	const container = document.getElementById('checkbox-form-container');
-	// Create checkboxes for each temperature array
 	const coldCheckboxes = createCheckboxes('Cold', cold);
 	const normalCheckboxes = createCheckboxes('Normal', normal);
 	const hotCheckboxes = createCheckboxes('Hot', hot);
@@ -74,17 +73,14 @@ const buildModal = () => {
 const modalOverlay = document.getElementById('modal-overlay');
 
 const addEventListeners = () => {
-	//Open preferences selection on icon cliclk
 	document.getElementById('clothing-preferences-icon').addEventListener('click', showModalWindow);
 
-	//Close button
 	document.getElementById('close-modal').addEventListener('click', () => modalOverlay.classList.remove('open'));
 
 	const savedPreferences = sessionStorage.getItem('clothingPreferences');
 	if (savedPreferences) {
 		let preferences = JSON.parse(savedPreferences);
 
-		// Iterate through each temperature bracket and set checkbox values
 		for (const temperature in preferences) {
 			preferences[temperature].forEach((item) => {
 				const checkbox = document.querySelector(`input[name="${temperature}"][value="${item}"]`);
@@ -101,18 +97,14 @@ const addEventListeners = () => {
 	const deselectAllButton = document.getElementById('deslctAll');
 	deselectAllButton.onclick = () => handleSelectDeselect(false);
 
-	// Save the preferences to sessionStorage when the save button is clicked
 	document.getElementById('saveBtn').addEventListener('click', () => {
-		// Iterate through each temperature bracket and extract selected values
 		for (const temperature in preferences) {
 			const checkboxes = document.querySelectorAll(`input[name="${temperature}"]:checked`);
 			preferences[temperature] = Array.from(checkboxes).map((checkbox) => checkbox.value);
 		}
 
-		// Store preferences in sessionStorage
 		sessionStorage.setItem('clothingPreferences', JSON.stringify(preferences));
 
-		// Close
 		modalOverlay.classList.remove('open');
 		if (document.title === 'Result') {
 			location.reload();
