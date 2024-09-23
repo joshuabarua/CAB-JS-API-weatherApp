@@ -176,20 +176,20 @@ const createClothingPrefSection = (defaultHour, clothingPref) => {
 	subHead.innerText = 'Clothing Options';
 	clothingPrefsContainer.appendChild(subHead);
 
-	if (defaultHour.main.feels_like <= 14) {
+	if (defaultHour.main.feels_like < 14) {
 		const coldClothingDiv = document.createElement('div');
 		coldClothingDiv.classList.add('clothing-section');
 		clothingPrefsContainer.appendChild(coldClothingDiv);
 	}
 
-	if (defaultHour.main.feels_like > 14 && defaultHour.main.feels_like <= 21) {
+	if (defaultHour.main.feels_like >= 14 && defaultHour.main.feels_like <= 21) {
 		const normalClothingDiv = document.createElement('div');
 		normalClothingDiv.classList.add('clothing-section');
 		normalClothingDiv.innerHTML = clothingPref.normal.map((item) => `<img src="${item}" alt="Normal clothing" loading="lazy" class="clothing-icon" />`).join('');
 		clothingPrefsContainer.appendChild(normalClothingDiv);
 	}
 
-	if (defaultHour.main.feels_like >= 22) {
+	if (defaultHour.main.feels_like > 21) {
 		const hotClothingDiv = document.createElement('div');
 		hotClothingDiv.classList.add('clothing-section');
 		hotClothingDiv.innerHTML = clothingPref.hot
