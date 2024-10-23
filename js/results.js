@@ -179,6 +179,8 @@ const createClothingPrefSection = (defaultHour, clothingPref) => {
 	if (defaultHour.main.feels_like < 14) {
 		const coldClothingDiv = document.createElement('div');
 		coldClothingDiv.classList.add('clothing-section');
+		console.log(clothingPref.cold[0]);
+		coldClothingDiv.innerHTML = clothingPref.cold.map((item) => `<img src="${item}" alt="Cold clothing" loading="lazy" class="clothing-icon" />`).join('');
 		clothingPrefsContainer.appendChild(coldClothingDiv);
 	}
 
@@ -192,16 +194,12 @@ const createClothingPrefSection = (defaultHour, clothingPref) => {
 	if (defaultHour.main.feels_like > 21) {
 		const hotClothingDiv = document.createElement('div');
 		hotClothingDiv.classList.add('clothing-section');
-		hotClothingDiv.innerHTML = clothingPref.hot
-			.map((item) => {
-				return `<img src="${item}" alt="Hot clothing" loading="lazy" class="clothing-icon" />`;
-			})
-			.join('');
+		hotClothingDiv.innerHTML = clothingPref.hot.map((item) => `<img src="${item}" alt="Hot clothing" loading="lazy" class="clothing-icon" />`).join('');
 		clothingPrefsContainer.appendChild(hotClothingDiv);
 	}
 
 	if (defaultHour.wind.speed > 12) {
-		const windWarning = `<p>Consider wearing a <img src="/assets/clothing-icons/Jacket.png" alt="Windbreaker" class="clothing-icon" /> due to high winds!</p>`;
+		const windWarning = `<p>Consider wearing a <img src="${clothingPref.cold[0]}" alt="Windbreaker" class="clothing-icon" /> due to high winds!</p>`;
 		clothingPrefsContainer.innerHTML += windWarning;
 	}
 
