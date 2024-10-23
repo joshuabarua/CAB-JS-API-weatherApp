@@ -115,13 +115,14 @@ const modifyConditionsToImg = (weatherConditionData) => {
 
 const getLottieAnimation = (weatherData) => {
 	const {weather, lottieCondition} = weatherData;
+	console.log(weather);
 	if (weather[0].description.includes('rain')) {
 		return lottieCondition.rain.src;
 	} else if (weather[0].description.includes('clear')) {
 		return lottieCondition.clear.src;
-	} else if (weather[0].description.includes('clouds')) {
+	} else if (weather[0].description.trim() === 'clouds') {
 		return lottieCondition.clouds.src;
-	} else if (weather[0].description.includes('some clouds', 'partly clouds', 'scattered clouds')) {
+	} else if (['some clouds', 'partly clouds', 'scattered clouds', 'few clouds'].some(condition => weather[0].description.includes(condition))) {
 		return lottieCondition.partlyCloudy.src;
 	} else if (weather[0].description.includes('thunderstorm')) {
 		return lottieCondition.thunderstorm.src;
@@ -179,7 +180,6 @@ const createClothingPrefSection = (defaultHour, clothingPref) => {
 	if (defaultHour.main.feels_like < 14) {
 		const coldClothingDiv = document.createElement('div');
 		coldClothingDiv.classList.add('clothing-section');
-		console.log(clothingPref.cold[0]);
 		coldClothingDiv.innerHTML = clothingPref.cold.map((item) => `<img src="${item}" alt="Cold clothing" loading="lazy" class="clothing-icon" />`).join('');
 		clothingPrefsContainer.appendChild(coldClothingDiv);
 	}
@@ -255,7 +255,7 @@ const mainTemperatureArea = (weatherData) => {
 
 	const temperatureValuesContainer = document.createElement('div');
 	const temperatureHeading = document.createElement('h2');
-	temperatureHeading.innerText = `Feels like: ${defaultHour.main.feels_like.toFixed(1)}°C`;
+	temperatureHeading.innerText = `Feels like: ${defaultHour.main.feels_like.toFixed(0)}°C`;
 	temperatureValuesContainer.appendChild(temperatureHeading);
 
 	const otherValues = document.createElement('div');
@@ -264,8 +264,8 @@ const mainTemperatureArea = (weatherData) => {
 
 	const timestamp = document.createElement('p');
 	const windSpeed = document.createElement('p');
-	temperatureAvgsH.innerText = `Highest: ${defaultHour.main.temp_max.toFixed(1)}°C `;
-	temperatureAvgsL.innerText = `Lowest: ${defaultHour.main.temp_min.toFixed(1)}°C `;
+	temperatureAvgsH.innerText = `Highest: ${defaultHour.main.temp_max.toFixed(0)}°C `;
+	temperatureAvgsL.innerText = `Lowest: ${defaultHour.main.temp_min.toFixed(0)}°C `;
 
 	timestamp.innerText = defaultHour.time;
 	windSpeed.innerText = `Wind: ${Math.round(defaultHour.wind.speed)}-${Math.round(defaultHour.wind.gust)} km/h`;
